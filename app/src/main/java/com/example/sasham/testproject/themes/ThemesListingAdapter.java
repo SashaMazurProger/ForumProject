@@ -17,10 +17,11 @@ import butterknife.ButterKnife;
 
 public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdapter.ViewHolder> {
 
-    private List<Theme> themes = new ArrayList<>(20);
+    private List<Theme> themes;
     private ThemesListingView themesListingView;
 
-    public ThemesListingAdapter(ThemesListingView themesListingView) {
+    public ThemesListingAdapter(List<Theme> themes,ThemesListingView themesListingView) {
+        this.themes = themes;
         this.themesListingView = themesListingView;
     }
 
@@ -42,11 +43,6 @@ public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdap
         holder.msgText.setText(currentTheme.getMsgText());
         holder.createdTime.setText(currentTheme.getMsgTime());
         holder.theme = currentTheme;
-    }
-
-    public void setThemes(List<Theme> themes) {
-        this.themes = themes;
-        notifyDataSetChanged();
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.sasham.testproject.R;
+import com.example.sasham.testproject.messages.MessagesFragment;
 import com.example.sasham.testproject.model.Theme;
 
 public class ThemesActivity extends AppCompatActivity implements ThemesListingFragment.Callback {
@@ -27,5 +28,10 @@ public class ThemesActivity extends AppCompatActivity implements ThemesListingFr
     @Override
     public void onThemeClicked(Theme theme) {
         Toast.makeText(this, theme.getForumName(), Toast.LENGTH_SHORT).show();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.themes_listing_container, new MessagesFragment())
+                .addToBackStack(null)
+                .commit();
     }
 }

@@ -5,4 +5,5 @@ public interface ThemesListingPresenter {
     void setView(ThemesListingView view);
     void firstPage();
     void nextPage();
+    void destroy();
 }

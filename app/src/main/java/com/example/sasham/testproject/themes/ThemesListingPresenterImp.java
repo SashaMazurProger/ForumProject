@@ -13,6 +13,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class ThemesListingPresenterImp implements ThemesListingPresenter {
+
     private ThemesListingView view;
     private ThemesListingInteractor themesListingInteractor = new ThemesListingInteractorImp();
     private List<Theme> loadedThemes = new ArrayList<>();
@@ -35,6 +36,11 @@ public class ThemesListingPresenterImp implements ThemesListingPresenter {
     public void nextPage() {
         currentPage++;
         loadThemes();
+    }
+
+    @Override
+    public void destroy() {
+        themesListingInteractor=null;
     }
 
 

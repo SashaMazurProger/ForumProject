@@ -3,6 +3,8 @@ package com.example.sasham.testproject.themes;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,19 +15,23 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.model.Theme;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class ThemesListingFragment extends Fragment implements ThemesListingView {
 
     private ThemesListingPresenter presenter = new ThemesListingPresenterImp();
     private Callback callback;
+    private List<Theme> themes = new ArrayList<>();
 
     @BindView(R.id.themes_listing_recycler_view)
     public RecyclerView themesRecyclerView;
@@ -37,6 +43,8 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     public TextView themesEmptyView;
 
     private ThemesListingAdapter themesListingAdapter;
+    private Unbinder unbinder;
+
 
     public ThemesListingFragment() {
         // Required empty public constructor
@@ -45,7 +53,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setRetainInstance(true);
     }
 
     @Override
@@ -55,9 +63,9 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         View root = inflater.inflate(R.layout.fragment_themes_listing, container, false);
 
         //Init views
-        ButterKnife.bind(this, root);
+        unbinder=ButterKnife.bind(this, root);
 
-        themesListingAdapter = new ThemesListingAdapter(this);
+        themesListingAdapter = new ThemesListingAdapter(themes, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         themesRecyclerView.setAdapter(themesListingAdapter);
         themesRecyclerView.setLayoutManager(layoutManager);
@@ -74,12 +82,22 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
             }
         });
 
-        presenter.setView(this);
-        presenter.firstPage();
-
         return root;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        presenter.setView(this);
+
+        if (savedInstanceState != null) {
+            themes = savedInstanceState.getParcelableArrayList(Constants.THEME);
+            themesListingAdapter.notifyDataSetChanged();
+        } else {
+            presenter.firstPage();
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -92,9 +110,17 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(Constants.THEME, (ArrayList<? extends Parcelable>) themes);
+    }
+
+    @Override
     public void showThemes(List<Theme> themeList) {
         themesProgress.setVisibility(View.GONE);
-        themesListingAdapter.setThemes(themeList);
+        themes.clear();
+        themes.addAll(themeList);
+        themesListingAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -114,6 +140,13 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         if (callback != null) {
             callback.onThemeClicked(theme);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.destroy();
+        unbinder.unbind();
     }
 
     public interface Callback {
