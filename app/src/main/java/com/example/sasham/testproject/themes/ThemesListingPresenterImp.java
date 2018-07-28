@@ -40,7 +40,7 @@ public class ThemesListingPresenterImp implements ThemesListingPresenter {
 
     @Override
     public void destroy() {
-        themesListingInteractor=null;
+        view = null;
     }
 
 
@@ -53,15 +53,25 @@ public class ThemesListingPresenterImp implements ThemesListingPresenter {
                                @Override
                                public void accept(List<Theme> themes) throws Exception {
                                    loadedThemes.addAll(themes);
-                                   view.showThemes(loadedThemes);
+                                   displayThemes();
                                }
                            },
-                            new Consumer<Throwable>() {
-                                @Override
-                                public void accept(Throwable throwable) throws Exception {
-                                    view.onError(throwable.getMessage());
-                                }
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                view.onError(throwable.getMessage());
+                            }
                         });
+    }
+
+    private void displayThemes() {
+        if (isViewAttached()) {
+            view.showThemes(loadedThemes);
+        }
+    }
+
+    private boolean isViewAttached() {
+        return view != null;
     }
 
 }

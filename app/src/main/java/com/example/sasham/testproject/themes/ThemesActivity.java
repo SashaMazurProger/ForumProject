@@ -30,7 +30,7 @@ public class ThemesActivity extends AppCompatActivity implements ThemesListingFr
         Toast.makeText(this, theme.getForumName(), Toast.LENGTH_SHORT).show();
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.themes_listing_container, new MessagesFragment())
+                .replace(R.id.themes_listing_container, MessagesFragment.newInstance(theme))
                 .addToBackStack(null)
                 .commit();
     }
