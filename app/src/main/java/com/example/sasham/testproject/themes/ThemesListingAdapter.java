@@ -17,6 +17,8 @@ import butterknife.ButterKnife;
 
 public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdapter.ViewHolder> {
 
+
+
     private List<Theme> themes = new ArrayList<>(20);
 
     @Override
@@ -36,6 +38,11 @@ public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdap
         holder.topicName.setText(currentTheme.getTopicText());
         holder.msgText.setText(currentTheme.getMsgText());
         holder.createdTime.setText(currentTheme.getMsgTime());
+    }
+
+    public void setThemes(List<Theme> themes) {
+        this.themes = themes;
+        notifyDataSetChanged();
     }
 
     @Override
