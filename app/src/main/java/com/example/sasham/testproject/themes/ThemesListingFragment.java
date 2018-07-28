@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.model.Theme;
@@ -19,12 +21,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ThemesListingFragment extends Fragment implements ThemesListingView{
+public class ThemesListingFragment extends Fragment implements ThemesListingView {
 
-    private ThemesListingPresenter presenter=new ThemesListingPresenterImp();
+    private ThemesListingPresenter presenter = new ThemesListingPresenterImp();
 
     @BindView(R.id.themes_listing_recycler_view)
     public RecyclerView themesRecyclerView;
+
+    @BindView(R.id.themes_progress)
+    public ProgressBar themesProgress;
+
+    @BindView(R.id.themes_empty_view)
+    public TextView themesEmptyView;
+
     private ThemesListingAdapter themesListingAdapter;
 
     public ThemesListingFragment() {
@@ -66,16 +75,21 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
     @Override
     public void showThemes(List<Theme> themeList) {
+        themesRecyclerView.setVisibility(View.VISIBLE);
+        themesProgress.setVisibility(View.GONE);
         themesListingAdapter.setThemes(themeList);
     }
 
     @Override
     public void onLoading() {
-
+        themesRecyclerView.setVisibility(View.INVISIBLE);
+        themesProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onError(String errorMessage) {
-
+        themesRecyclerView.setVisibility(View.GONE);
+        themesProgress.setVisibility(View.GONE);
+        themesEmptyView.setText(errorMessage);
     }
 }

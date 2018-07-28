@@ -3,9 +3,12 @@ package com.example.sasham.testproject.themes;
 import com.example.sasham.testproject.model.Theme;
 
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ThemesListingPresenterImp implements ThemesListingPresenter {
     private ThemesListingView view;
+    private ThemesListingInteractor interactor=new ThemesListingInteractorImp();
 
     @Override
     public void setView(ThemesListingView view) {
@@ -14,13 +17,9 @@ public class ThemesListingPresenterImp implements ThemesListingPresenter {
 
     @Override
     public void firstPage() {
-        view.showThemes(Arrays.asList(new Theme("324", "34", "Sasha", "Topic",
-                        "Message", "343234", null, null, null, null),
 
-                new Theme("324", "34", "Sasha", "Topic",
-                        "Message", "343234", null, null, null, null),
+        view.onLoading();
 
-                new Theme("324", "34", "Sasha", "Topic",
-                        "Message", "343234", null, null, null, null)));
+        view.showThemes(interactor.fetchThemes(1));
     }
 }
