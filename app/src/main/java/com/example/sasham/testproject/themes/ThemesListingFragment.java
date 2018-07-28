@@ -60,6 +60,18 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         themesRecyclerView.setAdapter(themesListingAdapter);
         themesRecyclerView.setLayoutManager(layoutManager);
 
+        //If we scrolled to end list then load more data
+        themesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if(!recyclerView.canScrollVertically(1)){
+                    presenter.nextPage();
+                }
+            }
+        });
+
         presenter.setView(this);
         presenter.firstPage();
 
