@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".themes.ThemesListingFragment">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/themes_listing_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-         />
+        android:layout_height="wrap_content"/>
 
 </FrameLayout>
