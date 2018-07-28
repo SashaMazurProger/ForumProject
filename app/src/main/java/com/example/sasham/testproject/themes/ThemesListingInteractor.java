@@ -4,7 +4,9 @@ import com.example.sasham.testproject.model.Theme;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+
 public interface ThemesListingInteractor {
 
-    List<Theme> fetchThemes(int page);
+    Observable<List<Theme>> fetchThemes(int page);
 }

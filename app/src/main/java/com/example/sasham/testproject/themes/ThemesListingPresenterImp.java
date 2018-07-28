@@ -8,10 +8,14 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 public class ThemesListingPresenterImp implements ThemesListingPresenter {
     private ThemesListingView view;
-    private ThemesListingInteractor themesListingInteractor=new ThemesListingInteractorImp();
-    private List<Theme> loadedThemes=new ArrayList<>();
+    private ThemesListingInteractor themesListingInteractor = new ThemesListingInteractorImp();
+    private List<Theme> loadedThemes = new ArrayList<>();
     private int currentPage;
 
 
@@ -22,7 +26,7 @@ public class ThemesListingPresenterImp implements ThemesListingPresenter {
 
     @Override
     public void firstPage() {
-        currentPage=1;
+        currentPage = 1;
         loadedThemes.clear();
         loadThemes();
     }
@@ -36,8 +40,22 @@ public class ThemesListingPresenterImp implements ThemesListingPresenter {
 
     private void loadThemes() {
         view.onLoading();
-        loadedThemes.addAll(themesListingInteractor.fetchThemes(currentPage));
-        view.showThemes(loadedThemes);
+        themesListingInteractor.fetchThemes(currentPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Theme>>() {
+                               @Override
+                               public void accept(List<Theme> themes) throws Exception {
+                                   loadedThemes.addAll(themes);
+                                   view.showThemes(loadedThemes);
+                               }
+                           },
+                            new Consumer<Throwable>() {
+                                @Override
+                                public void accept(Throwable throwable) throws Exception {
+                                    view.onError(throwable.getMessage());
+                                }
+                        });
     }
 
 }

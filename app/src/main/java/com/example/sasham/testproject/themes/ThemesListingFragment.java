@@ -87,14 +87,12 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
     @Override
     public void showThemes(List<Theme> themeList) {
-        themesRecyclerView.setVisibility(View.VISIBLE);
         themesProgress.setVisibility(View.GONE);
         themesListingAdapter.setThemes(themeList);
     }
 
     @Override
     public void onLoading() {
-        themesRecyclerView.setVisibility(View.INVISIBLE);
         themesProgress.setVisibility(View.VISIBLE);
     }
 
