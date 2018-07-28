@@ -2,10 +2,12 @@ package com.example.sasham.testproject.themes;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.sasham.testproject.R;
+import com.example.sasham.testproject.model.Theme;
 
-public class ThemesActivity extends AppCompatActivity {
+public class ThemesActivity extends AppCompatActivity implements ThemesListingFragment.Callback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +22,10 @@ public class ThemesActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.themes_listing_container, new ThemesListingFragment())
                 .commit();
+    }
+
+    @Override
+    public void onThemeClicked(Theme theme) {
+        Toast.makeText(this, theme.getForumName(), Toast.LENGTH_SHORT).show();
     }
 }

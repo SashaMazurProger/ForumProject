@@ -17,9 +17,12 @@ import butterknife.ButterKnife;
 
 public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdapter.ViewHolder> {
 
-
-
     private List<Theme> themes = new ArrayList<>(20);
+    private ThemesListingView themesListingView;
+
+    public ThemesListingAdapter(ThemesListingView themesListingView) {
+        this.themesListingView = themesListingView;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -32,12 +35,13 @@ public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        Theme currentTheme=themes.get(position);
+        Theme currentTheme = themes.get(position);
 
         holder.forumName.setText(currentTheme.getForumName());
         holder.topicName.setText(currentTheme.getTopicText());
         holder.msgText.setText(currentTheme.getMsgText());
         holder.createdTime.setText(currentTheme.getMsgTime());
+        holder.theme = currentTheme;
     }
 
     public void setThemes(List<Theme> themes) {
@@ -50,7 +54,9 @@ public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdap
         return themes.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        View root;
 
         @BindView(R.id.theme_forum_name)
         TextView forumName;
@@ -63,9 +69,18 @@ public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdap
         @BindView(R.id.theme_user_name)
         TextView userName;
 
+        Theme theme;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
+            root=itemView;
+            root.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            ThemesListingAdapter.this.themesListingView.onThemeClicked(theme);
         }
     }
 }

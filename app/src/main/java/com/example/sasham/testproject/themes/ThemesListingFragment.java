@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import butterknife.ButterKnife;
 public class ThemesListingFragment extends Fragment implements ThemesListingView {
 
     private ThemesListingPresenter presenter = new ThemesListingPresenterImp();
+    private Callback callback;
 
     @BindView(R.id.themes_listing_recycler_view)
     public RecyclerView themesRecyclerView;
@@ -55,7 +57,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         //Init views
         ButterKnife.bind(this, root);
 
-        themesListingAdapter = new ThemesListingAdapter();
+        themesListingAdapter = new ThemesListingAdapter(this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         themesRecyclerView.setAdapter(themesListingAdapter);
         themesRecyclerView.setLayoutManager(layoutManager);
@@ -66,7 +68,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if(!recyclerView.canScrollVertically(1)){
+                if (!recyclerView.canScrollVertically(1)) {
                     presenter.nextPage();
                 }
             }
@@ -82,6 +84,10 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        if (context instanceof Callback) {
+            callback = (Callback) context;
+        }
 
     }
 
@@ -101,5 +107,16 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         themesRecyclerView.setVisibility(View.GONE);
         themesProgress.setVisibility(View.GONE);
         themesEmptyView.setText(errorMessage);
+    }
+
+    @Override
+    public void onThemeClicked(Theme theme) {
+        if (callback != null) {
+            callback.onThemeClicked(theme);
+        }
+    }
+
+    public interface Callback {
+        void onThemeClicked(Theme theme);
     }
 }

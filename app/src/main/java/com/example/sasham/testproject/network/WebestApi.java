@@ -1,5 +1,6 @@
 package com.example.sasham.testproject.network;
 
+import com.example.sasham.testproject.model.Message;
 import com.example.sasham.testproject.model.Theme;
 
 import io.reactivex.Observable;
@@ -11,4 +12,7 @@ public interface WebestApi {
 
     @GET("forum/fresh/{page}/")
     Observable<ThemesWraper> themes(@Path("page") String page);
+
+    @GET("forum/topic/{id}/")
+    Observable<MessageWraper> themeMessages(@Path("id") String themeId);
 }

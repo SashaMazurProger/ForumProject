@@ -9,4 +9,5 @@ public interface ThemesListingView {
     void showThemes(List<Theme> themeList);
     void onLoading();
     void onError(String errorMessage);
+    void onThemeClicked(Theme theme);
 }
