@@ -10,6 +10,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/message_avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
+
         <TextView
             android:id="@+id/message_user_name"
             android:layout_width="wrap_content"
@@ -19,8 +24,7 @@
             android:id="@+id/message_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoLink="web"
-            />
+            android:autoLink="web" />
 
         <TextView
             android:id="@+id/message_created"

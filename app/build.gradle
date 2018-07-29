@@ -58,4 +58,10 @@ dependencies {
     // Dagger Android
     annotationProcessor "com.google.dagger:dagger-android-processor:2.16"
     implementation "com.google.dagger:dagger-android-support:2.16"
+
+    //For circle images
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    //Picasso(images)
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

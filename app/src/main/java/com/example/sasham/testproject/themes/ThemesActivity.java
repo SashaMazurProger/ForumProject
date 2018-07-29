@@ -29,7 +29,7 @@ public class ThemesActivity extends BaseActivity implements ThemesListingFragmen
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        setTitle(getString(R.string.app_name));
+        setDefaultTitle();
 
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override

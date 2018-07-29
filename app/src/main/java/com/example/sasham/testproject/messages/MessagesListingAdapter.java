@@ -16,18 +16,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.model.Message;
+import com.example.sasham.testproject.util.StringUtil;
 import com.example.sasham.testproject.website.WebActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 public class MessagesListingAdapter extends RecyclerView.Adapter<MessagesListingAdapter.ViewHolder> {
-
 
     private List<Message> messages;
 
@@ -64,8 +67,17 @@ public class MessagesListingAdapter extends RecyclerView.Adapter<MessagesListing
                     }
                 });
 
-
-        holder.createdTime.setText(currentMessage.getMsgTime());
+        if(StringUtil.isNotNullOrEmpty(currentMessage.getMsgTime())){
+            holder.createdTime.setText(StringUtil.getDateFromMillis(currentMessage.getMsgTime(), Constants.TIME_PATTERN));
+        }
+        if (StringUtil.isNotNullOrEmpty(currentMessage.getAvatar())) {
+            Picasso.get()
+                    .load(StringUtil.getAvatarUrl(currentMessage.getAvatar()))
+                    .placeholder(R.mipmap.ic_avatar)
+                    .into(holder.avatar);
+        } else {
+            holder.avatar.setImageResource(R.mipmap.ic_avatar);
+        }
     }
 
     @Override
@@ -81,6 +93,8 @@ public class MessagesListingAdapter extends RecyclerView.Adapter<MessagesListing
         TextView messageText;
         @BindView(R.id.message_created)
         TextView createdTime;
+        @BindView(R.id.message_avatar)
+        CircleImageView avatar;
 
         public ViewHolder(View itemView) {
             super(itemView);

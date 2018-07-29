@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.model.Theme;
+import com.example.sasham.testproject.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +43,9 @@ public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdap
         holder.forumName.setText(currentTheme.getForumName());
         holder.topicName.setText(currentTheme.getTopicText());
         holder.msgText.setText(currentTheme.getMsgText());
-        holder.createdTime.setText(currentTheme.getMsgTime());
+        if(StringUtil.isNotNullOrEmpty(currentTheme.getMsgTime())){
+            holder.createdTime.setText(StringUtil.getDateFromMillis(currentTheme.getMsgTime(), Constants.TIME_PATTERN));
+        }
         holder.theme = currentTheme;
     }
 
