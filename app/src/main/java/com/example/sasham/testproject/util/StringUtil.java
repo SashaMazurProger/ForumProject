@@ -1,6 +1,7 @@
 package com.example.sasham.testproject.util;
 
 import android.net.Uri;
+import android.text.Html;
 
 import com.example.sasham.testproject.Constants;
 
@@ -24,5 +25,16 @@ public class StringUtil {
             return new SimpleDateFormat(pattern).format(date);
         }
         return null;
+    }
+
+    public static String stripHtml(String html) {
+        if (html == null) {
+            return null;
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString();
+        } else {
+            return Html.fromHtml(html).toString();
+        }
     }
 }

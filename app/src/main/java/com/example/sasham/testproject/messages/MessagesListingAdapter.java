@@ -53,7 +53,7 @@ public class MessagesListingAdapter extends RecyclerView.Adapter<MessagesListing
 
         holder.userName.setText(currentMessage.getUserName());
 
-        holder.messageText.setText(currentMessage.getMsgText());
+        holder.messageText.setText(StringUtil.stripHtml(currentMessage.getMsgText()));
         holder.messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
         Linkify.addLinks(holder.messageText, Linkify.WEB_URLS);
         BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, holder.messageText)
@@ -70,6 +70,7 @@ public class MessagesListingAdapter extends RecyclerView.Adapter<MessagesListing
         if(StringUtil.isNotNullOrEmpty(currentMessage.getMsgTime())){
             holder.createdTime.setText(StringUtil.getDateFromMillis(currentMessage.getMsgTime(), Constants.TIME_PATTERN));
         }
+
         if (StringUtil.isNotNullOrEmpty(currentMessage.getAvatar())) {
             Picasso.get()
                     .load(StringUtil.getAvatarUrl(currentMessage.getAvatar()))

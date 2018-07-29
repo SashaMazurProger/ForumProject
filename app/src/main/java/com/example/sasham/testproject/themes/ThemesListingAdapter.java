@@ -42,7 +42,7 @@ public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdap
 
         holder.forumName.setText(currentTheme.getForumName());
         holder.topicName.setText(currentTheme.getTopicText());
-        holder.msgText.setText(currentTheme.getMsgText());
+        holder.msgText.setText(StringUtil.stripHtml(currentTheme.getMsgText()));
         if(StringUtil.isNotNullOrEmpty(currentTheme.getMsgTime())){
             holder.createdTime.setText(StringUtil.getDateFromMillis(currentTheme.getMsgTime(), Constants.TIME_PATTERN));
         }
