@@ -9,21 +9,20 @@ import com.example.sasham.testproject.util.Converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 
 public class ThemesListingInteractorImp implements ThemesListingInteractor {
+
+    @Inject
+    public ThemesListingInteractorImp() {
+    }
+
     @Override
     public Observable<List<Theme>> fetchThemes(int page) {
-//        return Arrays.asList(new Theme("324", "34", "Sasha", "Topic",
-//                        "Message", "343234", null, null, null, null),
-//
-//                new Theme("324", "34", "Sasha", "Topic",
-//                        "Message", "343234", null, null, null, null),
-//
-//                new Theme("324", "34", "Sasha", "Topic",
-//                        "Message", "343234", null, null, null, null));
 
         String pageString = String.valueOf(page);
         return ApiBuilder.createWebestApi()

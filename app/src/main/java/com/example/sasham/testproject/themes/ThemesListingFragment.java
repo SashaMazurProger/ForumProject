@@ -1,14 +1,12 @@
 package com.example.sasham.testproject.themes;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,16 +18,20 @@ import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.model.Theme;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.android.support.AndroidSupportInjection;
 
 public class ThemesListingFragment extends Fragment implements ThemesListingView {
 
-    private ThemesListingPresenter presenter = new ThemesListingPresenterImp();
+    @Inject
+    public ThemesListingPresenter presenter;
+
     private Callback callback;
     private List<Theme> themes = new ArrayList<>();
 
@@ -101,6 +103,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
 
         if (context instanceof Callback) {

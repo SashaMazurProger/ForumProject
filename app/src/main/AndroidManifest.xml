@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".website.WebActivity"></activity>
+        <activity android:name=".website.WebActivity" />
+        <activity android:name=".BaseActivity"></activity>
     </application>
 
 </manifest>

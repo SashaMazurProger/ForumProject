@@ -3,10 +3,9 @@ package com.example.sasham.testproject.themes;
 import com.example.sasham.testproject.model.Theme;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -15,10 +14,15 @@ import io.reactivex.schedulers.Schedulers;
 public class ThemesListingPresenterImp implements ThemesListingPresenter {
 
     private ThemesListingView view;
-    private ThemesListingInteractor themesListingInteractor = new ThemesListingInteractorImp();
+    private ThemesListingInteractor themesListingInteractor;
     private List<Theme> loadedThemes = new ArrayList<>();
     private int currentPage;
 
+
+    @Inject
+    public ThemesListingPresenterImp(ThemesListingInteractor themesListingInteractor) {
+        this.themesListingInteractor = themesListingInteractor;
+    }
 
     @Override
     public void setView(ThemesListingView view) {

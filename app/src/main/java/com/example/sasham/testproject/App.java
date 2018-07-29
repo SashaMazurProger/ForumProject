@@ -3,7 +3,7 @@ package com.example.sasham.testproject;
 import android.app.Activity;
 import android.app.Application;
 
-import com.example.sasham.testproject.dependencies.AppComponent;
+
 import com.example.sasham.testproject.dependencies.DaggerAppComponent;
 
 import javax.inject.Inject;
