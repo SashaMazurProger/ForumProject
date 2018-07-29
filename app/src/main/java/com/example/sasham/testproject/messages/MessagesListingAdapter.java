@@ -60,14 +60,12 @@ public class MessagesListingAdapter extends RecyclerView.Adapter<MessagesListing
                 .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
                     @Override
                     public boolean onClick(TextView textView, String url) {
-                        Intent intent = new Intent(context, WebActivity.class);
-                        intent.putExtra(WebActivity.WEB_URL_ARGS, url);
-                        context.startActivity(intent);
+                        WebActivity.startActivity(url, context);
                         return true;
                     }
                 });
 
-        if(StringUtil.isNotNullOrEmpty(currentMessage.getMsgTime())){
+        if (StringUtil.isNotNullOrEmpty(currentMessage.getMsgTime())) {
             holder.createdTime.setText(StringUtil.getDateFromMillis(currentMessage.getMsgTime(), Constants.TIME_PATTERN));
         }
 

@@ -1,5 +1,7 @@
 package com.example.sasham.testproject.website;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +28,13 @@ public class WebActivity extends AppCompatActivity {
     ProgressBar progress;
 
     public static final String WEB_URL_ARGS = "url";
+
+
+    public static void startActivity(String url, Context context){
+        Intent intent = new Intent(context, WebActivity.class);
+        intent.putExtra(WebActivity.WEB_URL_ARGS, url);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

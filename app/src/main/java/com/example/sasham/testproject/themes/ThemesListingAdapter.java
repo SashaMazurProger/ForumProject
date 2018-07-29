@@ -1,6 +1,9 @@
 package com.example.sasham.testproject.themes;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +13,21 @@ import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.model.Theme;
 import com.example.sasham.testproject.util.StringUtil;
+import com.example.sasham.testproject.website.WebActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdapter.ViewHolder> {
 
     private List<Theme> themes;
     private ThemesListingView themesListingView;
 
-    public ThemesListingAdapter(List<Theme> themes,ThemesListingView themesListingView) {
+    public ThemesListingAdapter(List<Theme> themes, ThemesListingView themesListingView) {
         this.themes = themes;
         this.themesListingView = themesListingView;
     }
@@ -37,13 +42,25 @@ public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        final Context context = holder.itemView.getContext();
         Theme currentTheme = themes.get(position);
 
         holder.forumName.setText(currentTheme.getForumName());
         holder.topicName.setText(currentTheme.getTopicText());
+
         holder.msgText.setText(StringUtil.stripHtml(currentTheme.getMsgText()));
-        if(StringUtil.isNotNullOrEmpty(currentTheme.getMsgTime())){
+        holder.msgText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+        Linkify.addLinks(holder.msgText, Linkify.WEB_URLS);
+        BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, holder.msgText)
+                .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
+                    @Override
+                    public boolean onClick(TextView textView, String url) {
+                        WebActivity.startActivity(url, context);
+                        return true;
+                    }
+                });
+
+        if (StringUtil.isNotNullOrEmpty(currentTheme.getMsgTime())) {
             holder.createdTime.setText(StringUtil.getDateFromMillis(currentTheme.getMsgTime(), Constants.TIME_PATTERN));
         }
         holder.theme = currentTheme;
@@ -74,7 +91,7 @@ public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdap
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            root=itemView;
+            root = itemView;
             root.setOnClickListener(this);
         }
 
