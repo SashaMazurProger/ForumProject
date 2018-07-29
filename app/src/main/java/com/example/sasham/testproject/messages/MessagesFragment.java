@@ -57,7 +57,7 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
 
     public static MessagesFragment newInstance(Theme theme) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.THEME, theme);
+        bundle.putParcelable(Constants.THEME_MODEL, theme);
         MessagesFragment messagesFragment = new MessagesFragment();
         messagesFragment.setArguments(bundle);
         return messagesFragment;
@@ -88,7 +88,7 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        theme = getArguments().getParcelable(Constants.THEME);
+        theme = getArguments().getParcelable(Constants.THEME_MODEL);
 
         presenter.setView(this);
         if (theme != null) {

@@ -94,7 +94,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         presenter.setView(this);
 
         if (savedInstanceState != null) {
-            themes = savedInstanceState.getParcelableArrayList(Constants.THEME);
+            themes = savedInstanceState.getParcelableArrayList(Constants.THEME_MODEL);
             themesListingAdapter.notifyDataSetChanged();
         } else {
             presenter.firstPage();
@@ -115,7 +115,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(Constants.THEME, (ArrayList<? extends Parcelable>) themes);
+        outState.putParcelableArrayList(Constants.THEME_MODEL, (ArrayList<? extends Parcelable>) themes);
     }
 
     @Override

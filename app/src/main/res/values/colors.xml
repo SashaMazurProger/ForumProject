@@ -3,4 +3,20 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    //White
+    <color name="colorPrimary_white">#379dbc</color>
+    <color name="colorPrimaryDark_white">#25607e</color>
+    <color name="colorAccent_white">#29a651</color>
+    <color name="colorBackgroundMain_white">#98afbf</color>
+    <color name="colorBackground_white">#ffffff</color>
+    <color name="textColorMain_white">#5e5e5e</color>
+
+    //Black
+    <color name="colorPrimary_black">#262929</color>
+    <color name="colorPrimaryDark_black">#101010</color>
+    <color name="colorAccent_black">#29a651</color>
+    <color name="colorBackgroundMain_black">#2e2e2e</color>
+    <color name="colorBackground_black">#161616</color>
+    <color name="textColorMain_black">#ffffff</color>
 </resources>

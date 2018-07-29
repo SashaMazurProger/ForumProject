@@ -2,21 +2,22 @@ package com.example.sasham.testproject.themes;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.widget.BaseAdapter;
-import android.widget.Toast;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.example.sasham.testproject.BaseActivity;
+import com.example.sasham.testproject.BaseDaggerActivity;
+import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.messages.MessagesFragment;
 import com.example.sasham.testproject.model.Theme;
+import com.example.sasham.testproject.util.PreferencesHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ThemesActivity extends BaseActivity implements ThemesListingFragment.Callback {
+public class ThemesActivity extends BaseDaggerActivity implements ThemesListingFragment.Callback {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -24,6 +25,7 @@ public class ThemesActivity extends BaseActivity implements ThemesListingFragmen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_themes);
 
         ButterKnife.bind(this);
@@ -36,13 +38,45 @@ public class ThemesActivity extends BaseActivity implements ThemesListingFragmen
             public void onBackStackChanged() {
                 Fragment fragment = getSupportFragmentManager()
                         .findFragmentById(R.id.themes_listing_container);
-                if(fragment!=null && fragment instanceof MessagesFragment == false){
+                if (fragment != null && fragment instanceof MessagesFragment == false) {
                     setDefaultTitle();
                 }
             }
         });
 
         showThemesFragment();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.themes_menu, menu);
+
+        MenuItem theme = menu.findItem(R.id.action_black_theme);
+        theme.setChecked(PreferencesHelper.getTheme(getApplicationContext()) == Constants.THEME_BLACK);
+
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.action_black_theme) {
+
+            boolean isCheked=!item.isChecked();
+            item.setChecked(isCheked);
+
+            if (isCheked) {
+                PreferencesHelper.setTheme(getApplicationContext(), Constants.THEME_BLACK);
+            } else {
+                PreferencesHelper.setTheme(getApplicationContext(), Constants.THEME_WHITE);
+            }
+            updateTheme();
+            recreateActivity();
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void setDefaultTitle() {
