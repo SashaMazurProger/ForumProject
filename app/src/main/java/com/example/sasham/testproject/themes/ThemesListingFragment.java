@@ -63,7 +63,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         View root = inflater.inflate(R.layout.fragment_themes_listing, container, false);
 
         //Init views
-        unbinder=ButterKnife.bind(this, root);
+        unbinder = ButterKnife.bind(this, root);
 
         themesListingAdapter = new ThemesListingAdapter(themes, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
@@ -117,7 +117,9 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
     @Override
     public void showThemes(List<Theme> themeList) {
+
         themesProgress.setVisibility(View.GONE);
+
         themes.clear();
         themes.addAll(themeList);
         themesListingAdapter.notifyDataSetChanged();
@@ -125,6 +127,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
     @Override
     public void onLoading() {
+
         themesProgress.setVisibility(View.VISIBLE);
     }
 

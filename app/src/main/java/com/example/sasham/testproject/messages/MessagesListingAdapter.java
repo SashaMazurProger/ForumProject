@@ -1,5 +1,7 @@
 package com.example.sasham.testproject.messages;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.model.Message;
+import com.example.sasham.testproject.website.WebActivity;
 
 import java.util.List;
 
@@ -42,18 +45,21 @@ public class MessagesListingAdapter extends RecyclerView.Adapter<MessagesListing
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
+        final Context context = holder.itemView.getContext();
         Message currentMessage = messages.get(position);
 
         holder.userName.setText(currentMessage.getUserName());
 
         holder.messageText.setText(currentMessage.getMsgText());
         holder.messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
-        Linkify.addLinks(holder.messageText,Linkify.WEB_URLS);
-        BetterLinkMovementMethod.linkify(Linkify.WEB_URLS,holder.messageText)
+        Linkify.addLinks(holder.messageText, Linkify.WEB_URLS);
+        BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, holder.messageText)
                 .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
                     @Override
                     public boolean onClick(TextView textView, String url) {
-                        Toast.makeText(holder.itemView.getContext(), "Oops", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, WebActivity.class);
+                        intent.putExtra(WebActivity.WEB_URL_ARGS, url);
+                        context.startActivity(intent);
                         return true;
                     }
                 });
