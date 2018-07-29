@@ -13,4 +13,5 @@ public interface AppModule {
 
     @ContributesAndroidInjector(modules = ThemesModule.class)
     ThemesActivity themesInjector();
+
 }

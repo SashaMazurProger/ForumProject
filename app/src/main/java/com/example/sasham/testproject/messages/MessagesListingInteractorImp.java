@@ -10,11 +10,18 @@ import com.example.sasham.testproject.util.Converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 
 public class MessagesListingInteractorImp implements MessagesListingInteractor {
+
+    @Inject
+    public MessagesListingInteractorImp() {
+    }
+
     @Override
     public Observable<List<Message>> fetchMessages(String themeId) {
         return ApiBuilder.createWebestApi()

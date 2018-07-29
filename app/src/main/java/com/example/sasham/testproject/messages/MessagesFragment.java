@@ -1,6 +1,7 @@
 package com.example.sasham.testproject.messages;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,16 +20,21 @@ import com.example.sasham.testproject.model.Theme;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.android.support.AndroidSupportInjection;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MessagesFragment extends Fragment implements MessagesListingView {
 
-    private MessagesListingPresenter presenter = new MessagesListingPresenterImp();
+    @Inject
+    public MessagesListingPresenter presenter;
+
     private List<Message> messages = new ArrayList<>();
     private Theme theme;
 
@@ -51,6 +57,12 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
         MessagesFragment messagesFragment = new MessagesFragment();
         messagesFragment.setArguments(bundle);
         return messagesFragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
     }
 
     @Override

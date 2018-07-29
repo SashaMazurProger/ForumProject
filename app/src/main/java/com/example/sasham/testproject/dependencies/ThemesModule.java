@@ -1,5 +1,6 @@
 package com.example.sasham.testproject.dependencies;
 
+import com.example.sasham.testproject.messages.MessagesFragment;
 import com.example.sasham.testproject.themes.ThemesListingFragment;
 
 import dagger.Module;
@@ -11,4 +12,8 @@ public interface ThemesModule {
     @ThemesListingFragmentScope
     @ContributesAndroidInjector(modules = ThemesListingFragmentModule.class)
     ThemesListingFragment themesListingFragmentInjector();
+
+    @MessagesListingFragmentScope
+    @ContributesAndroidInjector(modules = MessagesListingFragmentModule.class)
+    MessagesFragment messagesFragmentInjector();
 }

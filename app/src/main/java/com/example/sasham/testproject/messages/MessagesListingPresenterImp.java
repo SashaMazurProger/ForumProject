@@ -2,8 +2,9 @@ package com.example.sasham.testproject.messages;
 
 import com.example.sasham.testproject.model.Message;
 
-import java.util.Arrays;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -11,8 +12,13 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MessagesListingPresenterImp implements MessagesListingPresenter {
 
-    private MessagesListingInteractor interactor = new MessagesListingInteractorImp();
+    private MessagesListingInteractor interactor;
     private MessagesListingView view;
+
+    @Inject
+    public MessagesListingPresenterImp(MessagesListingInteractor interactor) {
+        this.interactor = interactor;
+    }
 
     @Override
     public void setView(MessagesListingView view) {
