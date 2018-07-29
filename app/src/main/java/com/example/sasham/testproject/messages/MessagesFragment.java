@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
@@ -43,6 +44,9 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
 
     @BindView(R.id.messages_progress)
     ProgressBar messageProgress;
+
+    @BindView(R.id.messages_empty_view)
+    TextView emptyView;
 
     private Unbinder unbinder;
     private MessagesListingAdapter messagesListingAdapter;
@@ -101,6 +105,14 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
     @Override
     public void showThemeMessages(List<Message> messageList) {
         messageProgress.setVisibility(View.GONE);
+
+        if (messageList.size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+            emptyView.setText(getString(R.string.no_messages));
+        }
+        else {
+            emptyView.setVisibility(View.GONE);
+        }
         messages.clear();
         messages.addAll(messageList);
         messagesListingAdapter.notifyDataSetChanged();
@@ -109,10 +121,14 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
     @Override
     public void onLoading() {
         messageProgress.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
     }
 
     @Override
     public void onError(String message) {
-
+        messageProgress.setVisibility(View.GONE);
+        messageProgress.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
+        emptyView.setText(message);
     }
 }

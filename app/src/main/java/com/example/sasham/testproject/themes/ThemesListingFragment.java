@@ -123,6 +123,13 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
         themesProgress.setVisibility(View.GONE);
 
+        if (themeList.size() == 0) {
+            themesEmptyView.setVisibility(View.VISIBLE);
+            themesEmptyView.setText(getString(R.string.no_themes));
+        } else {
+            themesEmptyView.setVisibility(View.GONE);
+        }
+
         themes.clear();
         themes.addAll(themeList);
         themesListingAdapter.notifyDataSetChanged();
@@ -130,7 +137,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
     @Override
     public void onLoading() {
-
+        themesEmptyView.setVisibility(View.GONE);
         themesProgress.setVisibility(View.VISIBLE);
     }
 
