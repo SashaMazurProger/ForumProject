@@ -5,12 +5,12 @@
     <color name="colorAccent">#FF4081</color>
 
     //White
-    <color name="colorPrimary_white">#379dbc</color>
+    <color name="colorPrimary_white">#13bf8f</color>
     <color name="colorPrimaryDark_white">#25607e</color>
     <color name="colorAccent_white">#29a651</color>
-    <color name="colorBackgroundMain_white">#98afbf</color>
+    <color name="colorBackgroundMain_white">#ececec</color>
     <color name="colorBackground_white">#ffffff</color>
-    <color name="textColorMain_white">#5e5e5e</color>
+    <color name="textColorMain_white">#737373</color>
 
     //Black
     <color name="colorPrimary_black">#262929</color>

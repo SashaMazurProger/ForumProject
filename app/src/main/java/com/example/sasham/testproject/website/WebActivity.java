@@ -11,12 +11,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.example.sasham.testproject.BaseActivity;
 import com.example.sasham.testproject.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class WebActivity extends AppCompatActivity {
+public class WebActivity extends BaseActivity {
 
     @BindView(R.id.web_view)
     WebView webView;

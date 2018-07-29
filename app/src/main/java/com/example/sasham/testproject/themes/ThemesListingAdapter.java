@@ -45,6 +45,7 @@ public class ThemesListingAdapter extends RecyclerView.Adapter<ThemesListingAdap
         final Context context = holder.itemView.getContext();
         Theme currentTheme = themes.get(position);
 
+        holder.userName.setText(currentTheme.getUserName());
         holder.forumName.setText(currentTheme.getForumName());
         holder.topicName.setText(currentTheme.getTopicText());
 

@@ -53,6 +53,10 @@ public class MessagesListingAdapter extends RecyclerView.Adapter<MessagesListing
 
         holder.userName.setText(currentMessage.getUserName());
 
+        holder.msgCount.setText(
+                StringUtil.isNotNullOrEmpty(currentMessage.getMsgCount())?
+                        currentMessage.getMsgCount() : "0");
+
         holder.messageText.setText(StringUtil.stripHtml(currentMessage.getMsgText()));
         holder.messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
         Linkify.addLinks(holder.messageText, Linkify.WEB_URLS);
@@ -92,6 +96,8 @@ public class MessagesListingAdapter extends RecyclerView.Adapter<MessagesListing
         TextView messageText;
         @BindView(R.id.message_created)
         TextView createdTime;
+        @BindView(R.id.message_msg_count)
+        TextView msgCount;
         @BindView(R.id.message_avatar)
         CircleImageView avatar;
 
