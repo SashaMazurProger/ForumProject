@@ -131,4 +131,5 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
         emptyView.setVisibility(View.VISIBLE);
         emptyView.setText(message);
     }
+
 }
