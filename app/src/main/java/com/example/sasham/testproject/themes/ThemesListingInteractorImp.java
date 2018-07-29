@@ -1,9 +1,9 @@
 package com.example.sasham.testproject.themes;
 
 import com.example.sasham.testproject.model.Theme;
-import com.example.sasham.testproject.network.ApiBuilder;
 import com.example.sasham.testproject.network.ThemeAnswer;
 import com.example.sasham.testproject.network.ThemesWraper;
+import com.example.sasham.testproject.network.WebestApi;
 import com.example.sasham.testproject.util.Converter;
 
 import java.util.ArrayList;
@@ -17,16 +17,18 @@ import io.reactivex.functions.Function;
 
 public class ThemesListingInteractorImp implements ThemesListingInteractor {
 
+    private WebestApi webestApi;
+
     @Inject
-    public ThemesListingInteractorImp() {
+    public ThemesListingInteractorImp(WebestApi webestApi) {
+        this.webestApi = webestApi;
     }
 
     @Override
     public Observable<List<Theme>> fetchThemes(int page) {
 
         String pageString = String.valueOf(page);
-        return ApiBuilder.createWebestApi()
-                .themes(pageString)
+        return webestApi.themes(pageString)
                 .map(new Function<ThemesWraper, List<ThemeAnswer>>() {
                     @Override
                     public List<ThemeAnswer> apply(ThemesWraper themesWraper) throws Exception {

@@ -2,9 +2,9 @@ package com.example.sasham.testproject.messages;
 
 
 import com.example.sasham.testproject.model.Message;
-import com.example.sasham.testproject.network.ApiBuilder;
 import com.example.sasham.testproject.network.MessageAnswer;
 import com.example.sasham.testproject.network.MessageWraper;
+import com.example.sasham.testproject.network.WebestApi;
 import com.example.sasham.testproject.util.Converter;
 
 import java.util.ArrayList;
@@ -18,13 +18,16 @@ import io.reactivex.functions.Function;
 
 public class MessagesListingInteractorImp implements MessagesListingInteractor {
 
+    private WebestApi webestApi;
+
     @Inject
-    public MessagesListingInteractorImp() {
+    public MessagesListingInteractorImp(WebestApi webestApi) {
+        this.webestApi = webestApi;
     }
 
     @Override
     public Observable<List<Message>> fetchMessages(String themeId) {
-        return ApiBuilder.createWebestApi()
+        return webestApi
                 .themeMessages(themeId)
                 .map(new Function<MessageWraper, List<MessageAnswer>>() {
                     @Override
