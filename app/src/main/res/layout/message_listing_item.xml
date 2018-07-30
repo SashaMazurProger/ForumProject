@@ -49,7 +49,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message_avatar"
-        app:layout_constraintWidth_default="wrap"
         tools:text="name" />
 
     <TextView
