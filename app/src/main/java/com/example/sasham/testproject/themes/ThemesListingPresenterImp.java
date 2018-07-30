@@ -47,6 +47,11 @@ public class ThemesListingPresenterImp implements ThemesListingPresenter {
         view = null;
     }
 
+    @Override
+    public void loadNewData() {
+        firstPage();
+    }
+
 
     private void loadThemes() {
         view.onLoading();

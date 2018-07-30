@@ -6,4 +6,5 @@ public interface ThemesListingPresenter {
     void firstPage();
     void nextPage();
     void destroy();
+    void loadNewData();
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,7 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
 
-public class ThemesListingFragment extends Fragment implements ThemesListingView, BaseActivity.OnConnectionListener {
+public class ThemesListingFragment extends Fragment implements ThemesListingView, BaseActivity.OnConnectionListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     public ThemesListingPresenter presenter;
@@ -44,6 +45,9 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
     @BindView(R.id.themes_empty_view)
     public TextView themesEmptyView;
+
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private ThemesListingAdapter themesListingAdapter;
     private Unbinder unbinder;
@@ -82,18 +86,18 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (mayLoadMoreData()) {
-                    if (isConnected) {
-                        presenter.nextPage();
-                    }
+                    presenter.nextPage();
                 }
             }
         });
+
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         return root;
     }
 
     private boolean mayLoadMoreData() {
-        return !themesRecyclerView.canScrollVertically(1);
+        return !themesRecyclerView.canScrollVertically(1) && isConnected;
     }
 
     @Override
@@ -102,7 +106,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
         presenter.setView(this);
 
-        if(baseActivity!=null){
+        if (baseActivity != null) {
             baseActivity.addOnConnectionListener(this);
         }
 
@@ -137,6 +141,9 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     @Override
     public void showThemes(List<Theme> themeList) {
 
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
         themesProgress.setVisibility(View.GONE);
 
         if (themeList.size() == 0) {
@@ -154,7 +161,10 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     @Override
     public void onLoading() {
         themesEmptyView.setVisibility(View.GONE);
-        themesProgress.setVisibility(View.VISIBLE);
+
+        if (!swipeRefreshLayout.isRefreshing()) {
+            themesProgress.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -182,10 +192,17 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     @Override
     public void internetConnectionChanged(boolean connected) {
         isConnected = connected;
-        if(isConnected){
-            if(mayLoadMoreData()){
-                presenter.nextPage();
-            }
+        if (mayLoadMoreData()) {
+            presenter.nextPage();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+
+        if (isConnected) {
+            swipeRefreshLayout.setRefreshing(true);
+            presenter.loadNewData();
         }
     }
 
