@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.sasham.testproject.BaseActivity;
 import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.model.Theme;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
 
-public class ThemesListingFragment extends Fragment implements ThemesListingView {
+public class ThemesListingFragment extends Fragment implements ThemesListingView, BaseActivity.OnConnectionListener {
 
     @Inject
     public ThemesListingPresenter presenter;
@@ -46,6 +47,8 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
     private ThemesListingAdapter themesListingAdapter;
     private Unbinder unbinder;
+    private BaseActivity baseActivity;
+    private boolean isConnected = false;
 
 
     public ThemesListingFragment() {
@@ -78,8 +81,10 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if (!recyclerView.canScrollVertically(1)) {
-                    presenter.nextPage();
+                if (mayLoadMoreData()) {
+                    if (isConnected) {
+                        presenter.nextPage();
+                    }
                 }
             }
         });
@@ -87,11 +92,19 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         return root;
     }
 
+    private boolean mayLoadMoreData() {
+        return !themesRecyclerView.canScrollVertically(1);
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         presenter.setView(this);
+
+        if(baseActivity!=null){
+            baseActivity.addOnConnectionListener(this);
+        }
 
         if (savedInstanceState != null) {
             themes = savedInstanceState.getParcelableArrayList(Constants.THEME_MODEL);
@@ -108,6 +121,9 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
         if (context instanceof Callback) {
             callback = (Callback) context;
+        }
+        if (context instanceof BaseActivity) {
+            baseActivity = (BaseActivity) context;
         }
 
     }
@@ -158,8 +174,19 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        baseActivity.removeOnConnectionListener(this);
         presenter.destroy();
         unbinder.unbind();
+    }
+
+    @Override
+    public void internetConnectionChanged(boolean connected) {
+        isConnected = connected;
+        if(isConnected){
+            if(mayLoadMoreData()){
+                presenter.nextPage();
+            }
+        }
     }
 
     public interface Callback {

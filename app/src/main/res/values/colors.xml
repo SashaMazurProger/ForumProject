@@ -19,4 +19,6 @@
     <color name="colorBackgroundMain_black">#2e2e2e</color>
     <color name="colorBackground_black">#161616</color>
     <color name="textColorMain_black">#ffffff</color>
+
+    <color name="light_red">#f13434</color>
 </resources>

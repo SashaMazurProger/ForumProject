@@ -15,7 +15,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasFragmentInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class BaseDaggerActivity extends BaseActivity implements HasSupportFragmentInjector {
+public abstract class BaseDaggerActivity extends BaseActivity implements HasSupportFragmentInjector {
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;

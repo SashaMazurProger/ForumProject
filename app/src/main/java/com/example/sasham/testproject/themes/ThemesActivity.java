@@ -1,5 +1,7 @@
 package com.example.sasham.testproject.themes;
 
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -7,20 +9,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.sasham.testproject.BaseActivity;
 import com.example.sasham.testproject.BaseDaggerActivity;
 import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.messages.MessagesFragment;
 import com.example.sasham.testproject.model.Theme;
+import com.example.sasham.testproject.util.NetworkUtil;
 import com.example.sasham.testproject.util.PreferencesHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ThemesActivity extends BaseDaggerActivity implements ThemesListingFragment.Callback {
+public class ThemesActivity extends BaseDaggerActivity implements ThemesListingFragment.Callback, BaseActivity.OnConnectionListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.themes_container)
+    CoordinatorLayout mainContainer;
+
+    private Snackbar snackbar;
+    private boolean isConnected=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +54,14 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
             }
         });
 
-        showThemesFragment();
+        if (NetworkUtil.isConnectedNetwork(this)) {
+            showThemesFragment();
+        }
+
+        addOnConnectionListener(this);
+        startListenInternetState();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,10 +79,10 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
 
         if (item.getItemId() == R.id.action_black_theme) {
 
-            boolean isCheked=!item.isChecked();
-            item.setChecked(isCheked);
+            boolean isChecked = !item.isChecked();
+            item.setChecked(isChecked);
 
-            if (isCheked) {
+            if (isChecked) {
                 PreferencesHelper.setTheme(getApplicationContext(), Constants.THEME_BLACK);
             } else {
                 PreferencesHelper.setTheme(getApplicationContext(), Constants.THEME_WHITE);
@@ -92,12 +108,33 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
 
     @Override
     public void onThemeClicked(Theme theme) {
-        setTitle(theme.getForumName());
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.themes_listing_container, MessagesFragment.newInstance(theme))
-                .addToBackStack(null)
-                .commit();
+       if(isConnected){
+           setTitle(theme.getForumName());
+           getSupportFragmentManager()
+                   .beginTransaction()
+                   .replace(R.id.themes_listing_container, MessagesFragment.newInstance(theme))
+                   .addToBackStack(null)
+                   .commit();
+       }
     }
 
+    @Override
+    public void internetConnectionChanged(boolean connected) {
+        isConnected=connected;
+
+        if (connected) {
+            if (snackbar != null) {
+                snackbar.dismiss();
+
+                Fragment fragment=getSupportFragmentManager().findFragmentById(R.id.themes_listing_container);
+                if( fragment==null){
+                    showThemesFragment();
+                }
+            }
+
+        } else {
+            snackbar = Snackbar.make(mainContainer, R.string.connection_failed, Snackbar.LENGTH_INDEFINITE);
+            snackbar.show();
+        }
+    }
 }
