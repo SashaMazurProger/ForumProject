@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,7 +32,7 @@ import dagger.android.support.AndroidSupportInjection;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MessagesFragment extends Fragment implements MessagesListingView {
+public class MessagesFragment extends Fragment implements MessagesListingView, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     public MessagesListingPresenter presenter;
@@ -47,6 +48,9 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
 
     @BindView(R.id.messages_empty_view)
     TextView emptyView;
+
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private Unbinder unbinder;
     private MessagesListingAdapter messagesListingAdapter;
@@ -81,6 +85,7 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
         messagesRecyclerView.setAdapter(messagesListingAdapter);
         messagesRecyclerView.setLayoutManager(layoutManager);
 
+        swipeRefreshLayout.setOnRefreshListener(this);
         return root;
     }
 
@@ -104,6 +109,10 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
 
     @Override
     public void showThemeMessages(List<Message> messageList) {
+        if(swipeRefreshLayout.isRefreshing()){
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
         messageProgress.setVisibility(View.GONE);
 
         if (messageList.size() == 0) {
@@ -120,8 +129,11 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
 
     @Override
     public void onLoading() {
-        messageProgress.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.GONE);
+
+        if (!swipeRefreshLayout.isRefreshing()) {
+            messageProgress.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -132,4 +144,9 @@ public class MessagesFragment extends Fragment implements MessagesListingView {
         emptyView.setText(message);
     }
 
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        presenter.loadNewData(theme.getId());
+    }
 }

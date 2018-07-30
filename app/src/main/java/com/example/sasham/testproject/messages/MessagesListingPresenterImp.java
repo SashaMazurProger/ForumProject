@@ -64,4 +64,9 @@ public class MessagesListingPresenterImp implements MessagesListingPresenter {
     public void destroy() {
         view = null;
     }
+
+    @Override
+    public void loadNewData(String themeId) {
+        fetchMessages(themeId);
+    }
 }

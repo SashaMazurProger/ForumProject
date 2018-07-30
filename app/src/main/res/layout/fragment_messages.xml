@@ -6,22 +6,32 @@
     android:background="?attr/backgroundColorMain"
     tools:context=".messages.MessagesFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/messages_recycler_view"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-    <ProgressBar
-        android:id="@+id/messages_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        />
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+           <android.support.v7.widget.RecyclerView
+               android:id="@+id/messages_recycler_view"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"/>
 
-    <TextView
-        android:id="@+id/messages_empty_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+           <ProgressBar
+               android:id="@+id/messages_progress"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerInParent="true"
+               android:visibility="gone"
+               />
+
+           <TextView
+               android:id="@+id/messages_empty_view"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerInParent="true"/>
+       </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>
