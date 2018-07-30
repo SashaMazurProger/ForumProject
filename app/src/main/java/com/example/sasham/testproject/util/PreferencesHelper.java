@@ -18,4 +18,15 @@ public class PreferencesHelper {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getInt(Constants.APP_THEME, -1);
     }
+
+    public static void setString(Context context,String key,String value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit()
+                .putString(key, value)
+                .commit();
+    }
+    public static String getString(Context context,String key,String defValue) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(key, defValue);
+    }
 }

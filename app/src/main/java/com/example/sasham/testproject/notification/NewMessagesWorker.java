@@ -51,14 +51,13 @@ public class NewMessagesWorker extends Worker implements Consumer<List<Message>>
     @Override
     public Result doWork() {
         checkFavoriteThemes();
-        showNotification(1, "dsf");
         return Result.SUCCESS;
-
     }
 
+    //Проверяем часто посещаемые форумы на наличие новых сообщений и показываем их в уведомлении
     private void checkFavoriteThemes() {
 
-        for (final FavoriteThemeInfo themeInfo : infoRepository.getMostViewed(2)) {
+        for (final FavoriteThemeInfo themeInfo : infoRepository.getMostViewed(1)) {
 
             if (isNotifShowed) {
                 return;
@@ -144,6 +143,7 @@ public class NewMessagesWorker extends Worker implements Consumer<List<Message>>
     public void accept(List<Message> messages) throws Exception {
         Log.d(TAG, "accept: " + messages.size());
 
+        //Если есть новые сообщения - выводим уведомление
         if (messages.size() > 0) {
             showNotification(messages.size(), messages.get(0).getTopicId());
             isNotifShowed = true;

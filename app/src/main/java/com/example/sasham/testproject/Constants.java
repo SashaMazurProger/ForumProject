@@ -9,4 +9,7 @@ public class Constants {
     public final static int THEME_WHITE= 1;
     public final static int THEME_BLACK = 2;
     public static final String THEME_ID_ARGS = "theme_id";
+    public static final String LAST_THEME_ID = "last_theme_id";
+    public static final String LAST_MESSAGE_TIME = "last_message_time";
+
 }

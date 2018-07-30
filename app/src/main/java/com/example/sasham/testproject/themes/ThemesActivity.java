@@ -16,6 +16,7 @@ import com.example.sasham.testproject.BaseDaggerActivity;
 import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.messages.MessagesFragment;
+import com.example.sasham.testproject.model.FavoriteThemeInfoRepositoryImp;
 import com.example.sasham.testproject.model.Theme;
 import com.example.sasham.testproject.util.NetworkUtil;
 import com.example.sasham.testproject.util.PreferencesHelper;
@@ -48,18 +49,7 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
 
         setDefaultTitle();
 
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                Fragment fragment = getSupportFragmentManager()
-                        .findFragmentById(R.id.themes_listing_container);
-                if (fragment != null && fragment instanceof MessagesFragment == false) {
-                    setDefaultTitle();
-                }
-            }
-        });
-
-
+        //Показываем фрагменты только если доступна сеть
         if (NetworkUtil.isConnectedNetwork(this)) {
             Intent intent = getIntent();
 
@@ -89,6 +79,7 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        //Изменяем основную тему приложения
         if (item.getItemId() == R.id.action_black_theme) {
 
             boolean isChecked = !item.isChecked();
@@ -111,6 +102,7 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
         setTitle(getString(R.string.app_name));
     }
 
+    //Показываем список топиков
     private void showThemesFragment() {
         themesfragment = new ThemesListingFragment();
 
@@ -120,6 +112,7 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
                 .commit();
     }
 
+    //Показываем сообщения топика, добавляя новый фрагмент в бэкстек
     @Override
     public void onThemeClicked(Theme theme) {
         if (isConnected) {
@@ -129,8 +122,10 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
                     .replace(R.id.themes_listing_container, MessagesFragment.newInstance(theme))
                     .addToBackStack(null)
                     .commit();
+
         }
     }
+
 
     @Override
     public void internetConnectionChanged(boolean connected) {
@@ -140,6 +135,7 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
             if (snackbar != null) {
                 snackbar.dismiss();
 
+                //Если не было сети и не был добавлен фрагмент - добавляем
                 if (themesfragment == null) {
                     showThemesFragment();
                 }

@@ -70,6 +70,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         if (context instanceof BaseActivity) {
             baseActivity = (BaseActivity) context;
         }
+        getActivity().setTitle(getString(R.string.app_name));
 
     }
 

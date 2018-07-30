@@ -192,6 +192,7 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
         } else {
             emptyView.setVisibility(View.GONE);
         }
+
         isDataLoaded = true;
         messages.clear();
         messages.addAll(messageList);
