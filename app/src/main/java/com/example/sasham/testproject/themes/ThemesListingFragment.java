@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sasham.testproject.BaseActivity;
 import com.example.sasham.testproject.Constants;
@@ -60,9 +61,23 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Callback) {
+            callback = (Callback) context;
+        }
+        if (context instanceof BaseActivity) {
+            baseActivity = (BaseActivity) context;
+        }
+
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        AndroidSupportInjection.inject(this);
     }
 
     @Override
@@ -118,19 +133,6 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
-        super.onAttach(context);
-
-        if (context instanceof Callback) {
-            callback = (Callback) context;
-        }
-        if (context instanceof BaseActivity) {
-            baseActivity = (BaseActivity) context;
-        }
-
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -147,10 +149,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         themesProgress.setVisibility(View.GONE);
 
         if (themeList.size() == 0) {
-            themesEmptyView.setVisibility(View.VISIBLE);
-            themesEmptyView.setText(getString(R.string.no_themes));
-        } else {
-            themesEmptyView.setVisibility(View.GONE);
+            onError(getString(R.string.no_themes));
         }
 
         themes.clear();
@@ -169,7 +168,7 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
     @Override
     public void onError(String errorMessage) {
-        themesRecyclerView.setVisibility(View.GONE);
+//        themesRecyclerView.setVisibility(View.GONE);
         themesProgress.setVisibility(View.GONE);
         themesEmptyView.setText(errorMessage);
     }
@@ -203,7 +202,16 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         if (isConnected) {
             swipeRefreshLayout.setRefreshing(true);
             presenter.loadNewData();
+        } else {
+            swipeRefreshLayout.setRefreshing(true);
         }
+    }
+
+    @Override
+    public void onDetach() {
+        callback = null;
+        baseActivity = null;
+        super.onDetach();
     }
 
     public interface Callback {

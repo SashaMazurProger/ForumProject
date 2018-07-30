@@ -181,6 +181,10 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
 
     @Override
     public void onError(String message) {
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+        messagesRecyclerView.setVisibility(View.GONE);
         messageProgress.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
         emptyView.setText(message);
@@ -188,6 +192,7 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
 
     @Override
     public void onRefresh() {
+
         swipeRefreshLayout.setRefreshing(true);
         presenter.loadNewData(theme.getId());
     }

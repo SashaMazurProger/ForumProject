@@ -32,6 +32,7 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
 
     private Snackbar snackbar;
     private boolean isConnected=false;
+    private Fragment themesfragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +45,16 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
 
         setDefaultTitle();
 
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                Fragment fragment = getSupportFragmentManager()
-                        .findFragmentById(R.id.themes_listing_container);
-                if (fragment != null && fragment instanceof MessagesFragment == false) {
-                    setDefaultTitle();
-                }
-            }
-        });
+//        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+//            @Override
+//            public void onBackStackChanged() {
+//                Fragment fragment = getSupportFragmentManager()
+//                        .findFragmentById(R.id.themes_listing_container);
+//                if (fragment != null && fragment instanceof MessagesFragment == false) {
+//                    setDefaultTitle();
+//                }
+//            }
+//        });
 
         if (NetworkUtil.isConnectedNetwork(this)) {
             showThemesFragment();
@@ -101,16 +102,18 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
     }
 
     private void showThemesFragment() {
+        themesfragment=new ThemesListingFragment();
+
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.themes_listing_container, new ThemesListingFragment())
+                .replace(R.id.themes_listing_container,themesfragment )
                 .commit();
     }
 
     @Override
     public void onThemeClicked(Theme theme) {
        if(isConnected){
-           setTitle(theme.getForumName());
+           setTitle(theme.getTopicText());
            getSupportFragmentManager()
                    .beginTransaction()
                    .replace(R.id.themes_listing_container, MessagesFragment.newInstance(theme))
@@ -127,8 +130,7 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
             if (snackbar != null) {
                 snackbar.dismiss();
 
-                Fragment fragment=getSupportFragmentManager().findFragmentById(R.id.themes_listing_container);
-                if( fragment==null){
+                if (themesfragment == null) {
                     showThemesFragment();
                 }
             }
