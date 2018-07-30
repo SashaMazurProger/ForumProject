@@ -2,6 +2,7 @@ package com.example.sasham.testproject.messages;
 
 
 import com.example.sasham.testproject.model.Message;
+import com.example.sasham.testproject.model.NetworkRepository;
 import com.example.sasham.testproject.network.MessageAnswer;
 import com.example.sasham.testproject.network.MessageWraper;
 import com.example.sasham.testproject.network.WebestApi;
@@ -18,32 +19,15 @@ import io.reactivex.functions.Function;
 
 public class MessagesListingInteractorImp implements MessagesListingInteractor {
 
-    private WebestApi webestApi;
+    private NetworkRepository networkRepository;
 
     @Inject
-    public MessagesListingInteractorImp(WebestApi webestApi) {
-        this.webestApi = webestApi;
+    public MessagesListingInteractorImp(NetworkRepository networkRepository) {
+        this.networkRepository = networkRepository;
     }
 
     @Override
     public Observable<List<Message>> fetchMessages(String themeId) {
-        return webestApi
-                .themeMessages(themeId)
-                .map(new Function<MessageWraper, List<MessageAnswer>>() {
-                    @Override
-                    public List<MessageAnswer> apply(MessageWraper messageWraper) throws Exception {
-                        return messageWraper.getMessageAnswers();
-                    }
-                })
-                .flatMap(new Function<List<MessageAnswer>, ObservableSource<List<Message>>>() {
-                    @Override
-                    public ObservableSource<List<Message>> apply(List<MessageAnswer> messageAnswers) throws Exception {
-                        List<Message> messages = new ArrayList<>();
-                        for (MessageAnswer themeAnswer : messageAnswers) {
-                            messages.add(Converter.messageAnswerToMessage(themeAnswer));
-                        }
-                        return Observable.just(messages);
-                    }
-                });
+        return networkRepository.themeMessages(themeId);
     }
 }
