@@ -1,5 +1,6 @@
 package com.example.sasham.testproject.themes;
 
+import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,8 @@ import butterknife.ButterKnife;
 
 public class ThemesActivity extends BaseDaggerActivity implements ThemesListingFragment.Callback, BaseActivity.OnConnectionListener {
 
+    public static final String SHOW_MESSAGES_ACTION = "show_messages";
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -31,7 +34,7 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
     CoordinatorLayout mainContainer;
 
     private Snackbar snackbar;
-    private boolean isConnected=false;
+    private boolean isConnected = false;
     private Fragment themesfragment;
 
     @Override
@@ -45,19 +48,26 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
 
         setDefaultTitle();
 
-//        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-//            @Override
-//            public void onBackStackChanged() {
-//                Fragment fragment = getSupportFragmentManager()
-//                        .findFragmentById(R.id.themes_listing_container);
-//                if (fragment != null && fragment instanceof MessagesFragment == false) {
-//                    setDefaultTitle();
-//                }
-//            }
-//        });
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Fragment fragment = getSupportFragmentManager()
+                        .findFragmentById(R.id.themes_listing_container);
+                if (fragment != null && fragment instanceof MessagesFragment == false) {
+                    setDefaultTitle();
+                }
+            }
+        });
+
 
         if (NetworkUtil.isConnectedNetwork(this)) {
-            showThemesFragment();
+            Intent intent = getIntent();
+
+            if (intent.getAction().equals(SHOW_MESSAGES_ACTION)) {
+                //TODO: show message fragment
+            } else {
+                showThemesFragment();
+            }
         }
 
         addOnConnectionListener(this);
@@ -102,29 +112,29 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
     }
 
     private void showThemesFragment() {
-        themesfragment=new ThemesListingFragment();
+        themesfragment = new ThemesListingFragment();
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.themes_listing_container,themesfragment )
+                .replace(R.id.themes_listing_container, themesfragment)
                 .commit();
     }
 
     @Override
     public void onThemeClicked(Theme theme) {
-       if(isConnected){
-           setTitle(theme.getTopicText());
-           getSupportFragmentManager()
-                   .beginTransaction()
-                   .replace(R.id.themes_listing_container, MessagesFragment.newInstance(theme))
-                   .addToBackStack(null)
-                   .commit();
-       }
+        if (isConnected) {
+            setTitle(theme.getTopicText());
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.themes_listing_container, MessagesFragment.newInstance(theme))
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     @Override
     public void internetConnectionChanged(boolean connected) {
-        isConnected=connected;
+        isConnected = connected;
 
         if (connected) {
             if (snackbar != null) {

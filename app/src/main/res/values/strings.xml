@@ -8,4 +8,5 @@
     <string name="connection_failed">No internet connection...</string>
     <string name="theme_title">Theme</string>
     <string name="messages_title">Messages</string>
+    <string name="new_messages_notification">new messages in forum</string>
 </resources>

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.sasham.testproject.BaseActivity;
 import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.model.Message;
@@ -36,7 +37,7 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MessagesFragment extends Fragment implements MessagesListingView, SwipeRefreshLayout.OnRefreshListener {
+public class MessagesFragment extends Fragment implements MessagesListingView, SwipeRefreshLayout.OnRefreshListener, BaseActivity.OnConnectionListener {
 
     @Inject
     public MessagesListingPresenter presenter;
@@ -72,6 +73,9 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
 
     private Unbinder unbinder;
     private MessagesListingAdapter messagesListingAdapter;
+    private BaseActivity baseActivity;
+    private boolean isConnected = false;
+    private boolean isDataLoaded = false;
 
     public MessagesFragment() {
         // Required empty public constructor
@@ -87,8 +91,17 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
 
     @Override
     public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
         super.onAttach(context);
+        if (context instanceof BaseActivity) {
+            baseActivity = (BaseActivity) context;
+        }
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        AndroidSupportInjection.inject(this);
     }
 
     @Override
@@ -114,6 +127,11 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
         theme = getArguments().getParcelable(Constants.THEME_MODEL);
 
         presenter.setView(this);
+
+        if (baseActivity != null) {
+            baseActivity.addOnConnectionListener(this);
+        }
+
         if (theme != null) {
             setThemeReview();
             presenter.fetchMessages(theme.getId());
@@ -150,6 +168,16 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        presenter.destroy();
+        if (baseActivity != null) {
+            baseActivity.removeOnConnectionListener(this);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        baseActivity = null;
+        super.onDetach();
     }
 
     @Override
@@ -157,7 +185,6 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
-
         messageProgress.setVisibility(View.GONE);
 
         if (messageList.size() == 0) {
@@ -165,6 +192,7 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
         } else {
             emptyView.setVisibility(View.GONE);
         }
+        isDataLoaded = true;
         messages.clear();
         messages.addAll(messageList);
         messagesListingAdapter.notifyDataSetChanged();
@@ -188,12 +216,29 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
         messageProgress.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
         emptyView.setText(message);
+
+        isDataLoaded = false;
     }
 
     @Override
     public void onRefresh() {
+        if (isConnected) {
+            swipeRefreshLayout.setRefreshing(true);
+            presenter.loadNewData(theme.getId());
+        } else if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
 
-        swipeRefreshLayout.setRefreshing(true);
-        presenter.loadNewData(theme.getId());
+    @Override
+    public void internetConnectionChanged(boolean connected) {
+        isConnected = connected;
+        if (mayDownloadData()) {
+            presenter.fetchMessages(theme.getId());
+        }
+    }
+
+    private boolean mayDownloadData() {
+        return isConnected && !isDataLoaded;
     }
 }

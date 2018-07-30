@@ -183,7 +183,9 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        baseActivity.removeOnConnectionListener(this);
+        if (baseActivity != null) {
+            baseActivity.removeOnConnectionListener(this);
+        }
         presenter.destroy();
         unbinder.unbind();
     }
@@ -198,12 +200,11 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
 
     @Override
     public void onRefresh() {
-
         if (isConnected) {
             swipeRefreshLayout.setRefreshing(true);
             presenter.loadNewData();
         } else {
-            swipeRefreshLayout.setRefreshing(true);
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 

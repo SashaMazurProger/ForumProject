@@ -16,7 +16,7 @@ public class WebestApiModule {
 
     @Singleton
     @Provides
-    WebestApi webestApi(){
+    public WebestApi webestApi(){
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl(Constants.WEBEST_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
