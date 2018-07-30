@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.model.Message;
 import com.example.sasham.testproject.model.Theme;
+import com.example.sasham.testproject.util.StringUtil;
+import com.example.sasham.testproject.website.WebActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +55,20 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
 
     @BindView(R.id.swipe_layout)
     SwipeRefreshLayout swipeRefreshLayout;
+
+
+    //Theme
+    @BindView(R.id.theme_forum_name)
+    TextView forumName;
+    @BindView(R.id.theme_topic_text)
+    TextView topicName;
+    @BindView(R.id.theme_msg_text)
+    TextView msgText;
+    @BindView(R.id.theme_created)
+    TextView createdTime;
+    @BindView(R.id.theme_user_name)
+    TextView userName;
+
 
     private Unbinder unbinder;
     private MessagesListingAdapter messagesListingAdapter;
@@ -97,7 +115,34 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
 
         presenter.setView(this);
         if (theme != null) {
+            setThemeReview();
             presenter.fetchMessages(theme.getId());
+        } else {
+            onError(getString(R.string.no_messages));
+        }
+    }
+
+    private void setThemeReview() {
+        Theme currentTheme = theme;
+
+        userName.setText(currentTheme.getUserName());
+        forumName.setText(currentTheme.getForumName());
+        topicName.setText(currentTheme.getTopicText());
+
+        msgText.setText(StringUtil.stripHtml(currentTheme.getMsgText()));
+        msgText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+        Linkify.addLinks(msgText, Linkify.WEB_URLS);
+        BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, msgText)
+                .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
+                    @Override
+                    public boolean onClick(TextView textView, String url) {
+                        WebActivity.startActivity(url, getContext());
+                        return true;
+                    }
+                });
+
+        if (StringUtil.isNotNullOrEmpty(currentTheme.getMsgTime())) {
+            createdTime.setText(StringUtil.getDateFromMillis(currentTheme.getMsgTime(), Constants.TIME_PATTERN));
         }
     }
 
@@ -109,17 +154,15 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
 
     @Override
     public void showThemeMessages(List<Message> messageList) {
-        if(swipeRefreshLayout.isRefreshing()){
+        if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
 
         messageProgress.setVisibility(View.GONE);
 
         if (messageList.size() == 0) {
-            emptyView.setVisibility(View.VISIBLE);
-            emptyView.setText(getString(R.string.no_messages));
-        }
-        else {
+            onError(getString(R.string.no_messages));
+        } else {
             emptyView.setVisibility(View.GONE);
         }
         messages.clear();
@@ -138,7 +181,6 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
 
     @Override
     public void onError(String message) {
-        messageProgress.setVisibility(View.GONE);
         messageProgress.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
         emptyView.setText(message);

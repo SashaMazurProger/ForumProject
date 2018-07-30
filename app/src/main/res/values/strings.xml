@@ -6,4 +6,6 @@
     <string name="no_themes">No themes yet</string>
     <string name="action_theme">Dark Theme</string>
     <string name="connection_failed">No internet connection...</string>
+    <string name="theme_title">Theme</string>
+    <string name="messages_title">Messages</string>
 </resources>
