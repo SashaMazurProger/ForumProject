@@ -31,11 +31,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intentArg) {
 
-        Log.d(TAG, "doInBackground: notified");
-
-        OneTimeWorkRequest newMessagesRequest = new OneTimeWorkRequest
-                .Builder(NewMessagesWorker.class)
-                .build();
 
         Constraints constraints=new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -47,6 +42,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                 .build();
 
         WorkManager.getInstance()
-                .enqueue(newMessagesRequest);
+                .enqueue(newMessagesWork);
     }
 }
