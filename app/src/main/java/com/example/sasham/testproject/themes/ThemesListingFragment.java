@@ -70,7 +70,6 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
         if (context instanceof BaseActivity) {
             baseActivity = (BaseActivity) context;
         }
-        getActivity().setTitle(getString(R.string.app_name));
 
     }
 
@@ -120,16 +119,17 @@ public class ThemesListingFragment extends Fragment implements ThemesListingView
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getActivity().setTitle(getString(R.string.app_name));
+
         presenter.setView(this);
 
         if (baseActivity != null) {
             baseActivity.addOnConnectionListener(this);
         }
 
-        if (savedInstanceState != null) {
-            themes = savedInstanceState.getParcelableArrayList(Constants.THEME_MODEL);
-            themesListingAdapter.notifyDataSetChanged();
-        } else {
+        //В случае если фрагмент не загрузил данные - загружаем первую страницу.
+        // Пропускаем если данные уже есть и нам не нужно их заменять
+        if (themes.size() == 0) {
             presenter.firstPage();
         }
     }

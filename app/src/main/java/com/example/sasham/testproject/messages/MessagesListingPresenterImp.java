@@ -7,12 +7,15 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class MessagesListingPresenterImp implements MessagesListingPresenter {
 
     private MessagesListingInteractor interactor;
+    private CompositeDisposable compositeDisposable=new CompositeDisposable();
     private MessagesListingView view;
 
     @Inject
@@ -31,7 +34,7 @@ public class MessagesListingPresenterImp implements MessagesListingPresenter {
 
         view.onLoading();
 
-        interactor.fetchMessages(themeId)
+        Disposable disposable=interactor.fetchMessages(themeId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Message>>() {
@@ -48,6 +51,8 @@ public class MessagesListingPresenterImp implements MessagesListingPresenter {
                                 }
                             }
                         });
+
+        compositeDisposable.add(disposable);
     }
 
     private void displayMessages(List<Message> messages) {
@@ -63,6 +68,7 @@ public class MessagesListingPresenterImp implements MessagesListingPresenter {
     @Override
     public void destroy() {
         view = null;
+        compositeDisposable.clear();
     }
 
     @Override

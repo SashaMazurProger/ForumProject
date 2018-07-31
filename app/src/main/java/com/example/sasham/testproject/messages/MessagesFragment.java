@@ -126,6 +126,8 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
 
         theme = getArguments().getParcelable(Constants.THEME_MODEL);
 
+        getActivity().setTitle(theme.getTopicText());
+
         presenter.setView(this);
 
         if (baseActivity != null) {

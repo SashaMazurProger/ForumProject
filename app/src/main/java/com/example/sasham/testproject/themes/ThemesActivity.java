@@ -116,7 +116,6 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
     @Override
     public void onThemeClicked(Theme theme) {
         if (isConnected) {
-            setTitle(theme.getTopicText());
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.themes_listing_container, MessagesFragment.newInstance(theme))
@@ -146,4 +145,5 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
             snackbar.show();
         }
     }
+
 }

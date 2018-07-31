@@ -8,6 +8,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -16,6 +18,7 @@ public class ThemesListingPresenterImp implements ThemesListingPresenter {
     private ThemesListingView view;
     private ThemesListingInteractor themesListingInteractor;
     private List<Theme> loadedThemes = new ArrayList<>();
+    private CompositeDisposable compositeDisposable=new CompositeDisposable();
     private int currentPage;
 
 
@@ -45,6 +48,7 @@ public class ThemesListingPresenterImp implements ThemesListingPresenter {
     @Override
     public void destroy() {
         view = null;
+        compositeDisposable.clear();
     }
 
     @Override
@@ -55,7 +59,7 @@ public class ThemesListingPresenterImp implements ThemesListingPresenter {
 
     private void loadThemes() {
         view.onLoading();
-        themesListingInteractor.fetchThemes(currentPage)
+        Disposable disposable = themesListingInteractor.fetchThemes(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Theme>>() {
@@ -71,6 +75,8 @@ public class ThemesListingPresenterImp implements ThemesListingPresenter {
                                 view.onError(throwable.getMessage());
                             }
                         });
+
+//        compositeDisposable.add(disposable);
     }
 
     private void displayThemes() {
