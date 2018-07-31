@@ -188,6 +188,7 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
             swipeRefreshLayout.setRefreshing(false);
         }
         messageProgress.setVisibility(View.GONE);
+        messagesRecyclerView.setVisibility(View.VISIBLE);
 
         if (messageList.size() == 0) {
             onError(getString(R.string.no_messages));
