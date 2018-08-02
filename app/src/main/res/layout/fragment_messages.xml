@@ -12,10 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -25,45 +24,47 @@
                     android:id="@+id/theme_review_container"
                     layout="@layout/theme_listing_item" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/messages_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/messages_title">
-
-                </android.support.v7.widget.RecyclerView>
-
                 <TextView
                     android:id="@+id/messages_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/theme_review_container"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:text="@string/messages_title"
                     android:textAllCaps="true"
                     android:textColor="?attr/colorAccent"
-                    android:layout_centerHorizontal="true"
                     android:textSize="14sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/messages_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/messages_title"
+                    android:nestedScrollingEnabled="false">
+
+                </android.support.v7.widget.RecyclerView>
+
 
                 <TextView
                     android:id="@+id/messages_empty_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/messages_title"
-                    android:layout_centerHorizontal="true"/>
+                    android:layout_centerHorizontal="true" />
 
                 <ProgressBar
                     android:id="@+id/messages_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/messages_title"
-                    android:layout_marginTop="8dp"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
                     android:visibility="gone" />
 
             </RelativeLayout>
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
