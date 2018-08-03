@@ -1,33 +1,31 @@
-package com.example.sasham.testproject.themes;
+package com.example.sasham.testproject.messages;
 
-import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.sasham.testproject.BaseActivity;
 import com.example.sasham.testproject.BaseDaggerActivity;
 import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
-import com.example.sasham.testproject.messages.MessagesActivity;
-import com.example.sasham.testproject.messages.MessagesFragment;
-import com.example.sasham.testproject.model.FavoriteThemeInfoRepositoryImp;
 import com.example.sasham.testproject.model.Theme;
+import com.example.sasham.testproject.themes.ThemesListingFragment;
 import com.example.sasham.testproject.util.NetworkUtil;
 import com.example.sasham.testproject.util.PreferencesHelper;
+import com.example.sasham.testproject.util.StringUtil;
+import com.example.sasham.testproject.website.WebActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
-public class ThemesActivity extends BaseDaggerActivity implements ThemesListingFragment.Callback, BaseActivity.OnConnectionListener {
-
-    public static final String SHOW_MESSAGES_ACTION = "show_messages";
+public class MessagesActivity extends BaseDaggerActivity implements BaseActivity.OnConnectionListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -37,28 +35,42 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
 
     private Snackbar snackbar;
     private boolean isConnected = false;
-    private Fragment themesfragment;
+    private Fragment messagesFragment;
+    private Theme theme;
+
+    //Theme
+    @BindView(R.id.theme_forum_name)
+    TextView forumName;
+    @BindView(R.id.theme_topic_text)
+    TextView topicName;
+    @BindView(R.id.theme_msg_text)
+    TextView msgText;
+    @BindView(R.id.theme_created)
+    TextView createdTime;
+    @BindView(R.id.theme_user_name)
+    TextView userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_themes);
+        setContentView(R.layout.activity_messages);
 
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         setDefaultTitle();
+
+        theme = getIntent().getParcelableExtra(Constants.THEME_MODEL);
+
+        setThemeReview();
 
         //Показываем фрагменты только если доступна сеть
         if (NetworkUtil.isConnectedNetwork(this)) {
-            Intent intent = getIntent();
 
-            if (intent.getAction().equals(SHOW_MESSAGES_ACTION)) {
-                //TODO: show message fragment
-            } else {
-                showThemesFragment();
-            }
+            showMessagesFragment();
         }
 
         addOnConnectionListener(this);
@@ -99,26 +111,42 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
         return super.onOptionsItemSelected(item);
     }
 
+    private void setThemeReview() {
+        Theme currentTheme = theme;
+
+        userName.setText(currentTheme.getUserName());
+        forumName.setText(currentTheme.getForumName());
+        topicName.setText(currentTheme.getTopicText());
+
+        msgText.setText(StringUtil.stripHtml(currentTheme.getMsgText()));
+        msgText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+        Linkify.addLinks(msgText, Linkify.WEB_URLS);
+        BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, msgText)
+                .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
+                    @Override
+                    public boolean onClick(TextView textView, String url) {
+                        WebActivity.startActivity(url, MessagesActivity.this);
+                        return true;
+                    }
+                });
+
+        if (StringUtil.isNotNullOrEmpty(currentTheme.getMsgTime())) {
+            createdTime.setText(StringUtil.getDateFromMillis(currentTheme.getMsgTime(), Constants.TIME_PATTERN));
+        }
+    }
+
     private void setDefaultTitle() {
-        setTitle(getString(R.string.app_name));
+        setTitle("");
     }
 
     //Показываем список топиков
-    private void showThemesFragment() {
-        themesfragment = new ThemesListingFragment();
+    private void showMessagesFragment() {
+        messagesFragment = new MessagesFragment();
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.themes_listing_container, themesfragment)
+                .replace(R.id.themes_listing_container, MessagesFragment.newInstance(theme))
                 .commit();
-    }
-
-    //Показываем сообщения топика, добавляя новый фрагмент в бэкстек
-    @Override
-    public void onThemeClicked(Theme theme) {
-        Intent intent = new Intent(this, MessagesActivity.class);
-        intent.putExtra(Constants.THEME_MODEL, theme);
-        startActivity(intent);
     }
 
 
@@ -131,8 +159,8 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
                 snackbar.dismiss();
 
                 //Если не было сети и не был добавлен фрагмент - добавляем
-                if (themesfragment == null) {
-                    showThemesFragment();
+                if (messagesFragment == null) {
+                    showMessagesFragment();
                 }
             }
 
@@ -141,5 +169,4 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
             snackbar.show();
         }
     }
-
 }

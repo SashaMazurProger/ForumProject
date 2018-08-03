@@ -58,19 +58,6 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
     SwipeRefreshLayout swipeRefreshLayout;
 
 
-    //Theme
-    @BindView(R.id.theme_forum_name)
-    TextView forumName;
-    @BindView(R.id.theme_topic_text)
-    TextView topicName;
-    @BindView(R.id.theme_msg_text)
-    TextView msgText;
-    @BindView(R.id.theme_created)
-    TextView createdTime;
-    @BindView(R.id.theme_user_name)
-    TextView userName;
-
-
     private Unbinder unbinder;
     private MessagesListingAdapter messagesListingAdapter;
     private BaseActivity baseActivity;
@@ -126,8 +113,6 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
 
         theme = getArguments().getParcelable(Constants.THEME_MODEL);
 
-        getActivity().setTitle(theme.getTopicText());
-
         presenter.setView(this);
 
         if (baseActivity != null) {
@@ -135,36 +120,12 @@ public class MessagesFragment extends Fragment implements MessagesListingView, S
         }
 
         if (theme != null) {
-            setThemeReview();
             presenter.fetchMessages(theme.getId());
         } else {
             onError(getString(R.string.no_messages));
         }
     }
 
-    private void setThemeReview() {
-        Theme currentTheme = theme;
-
-        userName.setText(currentTheme.getUserName());
-        forumName.setText(currentTheme.getForumName());
-        topicName.setText(currentTheme.getTopicText());
-
-        msgText.setText(StringUtil.stripHtml(currentTheme.getMsgText()));
-        msgText.setMovementMethod(BetterLinkMovementMethod.getInstance());
-        Linkify.addLinks(msgText, Linkify.WEB_URLS);
-        BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, msgText)
-                .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
-                    @Override
-                    public boolean onClick(TextView textView, String url) {
-                        WebActivity.startActivity(url, getContext());
-                        return true;
-                    }
-                });
-
-        if (StringUtil.isNotNullOrEmpty(currentTheme.getMsgTime())) {
-            createdTime.setText(StringUtil.getDateFromMillis(currentTheme.getMsgTime(), Constants.TIME_PATTERN));
-        }
-    }
 
     @Override
     public void onDestroyView() {

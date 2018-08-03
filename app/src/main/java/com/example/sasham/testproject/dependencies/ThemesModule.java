@@ -13,7 +13,4 @@ public interface ThemesModule {
     @ContributesAndroidInjector(modules = ThemesListingFragmentModule.class)
     ThemesListingFragment themesListingFragmentInjector();
 
-    @MessagesListingFragmentScope
-    @ContributesAndroidInjector(modules = MessagesListingFragmentModule.class)
-    MessagesFragment messagesFragmentInjector();
 }

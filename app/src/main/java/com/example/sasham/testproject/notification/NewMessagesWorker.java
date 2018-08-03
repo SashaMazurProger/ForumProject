@@ -109,8 +109,6 @@ public class NewMessagesWorker extends Worker implements Consumer<List<Message>>
         NotificationCompat.Builder notificationBuilder;
 
         Intent intent = new Intent(context, ThemesActivity.class);
-//        intent.putExtra(Constants.THEME_MODEL, topicId);
-//        intent.setAction(ThemesActivity.SHOW_MESSAGES_ACTION);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
                 PENDING_INTENT_REQUEST_CODE,
