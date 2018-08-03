@@ -2,6 +2,8 @@ package com.example.sasham.testproject.dependencies;
 
 
 import com.example.sasham.testproject.messages.MessagesActivity;
+import com.example.sasham.testproject.model.FavoriteThemeInfoRepository;
+import com.example.sasham.testproject.model.FavoriteThemeInfoRepositoryImp;
 import com.example.sasham.testproject.model.NetworkRepository;
 import com.example.sasham.testproject.model.NetworkRepositoryImp;
 import com.example.sasham.testproject.themes.ThemesActivity;
@@ -26,4 +28,8 @@ public interface AppModule {
     @Singleton
     @Binds
     NetworkRepository networkRepository(NetworkRepositoryImp networkRepositoryImp);
+
+    @Singleton
+    @Binds
+    FavoriteThemeInfoRepository favoriteThemeInfoRepository(FavoriteThemeInfoRepositoryImp favoriteThemeInfoRepositoryImp);
 }

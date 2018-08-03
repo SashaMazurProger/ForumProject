@@ -24,6 +24,8 @@ import com.example.sasham.testproject.util.Converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import androidx.work.Worker;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -39,12 +41,16 @@ public class NewMessagesWorker extends Worker implements Consumer<List<Message>>
     private static final String TAG = NewMessagesWorker.class.getSimpleName();
     private static final int PENDING_INTENT_REQUEST_CODE = 2;
 
-    FavoriteThemeInfoRepository infoRepository = new FavoriteThemeInfoRepositoryImp();
-    WebestApi webestApi = new WebestApiModule().webestApi();
+    private FavoriteThemeInfoRepository infoRepository;
+
+    private WebestApi webestApi;
 
     private boolean isNotifShowed = false;
 
-    public NewMessagesWorker() {
+    @Inject
+    public NewMessagesWorker(FavoriteThemeInfoRepository infoRepository, WebestApi webestApi) {
+        this.infoRepository = infoRepository;
+        this.webestApi = webestApi;
     }
 
     @NonNull
