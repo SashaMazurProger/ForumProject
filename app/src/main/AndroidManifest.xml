@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.White">
-        <activity android:name=".themes.ThemesActivity">
+        <activity android:name=".themes.ThemesActivity" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +34,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".messages.MessagesActivity"></activity>
+        <activity android:name=".messages.MessagesActivity" android:parentActivityName=".themes.ThemesActivity"></activity>
     </application>
 
 </manifest>

@@ -16,18 +16,27 @@
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <include
-                android:id="@+id/theme_review_container"
-                layout="@layout/theme_listing_item"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"/>
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:layout_collapseMode="pin"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|enterAlways" />
+
+                <include
+                    android:id="@+id/theme_review_container"
+                    layout="@layout/theme_listing_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true" />
+            </LinearLayout>
+
+
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
@@ -35,6 +44,6 @@
         android:id="@+id/themes_listing_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

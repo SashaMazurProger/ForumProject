@@ -169,4 +169,10 @@ public class MessagesActivity extends BaseDaggerActivity implements BaseActivity
             snackbar.show();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
 }
