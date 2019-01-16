@@ -1,12 +1,10 @@
 package com.example.sasham.testproject.themes;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,11 +14,12 @@ import com.example.sasham.testproject.BaseDaggerActivity;
 import com.example.sasham.testproject.Constants;
 import com.example.sasham.testproject.R;
 import com.example.sasham.testproject.messages.MessagesActivity;
-import com.example.sasham.testproject.messages.MessagesFragment;
 import com.example.sasham.testproject.model.FavoriteThemeInfoRepositoryImp;
 import com.example.sasham.testproject.model.Theme;
 import com.example.sasham.testproject.util.NetworkUtil;
 import com.example.sasham.testproject.util.PreferencesHelper;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +38,9 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
     private boolean isConnected = false;
     private Fragment themesfragment;
 
+    @Inject
+    FavoriteThemeInfoRepositoryImp infoRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +58,7 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
 
             if (intent.getAction().equals(SHOW_MESSAGES_ACTION)) {
                 //TODO: show message fragment
+
             } else {
                 showThemesFragment();
             }
@@ -116,6 +119,7 @@ public class ThemesActivity extends BaseDaggerActivity implements ThemesListingF
     //Показываем сообщения топика, добавляя новый фрагмент в бэкстек
     @Override
     public void onThemeClicked(Theme theme) {
+        infoRepository.addLastViewedTheme(theme);
         Intent intent = new Intent(this, MessagesActivity.class);
         intent.putExtra(Constants.THEME_MODEL, theme);
         startActivity(intent);

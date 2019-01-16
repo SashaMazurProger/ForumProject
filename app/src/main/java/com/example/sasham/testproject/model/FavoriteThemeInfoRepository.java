@@ -5,4 +5,8 @@ import java.util.List;
 public interface FavoriteThemeInfoRepository {
 
     List<FavoriteThemeInfo> getMostViewed(int count);
+
+    FavoriteThemeInfo getLastViewedTheme();
+
+    void addLastViewedTheme(Theme theme);
 }

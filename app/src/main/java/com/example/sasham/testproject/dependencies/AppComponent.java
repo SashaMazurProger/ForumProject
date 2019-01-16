@@ -3,7 +3,7 @@ package com.example.sasham.testproject.dependencies;
 import android.content.Context;
 
 import com.example.sasham.testproject.App;
-import com.example.sasham.testproject.network.WebestApi;
+import com.example.sasham.testproject.notification.NewMessagesWorker;
 
 import javax.inject.Singleton;
 
@@ -15,11 +15,14 @@ import dagger.Component;
 public interface AppComponent {
 
     @Component.Builder
-    interface Builder{
+    interface Builder {
         @BindsInstance
         Builder context(Context context);
+
         AppComponent build();
     }
 
     void injectApp(App app);
+
+    void inject(NewMessagesWorker newMessagesWorker);
 }

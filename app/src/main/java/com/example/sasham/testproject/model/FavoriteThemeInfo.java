@@ -4,11 +4,17 @@ public class FavoriteThemeInfo {
     private String themeId;
     private int countViewed;
     private long lastMessageTime;
+    private String title;
 
-    public FavoriteThemeInfo(String themeId, int countViewed, long lastMessageTime) {
+    public FavoriteThemeInfo(String themeId, int countViewed, long lastMessageTime, String title) {
         this.themeId = themeId;
         this.countViewed = countViewed;
         this.lastMessageTime = lastMessageTime;
+        this.title = title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getThemeId() {
@@ -33,5 +39,9 @@ public class FavoriteThemeInfo {
 
     public void setLastMessageTime(long lastMessageTime) {
         this.lastMessageTime = lastMessageTime;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

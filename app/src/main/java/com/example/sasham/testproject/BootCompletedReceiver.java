@@ -37,7 +37,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                 .build();
 
         PeriodicWorkRequest newMessagesWork = new PeriodicWorkRequest
-                .Builder(NewMessagesWorker.class,20, TimeUnit.SECONDS)
+                .Builder(NewMessagesWorker.class,1, TimeUnit.HOURS)
                 .setConstraints(constraints)
                 .build();
 
