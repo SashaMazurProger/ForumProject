@@ -1,28 +1,18 @@
 package com.example.sasham.testproject
 
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.support.v4.app.NotificationCompat
-import android.util.Log
+import androidx.core.app.NotificationCompat
 
 import com.example.sasham.testproject.notification.NewMessagesWorker
-import com.example.sasham.testproject.themes.ThemesActivity
 
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 import androidx.work.Constraints
 import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
-
-import android.content.Context.NOTIFICATION_SERVICE
 
 class BootCompletedReceiver : BroadcastReceiver() {
 

@@ -3,10 +3,10 @@ package com.example.sasham.testproject.themes
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,14 +20,11 @@ import java.util.ArrayList
 
 import javax.inject.Inject
 
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_themes_listing.*
 
 
-class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConnectionListener, SwipeRefreshLayout.OnRefreshListener {
+class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConnectionListener, androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     lateinit var presenter: ThemesListingPresenter
@@ -39,7 +36,7 @@ class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConn
     private var baseActivity: BaseActivity? = null
     private var isConnected = false
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
 
         if (context is Callback) {
@@ -57,7 +54,7 @@ class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConn
         AndroidSupportInjection.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val root = inflater!!.inflate(R.layout.fragment_themes_listing, container, false)
@@ -68,17 +65,17 @@ class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConn
         return !themesRecyclerView!!.canScrollVertically(1) && isConnected
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         themesListingAdapter = ThemesListingAdapter(themes, this)
-        val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.RecyclerView.VERTICAL, false)
         themesRecyclerView!!.adapter = themesListingAdapter
         themesRecyclerView!!.layoutManager = layoutManager
 
         //If we scrolled to end list then load more data
-        themesRecyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+        themesRecyclerView!!.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
                 if (mayLoadMoreData()) {
@@ -89,7 +86,7 @@ class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConn
 
         swipeRefreshLayout!!.setOnRefreshListener(this)
 
-        activity.title = getString(R.string.app_name)
+        activity!!.title = getString(R.string.app_name)
 
         presenter!!.setView(this)
 
@@ -105,7 +102,7 @@ class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConn
     }
 
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState!!.putParcelableArrayList(Constants.THEME_MODEL, themes as ArrayList<out Parcelable>)
     }

@@ -1,13 +1,10 @@
 package com.example.sasham.testproject.themes
 
-import android.support.v7.widget.RecyclerView
 import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.R
 import com.example.sasham.testproject.model.Theme
@@ -15,7 +12,7 @@ import com.example.sasham.testproject.util.StringUtil
 import com.example.sasham.testproject.website.WebActivity
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
-class ThemesListingAdapter(private val themes: MutableList<Theme>, private val themesListingView: ThemesListingView) : RecyclerView.Adapter<ThemesListingAdapter.ViewHolder>() {
+class ThemesListingAdapter(private val themes: MutableList<Theme>, private val themesListingView: ThemesListingView) : androidx.recyclerview.widget.RecyclerView.Adapter<ThemesListingAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -51,23 +48,22 @@ class ThemesListingAdapter(private val themes: MutableList<Theme>, private val t
         return themes.size
     }
 
-    inner class ViewHolder(internal var root: View) : RecyclerView.ViewHolder(root), View.OnClickListener {
+    inner class ViewHolder(internal var root: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(root), View.OnClickListener {
 
-        @BindView(R.id.forumName)
-        lateinit var forumName: TextView
-        @BindView(R.id.topicName)
-        lateinit var topicName: TextView
-        @BindView(R.id.msgText)
-        lateinit var msgText: TextView
-        @BindView(R.id.createdTime)
-        lateinit var createdTime: TextView
-        @BindView(R.id.userName)
-        lateinit var userName: TextView
+
+        var forumName: TextView = root.findViewById(R.id.forumName)
+
+        var topicName: TextView = root.findViewById(R.id.topicName)
+
+        var msgText: TextView = root.findViewById(R.id.msgText)
+
+        var createdTime: TextView = root.findViewById(R.id.createdTime)
+
+        var userName: TextView = root.findViewById(R.id.userName)
 
         internal var theme: Theme? = null
 
         init {
-            ButterKnife.bind(this, root)
             root.setOnClickListener(this)
         }
 

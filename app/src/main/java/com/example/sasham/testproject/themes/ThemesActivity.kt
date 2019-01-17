@@ -2,10 +2,10 @@ package com.example.sasham.testproject.themes
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 
@@ -21,15 +21,13 @@ import com.example.sasham.testproject.util.PreferencesHelper
 
 import javax.inject.Inject
 
-import butterknife.BindView
-import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_themes.*
 
 class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, BaseActivity.OnConnectionListener {
 
     private var snackbar: Snackbar? = null
     private var isConnected = false
-    private var themesfragment: Fragment? = null
+    private var themesfragment: ThemesListingFragment? = null
 
     @Inject
     lateinit var infoRepository: FavoriteThemeInfoRepositoryImp
@@ -39,7 +37,6 @@ class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, Bas
 
         setContentView(R.layout.activity_themes)
 
-        ButterKnife.bind(this)
         setSupportActionBar(toolbar)
 
         setDefaultTitle()
@@ -102,7 +99,7 @@ class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, Bas
 
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.themes_listing_container, themesfragment)
+                .replace(R.id.themes_listing_container, themesfragment!!)
                 .commit()
     }
 

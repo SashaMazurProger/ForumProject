@@ -1,13 +1,10 @@
 package com.example.sasham.testproject.messages
 
-import android.support.v7.widget.RecyclerView
 import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.R
 import com.example.sasham.testproject.model.Message
@@ -17,7 +14,7 @@ import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
-class MessagesListingAdapter(private val messages: List<Message>) : RecyclerView.Adapter<MessagesListingAdapter.ViewHolder>() {
+class MessagesListingAdapter(private val messages: List<Message>) : androidx.recyclerview.widget.RecyclerView.Adapter<MessagesListingAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -64,21 +61,18 @@ class MessagesListingAdapter(private val messages: List<Message>) : RecyclerView
         return messages.size
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(val root: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(root) {
 
-        @BindView(R.id.message_user_name)
-        lateinit var userName: TextView
-        @BindView(R.id.message_text)
-        lateinit var messageText: TextView
-        @BindView(R.id.message_created)
-        lateinit var createdTime: TextView
-        @BindView(R.id.message_msg_count)
-        lateinit var msgCount: TextView
-        @BindView(R.id.message_avatar)
-        lateinit var avatar: CircleImageView
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
+        var userName: TextView = root.findViewById(R.id.userName)
+
+        var messageText: TextView = root.findViewById(R.id.msgText)
+
+        var createdTime: TextView = root.findViewById(R.id.createdTime)
+
+        var msgCount: TextView = root.findViewById(R.id.msgCount)
+
+        var avatar: CircleImageView = root.findViewById(R.id.avatar)
+
     }
 }

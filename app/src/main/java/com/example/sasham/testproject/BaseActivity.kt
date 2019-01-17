@@ -6,8 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import com.example.sasham.testproject.themes.ThemesListingAdapter
+import androidx.appcompat.app.AppCompatActivity
 import com.example.sasham.testproject.util.NetworkUtil
 import com.example.sasham.testproject.util.PreferencesHelper
 

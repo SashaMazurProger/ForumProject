@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,7 +9,7 @@
 
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/message_avatar"
+        android:id="@+id/avatar"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="8dp"
@@ -29,11 +29,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="@+id/message_avatar"
+        app:layout_constraintBottom_toBottomOf="@+id/avatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/message_avatar"
-        app:layout_constraintTop_toTopOf="@+id/message_avatar"
+        app:layout_constraintStart_toEndOf="@+id/avatar"
+        app:layout_constraintTop_toTopOf="@+id/avatar"
         tools:text="name" />
 
     <TextView
@@ -49,7 +49,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/message_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/avatar"
         tools:text="name" />
 
     <TextView
@@ -59,7 +59,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/message_msg_count"
+        app:layout_constraintTop_toTopOf="@+id/msgCount"
         tools:text="name" />
 
     <TextView
@@ -84,4 +84,4 @@
         app:layout_constraintStart_toStartOf="@+id/message_text"
         app:layout_constraintTop_toBottomOf="@+id/message_text"
         app:srcCompat="@drawable/ic_message" />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

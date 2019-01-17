@@ -1,10 +1,10 @@
 package com.example.sasham.testproject.messages
 
-import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import android.text.util.Linkify
 import android.view.Menu
 import android.view.MenuItem
@@ -19,17 +19,16 @@ import com.example.sasham.testproject.util.NetworkUtil
 import com.example.sasham.testproject.util.PreferencesHelper
 import com.example.sasham.testproject.util.StringUtil
 import com.example.sasham.testproject.website.WebActivity
-
-import butterknife.BindView
 import kotlinx.android.synthetic.main.activity_messages.*
 import kotlinx.android.synthetic.main.theme_listing_item.*
+
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class MessagesActivity : BaseDaggerActivity(), BaseActivity.OnConnectionListener {
 
     private var snackbar: Snackbar? = null
     private var isConnected = false
-    private var messagesFragment: Fragment? = null
+    private var messagesFragment: androidx.fragment.app.Fragment? = null
     private var theme: Theme? = null
 
 

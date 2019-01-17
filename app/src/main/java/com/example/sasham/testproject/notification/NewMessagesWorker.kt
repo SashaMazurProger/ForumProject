@@ -5,7 +5,7 @@ import android.app.PendingIntent
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import android.util.Log
 import androidx.work.Worker
 import com.example.sasham.testproject.App
