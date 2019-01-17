@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/theme_forum_name"
+        android:id="@+id/forumName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -34,7 +34,7 @@
         tools:text="name" />
 
     <TextView
-        android:id="@+id/theme_user_name"
+        android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -43,11 +43,11 @@
         android:layout_marginTop="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/theme_msg_text"
+        app:layout_constraintTop_toBottomOf="@+id/msgText"
         tools:text="name" />
 
     <TextView
-        android:id="@+id/theme_topic_text"
+        android:id="@+id/topicName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -58,11 +58,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/theme_image"
-        app:layout_constraintTop_toBottomOf="@+id/theme_forum_name"
+        app:layout_constraintTop_toBottomOf="@+id/forumName"
         tools:text="name" />
 
     <TextView
-        android:id="@+id/theme_msg_text"
+        android:id="@+id/msgText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -77,12 +77,12 @@
         tools:text="name" />
 
     <TextView
-        android:id="@+id/theme_created"
+        android:id="@+id/createdTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/theme_user_name"
-        app:layout_constraintEnd_toEndOf="@+id/theme_forum_name"
-        app:layout_constraintTop_toTopOf="@+id/theme_user_name"
+        app:layout_constraintBottom_toBottomOf="@+id/userName"
+        app:layout_constraintEnd_toEndOf="@+id/forumName"
+        app:layout_constraintTop_toTopOf="@+id/userName"
         tools:text="name" />
 
 </android.support.constraint.ConstraintLayout>

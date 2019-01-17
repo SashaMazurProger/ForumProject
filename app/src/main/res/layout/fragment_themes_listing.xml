@@ -8,7 +8,7 @@
     tools:context=".themes.ThemesListingFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_layout"
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,19 +18,19 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/themes_listing_recycler_view"
+                android:id="@+id/themesRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <ProgressBar
-                android:id="@+id/themes_progress"
+                android:id="@+id/themesProgress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:visibility="gone" />
 
             <TextView
-                android:id="@+id/themes_empty_view"
+                android:id="@+id/themesEmptyView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
