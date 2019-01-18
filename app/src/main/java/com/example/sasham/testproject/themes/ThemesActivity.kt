@@ -16,6 +16,7 @@ import com.example.sasham.testproject.R
 import com.example.sasham.testproject.messages.MessagesActivity
 import com.example.sasham.testproject.model.FavoriteThemeInfoRepositoryImp
 import com.example.sasham.testproject.model.Theme
+import com.example.sasham.testproject.users.UsersFragment
 import com.example.sasham.testproject.util.NetworkUtil
 import com.example.sasham.testproject.util.PreferencesHelper
 
@@ -95,11 +96,11 @@ class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, Bas
 
     //Показываем список топиков
     private fun showThemesFragment() {
-        themesfragment = ThemesListingFragment()
+        //themesfragment = ThemesListingFragment()
 
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.themes_listing_container, themesfragment!!)
+                .replace(R.id.themes_listing_container, UsersFragment())
                 .commit()
     }
 

@@ -4,6 +4,7 @@ import android.content.Context
 
 import com.example.sasham.testproject.App
 import com.example.sasham.testproject.notification.NewMessagesWorker
+import com.example.sasham.testproject.users.UsersFragment
 
 import javax.inject.Singleton
 
@@ -25,4 +26,5 @@ interface AppComponent {
     fun injectApp(app: App)
 
     fun inject(newMessagesWorker: NewMessagesWorker)
+    fun injectF(f: UsersFragment)
 }
