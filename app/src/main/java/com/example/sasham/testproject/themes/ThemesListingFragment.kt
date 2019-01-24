@@ -3,31 +3,26 @@ package com.example.sasham.testproject.themes
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import com.example.sasham.testproject.BaseActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.sasham.testproject.Constants
+import com.example.sasham.testproject.MvpAppCompatFragment
 import com.example.sasham.testproject.R
+import com.example.sasham.testproject.base.BaseActivity
 import com.example.sasham.testproject.model.Theme
-
-import java.util.ArrayList
-
-import javax.inject.Inject
-
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_themes_listing.*
+import java.util.*
 
 
-class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConnectionListener, androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener {
+class ThemesListingFragment : MvpAppCompatFragment(), ThemesListingView, BaseActivity.OnConnectionListener, androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener {
 
-    @Inject
-    lateinit var presenter: ThemesListingPresenter
+    @InjectPresenter
+    lateinit var presenter: ThemesListingPresenterImp
 
     private var callback: Callback? = null
     private val themes = ArrayList<Theme>()
@@ -51,7 +46,6 @@ class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConn
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-        AndroidSupportInjection.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -69,7 +63,7 @@ class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConn
         super.onViewCreated(view, savedInstanceState)
 
         themesListingAdapter = ThemesListingAdapter(themes, this)
-        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.RecyclerView.VERTICAL, false)
+        val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         themesRecyclerView!!.adapter = themesListingAdapter
         themesRecyclerView!!.layoutManager = layoutManager
 
@@ -87,8 +81,6 @@ class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConn
         swipeRefreshLayout!!.setOnRefreshListener(this)
 
         activity!!.title = getString(R.string.app_name)
-
-        presenter!!.setView(this)
 
         if (baseActivity != null) {
             baseActivity!!.addOnConnectionListener(this)
@@ -115,7 +107,7 @@ class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConn
         themesProgress!!.visibility = View.GONE
 
         if (themeList.size == 0) {
-            onError(getString(R.string.no_themes))
+            message(getString(R.string.no_themes))
         }
 
         themes.clear()
@@ -131,7 +123,7 @@ class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConn
         }
     }
 
-    override fun onError(errorMessage: String) {
+    override fun message(errorMessage: String?) {
         //        themesRecyclerView.setVisibility(View.GONE);
         themesProgress!!.visibility = View.GONE
         themesEmptyView!!.text = errorMessage
@@ -148,7 +140,6 @@ class ThemesListingFragment : Fragment(), ThemesListingView, BaseActivity.OnConn
         if (baseActivity != null) {
             baseActivity!!.removeOnConnectionListener(this)
         }
-        presenter!!.destroy()
     }
 
     override fun internetConnectionChanged(connected: Boolean) {

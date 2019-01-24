@@ -38,7 +38,7 @@ constructor(private val context: Context) : FavoriteThemeInfoRepository {
     override fun addLastViewedTheme(theme: Theme?) {
         prefs.edit().putString(LAST_VIEWED_THEME_ID, theme!!.id).commit()
         prefs.edit().putLong(LAST_VIEWED_THEME_TIME, Calendar.getInstance().timeInMillis).commit()
-        prefs.edit().putString(LAST_VIEWED_THEME_TITLE, theme.forumName).commit()
+        prefs.edit().putString(LAST_VIEWED_THEME_TITLE, theme.topicText).commit()
     }
 
     companion object {

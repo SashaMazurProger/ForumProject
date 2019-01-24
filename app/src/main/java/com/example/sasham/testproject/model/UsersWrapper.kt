@@ -16,12 +16,12 @@ class UsersWrapper : Parcelable {
     var success: Boolean? = null
     @SerializedName("objects")
     @Expose
-    var users: List<User>? = null
+    var userWrappers: List<UserWrapper>? = null
 
     protected constructor(`in`: Parcel) {
         this.baseUrl = `in`.readValue(String::class.java.classLoader) as String
         this.success = `in`.readValue(Boolean::class.java.classLoader) as Boolean
-        `in`.readList(this.users, User::class.java!!.getClassLoader())
+        `in`.readList(this.userWrappers, UserWrapper::class.java!!.getClassLoader())
     }
 
     /**
@@ -33,19 +33,19 @@ class UsersWrapper : Parcelable {
     /**
      *
      * @param baseUrl
-     * @param users
+     * @param userWrappers
      * @param success
      */
-    constructor(baseUrl: String, success: Boolean?, users: List<User>) : super() {
+    constructor(baseUrl: String, success: Boolean?, userWrappers: List<UserWrapper>) : super() {
         this.baseUrl = baseUrl
         this.success = success
-        this.users = users
+        this.userWrappers = userWrappers
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeValue(baseUrl)
         dest.writeValue(success)
-        dest.writeList(users)
+        dest.writeList(userWrappers)
     }
 
     override fun describeContents(): Int {

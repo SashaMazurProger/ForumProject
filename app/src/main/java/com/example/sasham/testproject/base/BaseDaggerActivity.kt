@@ -1,8 +1,7 @@
-package com.example.sasham.testproject
+package com.example.sasham.testproject.base
 
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.sasham.testproject.base.BaseActivity
 
 import javax.inject.Inject
 

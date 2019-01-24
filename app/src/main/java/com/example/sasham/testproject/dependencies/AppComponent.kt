@@ -1,15 +1,13 @@
 package com.example.sasham.testproject.dependencies
 
 import android.content.Context
-
 import com.example.sasham.testproject.App
 import com.example.sasham.testproject.notification.NewMessagesWorker
-import com.example.sasham.testproject.users.UsersFragment
-
-import javax.inject.Singleton
-
+import com.example.sasham.testproject.themes.ThemesListingPresenterImp
+import com.example.sasham.testproject.users.UsersPresenter
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Singleton
 
 @Singleton
 @Component(modules = arrayOf(AppModule::class, WebestApiModule::class))
@@ -26,5 +24,6 @@ interface AppComponent {
     fun injectApp(app: App)
 
     fun inject(newMessagesWorker: NewMessagesWorker)
-    fun injectF(f: UsersFragment)
+    fun inject(presenter: UsersPresenter)
+    fun inject(presenter: ThemesListingPresenterImp)
 }

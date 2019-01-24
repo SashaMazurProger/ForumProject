@@ -6,7 +6,7 @@ import android.os.Parcelable.Creator
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class User : Parcelable {
+class UserWrapper : Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -43,7 +43,7 @@ class User : Parcelable {
     var homepage: String? = null
     @SerializedName("icq")
     @Expose
-    var icq: Int? = null
+    var icq: Long? = null
     @SerializedName("about")
     @Expose
     var about: String? = null
@@ -84,7 +84,7 @@ class User : Parcelable {
         this.state = `in`.readValue(Int::class.java.classLoader) as Int
         this.email = `in`.readValue(String::class.java.classLoader) as String
         this.homepage = `in`.readValue(String::class.java.classLoader) as String
-        this.icq = `in`.readValue(Int::class.java.classLoader) as Int
+        this.icq = `in`.readValue(Long::class.java.classLoader) as Long
         this.about = `in`.readValue(String::class.java.classLoader) as String
         this.reputation = `in`.readValue(Int::class.java.classLoader) as Int
         this.regDate = `in`.readValue(Int::class.java.classLoader) as Int
@@ -126,7 +126,7 @@ class User : Parcelable {
      * @param login
      * @param msgCount
      */
-    constructor(id: Int?, login: String, userName: String, birthday: String, country: String, country2: String, city: String, sex: String, state: Int?, email: String, homepage: String, icq: Int?, about: String, reputation: Int?, regDate: Int?, msgDate: Int?, msgCount: Int?, lastMsgTime: Int?, lastIp: String, avatar: String, created: Int?) : super() {
+    constructor(id: Int?, login: String, userName: String, birthday: String, country: String, country2: String, city: String, sex: String, state: Int?, email: String, homepage: String, icq: Long?, about: String, reputation: Int?, regDate: Int?, msgDate: Int?, msgCount: Int?, lastMsgTime: Int?, lastIp: String, avatar: String, created: Int?) : super() {
         this.id = id
         this.login = login
         this.userName = userName
@@ -180,14 +180,14 @@ class User : Parcelable {
 
     companion object {
         @JvmField
-        val CREATOR: Creator<User> = object : Creator<User> {
+        val CREATOR: Creator<UserWrapper> = object : Creator<UserWrapper> {
 
 
-            override fun createFromParcel(`in`: Parcel): User {
-                return User(`in`)
+            override fun createFromParcel(`in`: Parcel): UserWrapper {
+                return UserWrapper(`in`)
             }
 
-            override fun newArray(size: Int): Array<User?> {
+            override fun newArray(size: Int): Array<UserWrapper?> {
                 return arrayOfNulls(size)
             }
 

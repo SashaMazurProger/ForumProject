@@ -1,17 +1,14 @@
 package com.example.sasham.testproject.messages
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
-import androidx.fragment.app.Fragment
 import android.os.Bundle
-import androidx.appcompat.widget.Toolbar
 import android.text.util.Linkify
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 
-import com.example.sasham.testproject.BaseActivity
-import com.example.sasham.testproject.BaseDaggerActivity
+import com.example.sasham.testproject.base.BaseActivity
+import com.example.sasham.testproject.base.BaseDaggerActivity
 import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.R
 import com.example.sasham.testproject.model.Theme
@@ -92,7 +89,6 @@ class MessagesActivity : BaseDaggerActivity(), BaseActivity.OnConnectionListener
         val currentTheme = theme
 
         userName!!.text = currentTheme!!.userName
-        forumName!!.text = currentTheme.forumName
         topicName!!.text = currentTheme.topicText
 
         msgText!!.text = StringUtil.stripHtml(currentTheme.msgText)
@@ -119,7 +115,7 @@ class MessagesActivity : BaseDaggerActivity(), BaseActivity.OnConnectionListener
 
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.themes_listing_container, MessagesFragment.newInstance(theme!!))
+                .replace(R.id.fragment_c, MessagesFragment.newInstance(theme!!))
                 .commit()
     }
 

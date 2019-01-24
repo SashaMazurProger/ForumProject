@@ -1,30 +1,28 @@
 package com.example.sasham.testproject.themes
 
+import com.arellomobile.mvp.InjectViewState
+import com.arellomobile.mvp.MvpPresenter
+import com.example.sasham.testproject.App
+import com.example.sasham.testproject.model.DataRepository
 import com.example.sasham.testproject.model.Theme
-
-import java.util.ArrayList
-
-import javax.inject.Inject
-
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
+import java.util.*
+import javax.inject.Inject
 
-class ThemesListingPresenterImp @Inject
-constructor(private val themesListingInteractor: ThemesListingInteractor) : ThemesListingPresenter {
+@InjectViewState
+class ThemesListingPresenterImp : MvpPresenter<ThemesListingView>(), ThemesListingPresenter {
 
-    private var view: ThemesListingView? = null
+    @Inject
+    lateinit var data: DataRepository
+
     private val loadedThemes = ArrayList<Theme>()
     private val compositeDisposable = CompositeDisposable()
     private var currentPage: Int = 0
 
-    private val isViewAttached: Boolean
-        get() = view != null
-
-    override fun setView(view: ThemesListingView) {
-        this.view = view
+    init {
+        App.instance!!.appComp!!.inject(this)
     }
 
     override fun firstPage() {
@@ -38,8 +36,8 @@ constructor(private val themesListingInteractor: ThemesListingInteractor) : Them
         loadThemes()
     }
 
-    override fun destroy() {
-        view = null
+    override fun onDestroy() {
+        super.onDestroy()
         compositeDisposable.clear()
     }
 
@@ -49,23 +47,16 @@ constructor(private val themesListingInteractor: ThemesListingInteractor) : Them
 
 
     private fun loadThemes() {
-        view!!.onLoading()
-        val disposable = themesListingInteractor.fetchThemes(currentPage)
+
+        val disposable = data.themes(currentPage.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ themes ->
                     loadedThemes.addAll(themes)
-                    displayThemes()
+                    viewState.showThemes(loadedThemes)
                 },
-                        { throwable -> view!!.onError(throwable.message!!) })
+                        { throwable -> viewState.message(throwable.message) })
 
-                compositeDisposable.add(disposable);
+        compositeDisposable.add(disposable);
     }
-
-    private fun displayThemes() {
-        if (isViewAttached) {
-            view!!.showThemes(loadedThemes)
-        }
-    }
-
 }

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 class ThemesWraper {
 
-    @SerializedName("users")
+    @SerializedName("objects")
     @Expose
     var themeAnswers: List<ThemeAnswer>? = null
 }

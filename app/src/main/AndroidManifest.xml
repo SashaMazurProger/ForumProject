@@ -22,8 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".website.WebActivity" />
-        <activity android:name=".BaseDaggerActivity" />
-        <activity android:name=".BaseActivity" />
+        <activity android:name=".base.BaseDaggerActivity" />
+        <activity android:name=".base.BaseActivity" />
 
         <receiver
             android:name=".BootCompletedReceiver"

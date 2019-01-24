@@ -11,16 +11,13 @@ object Converter {
         return if (themeAnswer == null) {
             null
         } else Theme(
-                themeAnswer.id,
-                themeAnswer.userId,
+                themeAnswer.id.toString(),
+                themeAnswer.userId.toString(),
                 themeAnswer.userName,
                 themeAnswer.topicText,
                 themeAnswer.msgText,
-                themeAnswer.msgTime,
-                themeAnswer.topicUpdated,
-                themeAnswer.isAdmin,
-                themeAnswer.isModerator,
-                themeAnswer.forumName
+                themeAnswer.msgTime.toString(),
+                themeAnswer.topicUpdated.toString()
         )
 
     }

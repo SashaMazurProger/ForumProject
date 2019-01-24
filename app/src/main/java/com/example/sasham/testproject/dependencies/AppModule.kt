@@ -2,18 +2,16 @@ package com.example.sasham.testproject.dependencies
 
 
 import com.example.sasham.testproject.messages.MessagesActivity
+import com.example.sasham.testproject.model.DataRepository
+import com.example.sasham.testproject.model.DataRepositoryImp
 import com.example.sasham.testproject.model.FavoriteThemeInfoRepository
 import com.example.sasham.testproject.model.FavoriteThemeInfoRepositoryImp
-import com.example.sasham.testproject.model.NetworkRepository
-import com.example.sasham.testproject.model.NetworkRepositoryImp
 import com.example.sasham.testproject.themes.ThemesActivity
-
-import javax.inject.Singleton
-
 import dagger.Binds
 import dagger.Module
 import dagger.android.AndroidInjectionModule
 import dagger.android.ContributesAndroidInjector
+import javax.inject.Singleton
 
 
 @Module(includes = arrayOf(AndroidInjectionModule::class))
@@ -27,7 +25,7 @@ interface AppModule {
 
     @Singleton
     @Binds
-    fun networkRepository(networkRepositoryImp: NetworkRepositoryImp): NetworkRepository
+    fun dataRepository(dataRepositoryImp: DataRepositoryImp): DataRepository
 
     @Singleton
     @Binds

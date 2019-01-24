@@ -1,22 +1,14 @@
 package com.example.sasham.testproject.model
 
-import com.example.sasham.testproject.network.MessageAnswer
-import com.example.sasham.testproject.network.MessageWraper
-import com.example.sasham.testproject.network.ThemeAnswer
-import com.example.sasham.testproject.network.ThemesWraper
 import com.example.sasham.testproject.network.WebestApi
+import com.example.sasham.testproject.users.User
 import com.example.sasham.testproject.util.Converter
-
-import java.util.ArrayList
-
+import io.reactivex.Observable
+import java.util.*
 import javax.inject.Inject
 
-import io.reactivex.Observable
-import io.reactivex.ObservableSource
-import io.reactivex.functions.Function
-
-class NetworkRepositoryImp @Inject
-constructor(private val webestApi: WebestApi) : NetworkRepository {
+class DataRepositoryImp @Inject
+constructor(private val webestApi: WebestApi) : DataRepository {
 
     override fun themes(page: String): Observable<List<Theme>> {
         return webestApi.themes(page)
@@ -41,5 +33,12 @@ constructor(private val webestApi: WebestApi) : NetworkRepository {
                     }
                     Observable.just(messages)
                 }
+    }
+
+    override fun users(): Observable<List<User>> {
+        return webestApi
+                .users()
+                .map { it.userWrappers!!.map { User(it.userName!!) } }
+
     }
 }

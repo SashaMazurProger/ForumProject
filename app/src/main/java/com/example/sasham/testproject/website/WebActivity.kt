@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.example.sasham.testproject.BaseActivity
+import com.example.sasham.testproject.base.BaseActivity
 import com.example.sasham.testproject.R
 import kotlinx.android.synthetic.main.activity_web.*
 

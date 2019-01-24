@@ -2,7 +2,7 @@ package com.example.sasham.testproject
 
 object Constants {
     val TIME_PATTERN = "dd.MM.yyyy  HH:mm:ss"
-    val WEBEST_BASE_URL = "http://deep.webest.net/api/v1/"
+    val WEBEST_BASE_URL = "http://deep.webest.net/api/"
     val WEBEST_BASE_AVATAR_URL = "http://deep.webest.net/image/avatar/"
     val THEME_MODEL = "theme_model"
     val APP_THEME = "app_theme"

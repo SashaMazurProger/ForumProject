@@ -26,7 +26,6 @@ class ThemesListingAdapter(private val themes: MutableList<Theme>, private val t
         val currentTheme = themes[position]
 
         holder.userName!!.text = currentTheme.userName
-        holder.forumName!!.text = currentTheme.forumName
         holder.topicName!!.text = currentTheme.topicText
 
         holder.msgText!!.text = StringUtil.stripHtml(currentTheme.msgText)
@@ -50,8 +49,6 @@ class ThemesListingAdapter(private val themes: MutableList<Theme>, private val t
 
     inner class ViewHolder(internal var root: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(root), View.OnClickListener {
 
-
-        var forumName: TextView = root.findViewById(R.id.forumName)
 
         var topicName: TextView = root.findViewById(R.id.topicName)
 

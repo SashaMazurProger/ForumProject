@@ -7,12 +7,12 @@ import retrofit2.http.Path
 
 interface WebestApi {
 
-    @GET("forum/fresh/{page}/")
+    @GET("v1/forum/topics/page/{page}/")
     fun themes(@Path("page") page: String): Observable<ThemesWraper>
 
-    @GET("forum/topic/{id}/")
+    @GET("v1/forum/topic/{id}/")
     fun themeMessages(@Path("id") themeId: String): Observable<MessageWraper>
 
-    @GET("forum/users/")
+    @GET("v1/forum/users/")
     fun users(): Observable<UsersWrapper>
 }

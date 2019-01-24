@@ -13,9 +13,6 @@ class Theme : Parcelable {
     var msgText: String? = null
     var msgTime: String? = null
     var topicUpdated: String? = null
-    var isAdmin: String? = null
-    var isModerator: String? = null
-    var forumName: String? = null
 
     protected constructor(`in`: Parcel) {
         this.id = `in`.readValue(String::class.java.classLoader) as String?
@@ -25,9 +22,7 @@ class Theme : Parcelable {
         this.msgText = `in`.readValue(String::class.java.classLoader) as String?
         this.msgTime = `in`.readValue(String::class.java.classLoader) as String?
         this.topicUpdated = `in`.readValue(String::class.java.classLoader) as String?
-        this.isAdmin = `in`.readValue(String::class.java.classLoader) as String?
-        this.isModerator = `in`.readValue(String::class.java.classLoader) as String?
-        this.forumName = `in`.readValue(String::class.java.classLoader) as String?
+
     }
 
     /**
@@ -35,7 +30,7 @@ class Theme : Parcelable {
      */
     constructor() {}
 
-    constructor(id: String?, userId: String?, userName: String?, topicText: String?, msgText: String?, msgTime: String?, topicUpdated: String?, isAdmin: String?, isModerator: String?, forumName: String?) {
+    constructor(id: String?, userId: String?, userName: String?, topicText: String?, msgText: String?, msgTime: String?, topicUpdated: String?) {
         this.id = id
         this.userId = userId
         this.userName = userName
@@ -43,9 +38,7 @@ class Theme : Parcelable {
         this.msgText = msgText
         this.msgTime = msgTime
         this.topicUpdated = topicUpdated
-        this.isAdmin = isAdmin
-        this.isModerator = isModerator
-        this.forumName = forumName
+
     }
 
 
@@ -71,9 +64,6 @@ class Theme : Parcelable {
         dest.writeValue(msgText)
         dest.writeValue(msgTime)
         dest.writeValue(topicUpdated)
-        dest.writeValue(isAdmin)
-        dest.writeValue(isModerator)
-        dest.writeValue(forumName)
     }
 
     override fun describeContents(): Int {

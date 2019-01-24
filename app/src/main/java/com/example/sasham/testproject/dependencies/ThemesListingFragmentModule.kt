@@ -11,6 +11,7 @@ import dagger.Module
 @Module
 interface ThemesListingFragmentModule {
 
+
     @ThemesListingFragmentScope
     @Binds
     fun themesListingPresenter(themesListingPresenterImp: ThemesListingPresenterImp): ThemesListingPresenter

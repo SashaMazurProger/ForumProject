@@ -5,76 +5,61 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.sasham.testproject.Constants
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.example.sasham.testproject.MvpAppCompatFragment
 import com.example.sasham.testproject.R
-import com.example.sasham.testproject.network.WebestApi
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_users.*
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+
+class UsersFragment : MvpAppCompatFragment(), UsersView {
 
 
-class UsersFragment : Fragment() {
+    @InjectPresenter
+    lateinit var presenter: UsersPresenter
 
-    lateinit var api: WebestApi
+//    @ProvidePresenterTag(presenterClass = UsersPresenter::class, type = PresenterType.GLOBAL)
+//
+//    @ProvidePresenter(type = PresenterType.GLOBAL)
+//    fun provideDialogPresenter() = UsersPresenter()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val root = inflater!!.inflate(R.layout.fragment_users, container, false)
-        return root
-    }
+//    override val layoutId: Int
+//        get() = R.layout.fragment_users
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        api = Retrofit.Builder()
-                .baseUrl(Constants.WEBEST_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-                .create(WebestApi::class.java)
+    private lateinit var adapter: GroupAdapter<ViewHolder>
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_users, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = GroupAdapter<ViewHolder>()
-        listView.apply {
-            setAdapter(adapter)
-            layoutManager = LinearLayoutManager(context)
-        }
-
-        api.users()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ w ->
-                    val section = Section()
-                    section.addAll(w.users!!.map { UserItem(it) })
-                    adapter.add(section)
-
-                },
-                        {
-                            Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
-                        })
-
+        adapter = GroupAdapter()
+        listView.setAdapter(adapter)
+        listView.layoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
 
         adapter.setOnItemClickListener { item, view ->
             if (item is UserItem) {
                 val userItem = item as UserItem
-                Toast.makeText(context, "${userItem.user.userName} view: ${view.javaClass.name} ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "${userItem.user.name} view: ${view.javaClass.name} ", Toast.LENGTH_SHORT).show()
             }
         }
 
 
     }
 
+    override fun message(m: String) {
+        Toast.makeText(context, m, Toast.LENGTH_SHORT).show()
+    }
 
+    override fun showUsers(users: List<UserItem>) {
+        val section = Section()
+        section.addAll(users)
+        adapter.add(section)
+    }
 }
 

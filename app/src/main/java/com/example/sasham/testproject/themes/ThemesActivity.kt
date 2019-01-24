@@ -2,33 +2,27 @@ package com.example.sasham.testproject.themes
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.google.android.material.snackbar.Snackbar
-import androidx.fragment.app.Fragment
-import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-
-import com.example.sasham.testproject.BaseActivity
-import com.example.sasham.testproject.BaseDaggerActivity
 import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.R
+import com.example.sasham.testproject.base.BaseActivity
+import com.example.sasham.testproject.base.BaseDaggerActivity
 import com.example.sasham.testproject.messages.MessagesActivity
 import com.example.sasham.testproject.model.FavoriteThemeInfoRepositoryImp
 import com.example.sasham.testproject.model.Theme
 import com.example.sasham.testproject.users.UsersFragment
-import com.example.sasham.testproject.util.NetworkUtil
 import com.example.sasham.testproject.util.PreferencesHelper
-
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_themes.*
 import javax.inject.Inject
 
-import kotlinx.android.synthetic.main.activity_themes.*
 
 class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, BaseActivity.OnConnectionListener {
 
     private var snackbar: Snackbar? = null
     private var isConnected = false
-    private var themesfragment: ThemesListingFragment? = null
 
     @Inject
     lateinit var infoRepository: FavoriteThemeInfoRepositoryImp
@@ -37,25 +31,25 @@ class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, Bas
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_themes)
-
         setSupportActionBar(toolbar)
-
         setDefaultTitle()
-
-        //Показываем фрагменты только если доступна сеть
-        if (NetworkUtil.isConnectedNetwork(this)) {
-            val intent = intent
-
-            if (intent.action == SHOW_MESSAGES_ACTION) {
-                //TODO: show message fragment
-
-            } else {
-                showThemesFragment()
-            }
-        }
-
         addOnConnectionListener(this)
         startListenInternetState()
+        showThemesFragment()
+
+        (bottomNav as BottomNavigationView).setOnNavigationItemSelectedListener(
+                {
+                    when (it.itemId) {
+                        R.id.menu_themes -> {
+                            showThemesFragment()
+                        }
+                        R.id.menu_users -> {
+                            showUsersFragment()
+                        }
+
+                    }
+                    true
+                })
     }
 
 
@@ -96,12 +90,35 @@ class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, Bas
 
     //Показываем список топиков
     private fun showThemesFragment() {
-        //themesfragment = ThemesListingFragment()
 
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.themes_listing_container, UsersFragment())
-                .commit()
+        val f = supportFragmentManager.findFragmentByTag(ThemesListingFragment::class.java.simpleName)
+        if (f == null) {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_c, ThemesListingFragment(), ThemesListingFragment::class.java.simpleName)
+                    .commit()
+        } else {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_c, f, ThemesListingFragment::class.java.simpleName)
+                    .commit()
+        }
+    }
+
+    private fun showUsersFragment() {
+
+        val f = supportFragmentManager.findFragmentByTag(UsersFragment::class.java.simpleName)
+        if (f == null) {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_c, UsersFragment(), UsersFragment::class.java.simpleName)
+                    .commit()
+        } else {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_c, f, UsersFragment::class.java.simpleName)
+                    .commit()
+        }
     }
 
     //Показываем сообщения топика, добавляя новый фрагмент в бэкстек
@@ -119,11 +136,6 @@ class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, Bas
         if (connected) {
             if (snackbar != null) {
                 snackbar!!.dismiss()
-
-                //Если не было сети и не был добавлен фрагмент - добавляем
-                if (themesfragment == null) {
-                    showThemesFragment()
-                }
             }
 
         } else {
