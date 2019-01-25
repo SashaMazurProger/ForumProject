@@ -2,8 +2,9 @@ package com.example.sasham.testproject.dependencies
 
 import android.content.Context
 import com.example.sasham.testproject.App
+import com.example.sasham.testproject.messages.MessagesPresenter
 import com.example.sasham.testproject.notification.NewMessagesWorker
-import com.example.sasham.testproject.themes.ThemesListingPresenterImp
+import com.example.sasham.testproject.themes.ThemesPresenter
 import com.example.sasham.testproject.users.UsersPresenter
 import dagger.BindsInstance
 import dagger.Component
@@ -25,5 +26,6 @@ interface AppComponent {
 
     fun inject(newMessagesWorker: NewMessagesWorker)
     fun inject(presenter: UsersPresenter)
-    fun inject(presenter: ThemesListingPresenterImp)
+    fun inject(presenter: ThemesPresenter)
+    fun inject(presenter: MessagesPresenter)
 }

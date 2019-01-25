@@ -12,7 +12,7 @@ import java.util.*
 import javax.inject.Inject
 
 @InjectViewState
-class ThemesListingPresenterImp : MvpPresenter<ThemesListingView>(), ThemesListingPresenter {
+class ThemesPresenter : MvpPresenter<ThemesView>() {
 
     @Inject
     lateinit var data: DataRepository
@@ -25,13 +25,13 @@ class ThemesListingPresenterImp : MvpPresenter<ThemesListingView>(), ThemesListi
         App.instance!!.appComp!!.inject(this)
     }
 
-    override fun firstPage() {
+    fun firstPage() {
         currentPage = 1
         loadedThemes.clear()
         loadThemes()
     }
 
-    override fun nextPage() {
+    fun nextPage() {
         currentPage++
         loadThemes()
     }
@@ -41,7 +41,7 @@ class ThemesListingPresenterImp : MvpPresenter<ThemesListingView>(), ThemesListi
         compositeDisposable.clear()
     }
 
-    override fun loadNewData() {
+    fun loadNewData() {
         firstPage()
     }
 
@@ -55,7 +55,7 @@ class ThemesListingPresenterImp : MvpPresenter<ThemesListingView>(), ThemesListi
                     loadedThemes.addAll(themes)
                     viewState.showThemes(loadedThemes)
                 },
-                        { throwable -> viewState.message(throwable.message) })
+                        { throwable -> viewState.message(throwable.message!!) })
 
         compositeDisposable.add(disposable);
     }

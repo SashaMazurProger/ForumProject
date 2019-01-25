@@ -1,6 +1,5 @@
 package com.example.sasham.testproject.themes
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,9 +7,7 @@ import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.R
 import com.example.sasham.testproject.base.BaseActivity
 import com.example.sasham.testproject.base.BaseDaggerActivity
-import com.example.sasham.testproject.messages.MessagesActivity
 import com.example.sasham.testproject.model.FavoriteThemeInfoRepositoryImp
-import com.example.sasham.testproject.model.Theme
 import com.example.sasham.testproject.users.UsersFragment
 import com.example.sasham.testproject.util.PreferencesHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -19,13 +16,10 @@ import kotlinx.android.synthetic.main.activity_themes.*
 import javax.inject.Inject
 
 
-class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, BaseActivity.OnConnectionListener {
+class ThemesActivity : BaseDaggerActivity(),  BaseActivity.OnConnectionListener {
 
     private var snackbar: Snackbar? = null
     private var isConnected = false
-
-    @Inject
-    lateinit var infoRepository: FavoriteThemeInfoRepositoryImp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,19 +31,18 @@ class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, Bas
         startListenInternetState()
         showThemesFragment()
 
-        (bottomNav as BottomNavigationView).setOnNavigationItemSelectedListener(
-                {
-                    when (it.itemId) {
-                        R.id.menu_themes -> {
-                            showThemesFragment()
-                        }
-                        R.id.menu_users -> {
-                            showUsersFragment()
-                        }
+        (bottomNav as BottomNavigationView).setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu_themes -> {
+                    showThemesFragment()
+                }
+                R.id.menu_users -> {
+                    showUsersFragment()
+                }
 
-                    }
-                    true
-                })
+            }
+            true
+        }
     }
 
 
@@ -91,16 +84,16 @@ class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, Bas
     //Показываем список топиков
     private fun showThemesFragment() {
 
-        val f = supportFragmentManager.findFragmentByTag(ThemesListingFragment::class.java.simpleName)
+        val f = supportFragmentManager.findFragmentByTag(ThemesFragment::class.java.simpleName)
         if (f == null) {
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragment_c, ThemesListingFragment(), ThemesListingFragment::class.java.simpleName)
+                    .replace(R.id.fragment_c, ThemesFragment(), ThemesFragment::class.java.simpleName)
                     .commit()
         } else {
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragment_c, f, ThemesListingFragment::class.java.simpleName)
+                    .replace(R.id.fragment_c, f, ThemesFragment::class.java.simpleName)
                     .commit()
         }
     }
@@ -121,14 +114,6 @@ class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, Bas
         }
     }
 
-    //Показываем сообщения топика, добавляя новый фрагмент в бэкстек
-    override fun onThemeClicked(theme: Theme) {
-        infoRepository!!.addLastViewedTheme(theme)
-        val intent = Intent(this, MessagesActivity::class.java)
-        intent.putExtra(Constants.THEME_MODEL, theme)
-        startActivity(intent)
-    }
-
 
     override fun internetConnectionChanged(connected: Boolean) {
         isConnected = connected
@@ -143,10 +128,4 @@ class ThemesActivity : BaseDaggerActivity(), ThemesListingFragment.Callback, Bas
             snackbar!!.show()
         }
     }
-
-    companion object {
-
-        val SHOW_MESSAGES_ACTION = "show_messages"
-    }
-
 }

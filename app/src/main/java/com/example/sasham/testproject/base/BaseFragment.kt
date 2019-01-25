@@ -53,22 +53,16 @@ abstract class BaseFragment : MvpAppCompatFragment(), IView {
         return baseActivity != null
     }
 
-    override fun showMessage(resId: Int) {
+    override fun message(resId: Int) {
         if (activityIsNotNull()) {
-            baseActivity!!.showMessage(resId)
+            baseActivity!!.message(resId)
         }
     }
 
-    override fun showMessage(message: String) {
+    override fun message(message: String) {
         if (activityIsNotNull()) {
-            baseActivity!!.showMessage(message)
+            baseActivity!!.message(message)
         }
-    }
-
-    override fun isNetworkConnected(): Boolean {
-        return if (activityIsNotNull()) {
-            baseActivity!!.isNetworkConnected()
-        } else false
     }
 
     override fun hideKeyboard() {

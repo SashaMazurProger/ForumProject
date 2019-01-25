@@ -1,18 +1,18 @@
 package com.example.sasham.testproject.base
 
 import androidx.annotation.StringRes
+import com.arellomobile.mvp.MvpView
+import com.example.sasham.testproject.App
 
-interface IView {
-
-    fun isNetworkConnected(): Boolean
+interface IView : MvpView {
 
     fun showLoading()
 
     fun hideLoading()
 
-    fun showMessage(@StringRes resId: Int)
+    fun message(@StringRes resId: Int)
 
-    fun showMessage(message: String)
+    fun message(message: String)
 
     fun hideKeyboard()
 

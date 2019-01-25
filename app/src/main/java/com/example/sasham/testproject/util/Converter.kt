@@ -2,8 +2,8 @@ package com.example.sasham.testproject.util
 
 import com.example.sasham.testproject.model.Message
 import com.example.sasham.testproject.model.Theme
-import com.example.sasham.testproject.network.MessageAnswer
-import com.example.sasham.testproject.network.ThemeAnswer
+import com.example.sasham.testproject.model.network.MessageAnswer
+import com.example.sasham.testproject.model.network.ThemeAnswer
 
 object Converter {
 

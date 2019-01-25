@@ -7,7 +7,8 @@ import dagger.android.ContributesAndroidInjector
 
 @Module
 interface MessagesModule {
-    @MessagesListingFragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(MessagesListingFragmentModule::class))
+
+    @PerFragment
+    @ContributesAndroidInjector(modules = arrayOf(MessagesFragmentModule::class))
     fun messagesFragmentInjector(): MessagesFragment
 }

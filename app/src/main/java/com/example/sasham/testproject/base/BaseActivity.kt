@@ -7,21 +7,19 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.sasham.testproject.App
 import com.example.sasham.testproject.Constants
+import com.example.sasham.testproject.MvpAppCompatActivity
 import com.example.sasham.testproject.R
 import com.example.sasham.testproject.util.NetworkUtil
 import com.example.sasham.testproject.util.PreferencesHelper
+import com.example.sasham.testproject.util.isOnline
 import com.google.android.material.snackbar.Snackbar
 
 
-abstract class BaseActivity : AppCompatActivity(), IView {
+abstract class BaseActivity : MvpAppCompatActivity(), IView {
 
     private var internetBroadcastReceiver: BroadcastReceiver? = null
 
@@ -110,18 +108,14 @@ abstract class BaseActivity : AppCompatActivity(), IView {
         snackbar.show()
     }
 
-    override fun showMessage(resId: Int) {
-        showMessage(getString(resId))
+    override fun message(resId: Int) {
+        message(getString(resId))
     }
 
-    override fun showMessage(message: String) {
+    override fun message(message: String) {
         if (message != null) {
             showSnackbar(message)
         }
-    }
-
-    override fun isNetworkConnected(): Boolean {
-        return App.instance!!.isOnline()
     }
 
     override fun hideKeyboard() {

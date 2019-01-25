@@ -70,7 +70,7 @@ class MessagesListingAdapter(private val messages: List<Message>) : androidx.rec
 
         var createdTime: TextView = root.findViewById(R.id.createdTime)
 
-        var msgCount: TextView = root.findViewById(R.id.msgCount)
+        var msgCount: TextView = root.findViewById(R.id.messagesCount)
 
         var avatar: CircleImageView = root.findViewById(R.id.avatar)
 

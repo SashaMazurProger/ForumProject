@@ -1,156 +1,75 @@
 package com.example.sasham.testproject.messages
 
 
-import android.content.Context
 import android.os.Bundle
-
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.sasham.testproject.base.BaseActivity
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.R
+import com.example.sasham.testproject.base.BaseFragment
 import com.example.sasham.testproject.model.Message
 import com.example.sasham.testproject.model.Theme
+import com.example.sasham.testproject.util.isOnline
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Section
+import com.xwray.groupie.ViewHolder
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_messages.*
-import java.util.*
-import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
-class MessagesFragment : Fragment(), MessagesListingView, androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener, BaseActivity.OnConnectionListener {
+class MessagesFragment : BaseFragment(), MessagesListingView, androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener{
 
-    @Inject
-    lateinit var presenter: MessagesListingPresenter
+    override val layoutId: Int
+        get() = R.layout.fragment_messages
 
-    private val messages = ArrayList<Message>()
-    private var theme: Theme? = null
+    @InjectPresenter
+    lateinit var presenter: MessagesPresenter
 
-    private var messagesListingAdapter: MessagesListingAdapter? = null
-    private var baseActivity: BaseActivity? = null
-    private var isConnected = false
-    private var isDataLoaded = false
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is BaseActivity) {
-            baseActivity = context
-        }
-
+    @ProvidePresenter
+    fun provide(): MessagesPresenter {
+        return MessagesPresenter(arguments!!.getParcelable(Constants.THEME_MODEL))
     }
+
+    private var groupAdapter: GroupAdapter<ViewHolder>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidSupportInjection.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val root = inflater.inflate(R.layout.fragment_messages, container, false)
-        return root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        theme = arguments!!.getParcelable(Constants.THEME_MODEL)
 
-        presenter!!.setView(this)
-
-
-        messagesListingAdapter = MessagesListingAdapter(messages)
-        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.RecyclerView.VERTICAL, false)
-        messagesRecyclerView!!.adapter = messagesListingAdapter
+        groupAdapter = GroupAdapter()
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context,
+                androidx.recyclerview.widget.RecyclerView.VERTICAL, false)
+        messagesRecyclerView!!.adapter = groupAdapter
         messagesRecyclerView!!.layoutManager = layoutManager
 
         swipeRefreshLayout!!.setOnRefreshListener(this)
 
-        if (baseActivity != null) {
-            baseActivity!!.addOnConnectionListener(this)
-        }
-
-        if (theme != null) {
-            presenter!!.fetchMessages(theme!!.id!!)
-        } else {
-            onError(getString(R.string.no_messages))
-        }
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        presenter!!.destroy()
-        if (baseActivity != null) {
-            baseActivity!!.removeOnConnectionListener(this)
-        }
-    }
-
-    override fun onDetach() {
-        baseActivity = null
-        super.onDetach()
-    }
-
-    override fun showThemeMessages(messageList: List<Message>) {
+    override fun showThemeMessages(messages: List<Message>) {
         if (swipeRefreshLayout!!.isRefreshing) {
             swipeRefreshLayout!!.isRefreshing = false
         }
-        messageProgress!!.visibility = View.GONE
-        messagesRecyclerView!!.visibility = View.VISIBLE
 
-        if (messageList.size == 0) {
-            onError(getString(R.string.no_messages))
-        } else {
-            emptyView!!.visibility = View.GONE
-        }
-
-        isDataLoaded = true
-        messages.clear()
-        messages.addAll(messageList)
-        messagesListingAdapter!!.notifyDataSetChanged()
+        val section = Section()
+        section.addAll(messages.map { MessageItem(it) })
+        groupAdapter!!.add(section)
     }
 
-    override fun onLoading() {
-        emptyView!!.visibility = View.GONE
-
-        if (!swipeRefreshLayout!!.isRefreshing) {
-            messageProgress!!.visibility = View.VISIBLE
-        }
-    }
-
-    override fun onError(message: String) {
-        if (swipeRefreshLayout!!.isRefreshing) {
-            swipeRefreshLayout!!.isRefreshing = false
-        }
-        messagesRecyclerView!!.visibility = View.GONE
-        messageProgress!!.visibility = View.GONE
-        emptyView!!.visibility = View.VISIBLE
-        emptyView!!.text = message
-
-        isDataLoaded = false
-    }
 
     override fun onRefresh() {
-        if (isConnected) {
             swipeRefreshLayout!!.isRefreshing = true
-            presenter!!.loadNewData(theme!!.id!!)
-        } else if (swipeRefreshLayout!!.isRefreshing) {
-            swipeRefreshLayout!!.isRefreshing = false
-        }
-    }
-
-    override fun internetConnectionChanged(connected: Boolean) {
-        isConnected = connected
-        if (mayDownloadData()) {
-            presenter!!.fetchMessages(theme!!.id!!)
-        }
-    }
-
-    private fun mayDownloadData(): Boolean {
-        return isConnected && !isDataLoaded
+            presenter!!.fetchMessages()
     }
 
     companion object {
@@ -163,4 +82,4 @@ class MessagesFragment : Fragment(), MessagesListingView, androidx.swiperefreshl
             return messagesFragment
         }
     }
-}// Required empty public constructor
+}

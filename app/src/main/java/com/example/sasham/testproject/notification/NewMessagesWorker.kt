@@ -12,7 +12,7 @@ import com.example.sasham.testproject.App
 import com.example.sasham.testproject.R
 import com.example.sasham.testproject.model.FavoriteThemeInfoRepository
 import com.example.sasham.testproject.model.Message
-import com.example.sasham.testproject.network.WebestApi
+import com.example.sasham.testproject.model.network.WebestApi
 import com.example.sasham.testproject.themes.ThemesActivity
 import com.example.sasham.testproject.util.Converter
 import io.reactivex.Observable

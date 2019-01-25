@@ -1,7 +1,6 @@
 package com.example.sasham.testproject.model
 
-import com.example.sasham.testproject.network.WebestApi
-import com.example.sasham.testproject.users.User
+import com.example.sasham.testproject.model.network.WebestApi
 import com.example.sasham.testproject.util.Converter
 import io.reactivex.Observable
 import java.util.*
@@ -29,7 +28,7 @@ constructor(private val webestApi: WebestApi) : DataRepository {
                 .flatMap { messageAnswers ->
                     val messages = ArrayList<Message>()
                     for (themeAnswer in messageAnswers!!.iterator()) {
-                        messages.add(Converter.messageAnswerToMessage(themeAnswer!!)!!)
+                        themeAnswer == null ?: messages.add(Converter.messageAnswerToMessage(themeAnswer)!!)
                     }
                     Observable.just(messages)
                 }

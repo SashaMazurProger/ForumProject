@@ -5,15 +5,6 @@ import android.os.Bundle
 
 import androidx.annotation.NonNull
 
-interface IPresenter<T : IView> {
+interface IPresenter {
 
-    fun onAttach(view: T)
-
-    fun onRestoreView(@NonNull savedInstanceState: Bundle)
-
-    fun onSaveStateView(@NonNull savedInstanceState: Bundle)
-
-    fun onDetach()
-
-    fun setUserAsLoggedOut()
 }

@@ -35,19 +35,6 @@ class WebActivity : BaseActivity() {
     private fun openWebSite() {
         val url = intent.getStringExtra(WEB_URL_ARGS)
         webView.settings.javaScriptEnabled = true
-        webView.webViewClient = object : WebViewClient() {
-
-            override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
-                super.onPageStarted(view, url, favicon)
-                progress.visibility = View.VISIBLE
-            }
-
-            override fun onPageFinished(view: WebView, url: String?) {
-                super.onPageFinished(view, url)
-                progress.visibility = View.GONE
-            }
-        }
-
         webView.loadUrl(url)
         title = url
     }

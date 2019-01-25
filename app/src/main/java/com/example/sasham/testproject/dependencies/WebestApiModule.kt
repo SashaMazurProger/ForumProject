@@ -1,7 +1,7 @@
 package com.example.sasham.testproject.dependencies
 
 import com.example.sasham.testproject.Constants
-import com.example.sasham.testproject.network.WebestApi
+import com.example.sasham.testproject.model.network.WebestApi
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import dagger.Module
 import dagger.Provides
