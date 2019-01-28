@@ -2,6 +2,7 @@ package com.example.sasham.testproject.themes
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,6 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_themes_listing.*
-import java.util.*
 
 
 class ThemesFragment : BaseFragment(), ThemesView, androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener {
@@ -25,8 +25,8 @@ class ThemesFragment : BaseFragment(), ThemesView, androidx.swiperefreshlayout.w
 
     @InjectPresenter
     lateinit var presenter: ThemesPresenter
-    private val themes = ArrayList<Theme>()
-    private var groupAdapter: GroupAdapter<ViewHolder>? = null
+    private var themesAdapter: GroupAdapter<ViewHolder>? = null
+    private var sectionsAdapter: GroupAdapter<ViewHolder>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,26 +37,32 @@ class ThemesFragment : BaseFragment(), ThemesView, androidx.swiperefreshlayout.w
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupAdapter = GroupAdapter()
+        themesAdapter = GroupAdapter()
         val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        themesList!!.adapter = groupAdapter
+        themesList!!.adapter = themesAdapter
         themesList!!.layoutManager = layoutManager
 
-        groupAdapter!!.setOnItemClickListener { item, view ->
+        themesAdapter!!.setOnItemClickListener { item, view ->
             val intent = Intent(context, MessagesActivity::class.java)
             intent.putExtra(Constants.THEME_MODEL, (item as ThemeItem).theme)
             startActivity(intent)
         }
 
+
+        sectionsAdapter = GroupAdapter()
+        val layoutManager2 = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        sectionsList!!.adapter = sectionsAdapter
+        sectionsList!!.layoutManager = layoutManager2
+
+        sectionsAdapter!!.setOnItemClickListener { item, view ->
+            presenter.selectSection((item as SectionItem).section)
+            baseActivity!!.setToolbarTitle(item.section.title)
+            drawerLayout.closeDrawer(Gravity.LEFT)
+        }
+
         //TODO If we scrolled to end list then load more data
 
         swipeRefreshLayout!!.setOnRefreshListener(this)
-
-        //В случае если фрагмент не загрузил данные - загружаем первую страницу.
-        // Пропускаем если данные уже есть и нам не нужно их заменять
-        if (themes.size == 0) {
-            presenter!!.firstPage()
-        }
     }
 
 
@@ -68,7 +74,16 @@ class ThemesFragment : BaseFragment(), ThemesView, androidx.swiperefreshlayout.w
 
         val section = Section()
         section.addAll(themes.map { ThemeItem(it) })
-        groupAdapter!!.add(section)
+        themesAdapter!!.clear()
+        themesAdapter!!.add(section)
+    }
+
+    override fun showSections(sections: List<com.example.sasham.testproject.model.Section>) {
+
+        val section = Section()
+        section.addAll(sections.map { SectionItem(it) })
+        sectionsAdapter!!.clear()
+        sectionsAdapter!!.add(section)
     }
 
     override fun onRefresh() {

@@ -14,6 +14,12 @@ class MessagesPresenter(private val theme: Theme) : BasePresenter<MessagesListin
         App.instance!!.appComp!!.inject(this)
     }
 
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+
+        fetchMessages()
+    }
+
     fun fetchMessages() {
 
         val disposable = data.themeMessages(theme.id!!)

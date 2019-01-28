@@ -11,5 +11,6 @@ object Constants {
     val THEME_ID_ARGS = "theme_id"
     val LAST_THEME_ID = "last_theme_id"
     val LAST_MESSAGE_TIME = "last_message_time"
+    val USER_MODEL = "user"
 
 }

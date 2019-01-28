@@ -21,7 +21,7 @@ class MessageItem(val message: Message) : Item() {
 
         val view = holder.itemView
 
-        view.userName!!.text = message.userName
+        view.topicName!!.text = message.topicName
 
         view.messagesCount!!.text = if (StringUtil.isNotNullOrEmpty(message.msgCount))
             message.msgCount

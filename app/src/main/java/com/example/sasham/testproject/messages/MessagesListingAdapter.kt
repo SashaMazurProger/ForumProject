@@ -27,7 +27,7 @@ class MessagesListingAdapter(private val messages: List<Message>) : androidx.rec
         val context = holder.itemView.context
         val currentMessage = messages[position]
 
-        holder.userName!!.text = currentMessage.userName
+        holder.userName!!.text = currentMessage.topicName
 
         holder.msgCount!!.text = if (StringUtil.isNotNullOrEmpty(currentMessage.msgCount))
             currentMessage.msgCount

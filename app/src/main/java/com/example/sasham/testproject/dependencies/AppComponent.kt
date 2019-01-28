@@ -5,6 +5,7 @@ import com.example.sasham.testproject.App
 import com.example.sasham.testproject.messages.MessagesPresenter
 import com.example.sasham.testproject.notification.NewMessagesWorker
 import com.example.sasham.testproject.themes.ThemesPresenter
+import com.example.sasham.testproject.users.UserDetPresenter
 import com.example.sasham.testproject.users.UsersPresenter
 import dagger.BindsInstance
 import dagger.Component
@@ -28,4 +29,5 @@ interface AppComponent {
     fun inject(presenter: UsersPresenter)
     fun inject(presenter: ThemesPresenter)
     fun inject(presenter: MessagesPresenter)
+    fun inject(presenter: UserDetPresenter)
 }

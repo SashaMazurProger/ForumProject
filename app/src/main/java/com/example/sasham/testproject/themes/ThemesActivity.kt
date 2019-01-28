@@ -7,16 +7,13 @@ import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.R
 import com.example.sasham.testproject.base.BaseActivity
 import com.example.sasham.testproject.base.BaseDaggerActivity
-import com.example.sasham.testproject.model.FavoriteThemeInfoRepositoryImp
 import com.example.sasham.testproject.users.UsersFragment
 import com.example.sasham.testproject.util.PreferencesHelper
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_themes.*
-import javax.inject.Inject
 
 
-class ThemesActivity : BaseDaggerActivity(),  BaseActivity.OnConnectionListener {
+class ThemesActivity : BaseDaggerActivity() {
 
     private var snackbar: Snackbar? = null
     private var isConnected = false
@@ -27,11 +24,12 @@ class ThemesActivity : BaseDaggerActivity(),  BaseActivity.OnConnectionListener 
         setContentView(R.layout.activity_themes)
         setSupportActionBar(toolbar)
         setDefaultTitle()
-        addOnConnectionListener(this)
         startListenInternetState()
         showThemesFragment()
 
-        (bottomNav as BottomNavigationView).setOnNavigationItemSelectedListener {
+        bottomNav.setOnNavigationItemSelectedListener {
+
+            setDefaultTitle()
             when (it.itemId) {
                 R.id.menu_themes -> {
                     showThemesFragment()
@@ -78,7 +76,7 @@ class ThemesActivity : BaseDaggerActivity(),  BaseActivity.OnConnectionListener 
     }
 
     private fun setDefaultTitle() {
-        title = getString(R.string.app_name)
+        setToolbarTitle(R.string.app_name)
     }
 
     //Показываем список топиков
@@ -114,18 +112,4 @@ class ThemesActivity : BaseDaggerActivity(),  BaseActivity.OnConnectionListener 
         }
     }
 
-
-    override fun internetConnectionChanged(connected: Boolean) {
-        isConnected = connected
-
-        if (connected) {
-            if (snackbar != null) {
-                snackbar!!.dismiss()
-            }
-
-        } else {
-            snackbar = Snackbar.make(mainContainer!!, R.string.connection_failed, Snackbar.LENGTH_INDEFINITE)
-            snackbar!!.show()
-        }
-    }
 }

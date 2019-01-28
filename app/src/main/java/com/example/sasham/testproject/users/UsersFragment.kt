@@ -33,7 +33,9 @@ class UsersFragment : BaseFragment(), UsersView {
         adapter.setOnItemClickListener { item, view ->
             if (item is UserItem) {
                 val userItem = item as UserItem
-                Toast.makeText(context, "${userItem.user.name} view: ${view.javaClass.name} ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "${userItem.user.userName} view: ${view.javaClass.name} ", Toast.LENGTH_SHORT).show()
+                val userDialog = UserDialog.newInstance(userItem.user)
+                userDialog.show(childFragmentManager, UserDialog::javaClass.name)
             }
         }
 

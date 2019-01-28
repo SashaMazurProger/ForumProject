@@ -9,7 +9,7 @@ class Message : Parcelable {
     var id: String? = null
     var topicId: String? = null
     var userId: String? = null
-    var userName: String? = null
+    var topicName: String? = null
     var msgTime: String? = null
     var msgText: String? = null
     var userEmail: String? = null
@@ -25,7 +25,7 @@ class Message : Parcelable {
         this.id = `in`.readValue(String::class.java.classLoader) as String
         this.topicId = `in`.readValue(String::class.java.classLoader) as String
         this.userId = `in`.readValue(String::class.java.classLoader) as String
-        this.userName = `in`.readValue(String::class.java.classLoader) as String
+        this.topicName = `in`.readValue(String::class.java.classLoader) as String
         this.msgTime = `in`.readValue(String::class.java.classLoader) as String
         this.msgText = `in`.readValue(String::class.java.classLoader) as String
         this.userEmail = `in`.readValue(String::class.java.classLoader) as String
@@ -47,7 +47,7 @@ class Message : Parcelable {
         this.id = id
         this.topicId = topicId
         this.userId = userId
-        this.userName = userName
+        this.topicName = userName
         this.msgTime = msgTime
         this.msgText = msgText
         this.userEmail = userEmail
@@ -82,7 +82,7 @@ class Message : Parcelable {
         dest.writeValue(id)
         dest.writeValue(topicId)
         dest.writeValue(userId)
-        dest.writeValue(userName)
+        dest.writeValue(topicName)
         dest.writeValue(msgTime)
         dest.writeValue(msgText)
         dest.writeValue(userEmail)

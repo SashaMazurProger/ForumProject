@@ -104,7 +104,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), IView {
 
         // Get the Snackbar's layout view
         val layout = snackbar.view as Snackbar.SnackbarLayout
-        layout.setBackgroundColor(ContextCompat.getColor(this, R.color.md_white_1000))
+        layout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
         snackbar.show()
     }
 
