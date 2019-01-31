@@ -16,16 +16,20 @@ class UsersPresenter : BasePresenter<UsersView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
+        viewState.showLoading()
+
         compositeDisposable.add(
                 data.users()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 {
+                                    viewState.hideLoading()
                                     viewState.showUsers(it.map { UserItem(it) })
                                 }
                                 ,
                                 {
+                                    viewState.hideLoading()
                                     viewState.message(it.message!!)
                                 }
                         )

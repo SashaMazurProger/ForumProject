@@ -3,19 +3,15 @@
 
     <item
         android:id="@+id/menu_themes"
-        android:icon="@drawable/ic_people"
+        android:icon="@drawable/ic_iconfinder_icon_double_circle_message"
         android:title="Themes" />
     <item
         android:id="@+id/menu_users"
-        android:icon="@drawable/ic_people"
+        android:icon="@drawable/ic_iconfinder_icon_three_people"
         android:title="Users" />
     <item
-        android:id="@+id/menu_2"
-        android:icon="@drawable/ic_people"
-        android:title="Users" />
-    <item
-        android:id="@+id/menu_3"
-        android:icon="@drawable/ic_people"
+        android:id="@+id/menu_account"
+        android:icon="@drawable/ic_iconfinder_icon_people_deliver"
         android:title="Users" />
 
 </menu>

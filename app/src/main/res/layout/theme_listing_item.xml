@@ -15,7 +15,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="?attr/backgroundColorMain"
+        android:background="@drawable/rectangle_corners_bg"
         android:src="@drawable/ic_people"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

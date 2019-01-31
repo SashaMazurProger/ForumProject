@@ -3,9 +3,9 @@ package com.example.sasham.testproject.themes
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.R
-import com.example.sasham.testproject.base.BaseActivity
 import com.example.sasham.testproject.base.BaseDaggerActivity
 import com.example.sasham.testproject.users.UsersFragment
 import com.example.sasham.testproject.util.PreferencesHelper
@@ -37,10 +37,17 @@ class ThemesActivity : BaseDaggerActivity() {
                 R.id.menu_users -> {
                     showUsersFragment()
                 }
+                R.id.menu_account -> {
+                    showAccountFragment()
+                }
 
             }
             true
         }
+    }
+
+    private fun showAccountFragment() {
+
     }
 
 
@@ -86,12 +93,12 @@ class ThemesActivity : BaseDaggerActivity() {
         if (f == null) {
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragment_c, ThemesFragment(), ThemesFragment::class.java.simpleName)
+                    .replace(R.id.fragmentC, ThemesFragment(), ThemesFragment::class.java.simpleName)
                     .commit()
         } else {
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragment_c, f, ThemesFragment::class.java.simpleName)
+                    .replace(R.id.fragmentC, f, ThemesFragment::class.java.simpleName)
                     .commit()
         }
     }
@@ -102,14 +109,21 @@ class ThemesActivity : BaseDaggerActivity() {
         if (f == null) {
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragment_c, UsersFragment(), UsersFragment::class.java.simpleName)
+                    .replace(R.id.fragmentC, UsersFragment(), UsersFragment::class.java.simpleName)
                     .commit()
         } else {
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragment_c, f, UsersFragment::class.java.simpleName)
+                    .replace(R.id.fragmentC, f, UsersFragment::class.java.simpleName)
                     .commit()
         }
     }
 
+    override fun showLoading() {
+        mainProgress.visibility = View.VISIBLE
+    }
+
+    override fun hideLoading() {
+        mainProgress.visibility = View.GONE
+    }
 }

@@ -56,14 +56,20 @@ class ThemesPresenter : MvpPresenter<ThemesView>() {
 
     private fun loadThemes() {
 
+        viewState.showLoading()
+
         val disposable = data.themes(currentPage.toString(), section)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ themes ->
+                    viewState.hideLoading()
                     loadedThemes.addAll(themes)
                     viewState.showThemes(loadedThemes)
                 },
-                        { throwable -> viewState.message(throwable.message!!) })
+                        { throwable ->
+                            viewState.hideLoading()
+                            viewState.message(throwable.message!!)
+                        })
         compositeDisposable.add(disposable)
 
     }

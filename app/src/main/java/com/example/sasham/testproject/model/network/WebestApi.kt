@@ -7,21 +7,21 @@ import retrofit2.http.Query
 
 interface WebestApi {
 
-    @GET("v1/forum/topics/page/{page}/")
+    @GET("v1/forum/topic/page/{page}/")
     fun themes(@Path("page") page: String): Observable<ThemesWraper>
 
-    @GET("v1/forum/section/{section}/topics/page/{page}/")
+    @GET("v1/forum/section/{section}/topic/page/{page}/")
     fun themesBySection(@Path("page") page: String, @Path("section") section: Int?): Observable<ThemesWraper>
 
     @GET("v1/forum/topic/{id}/")
     fun themeMessages(@Path("id") themeId: String): Observable<MessagesWraper>
 
-    @GET("v1/forum/users/")
+    @GET("v1/user/list/")
     fun users(): Observable<UsersWrapper>
 
-    @GET("v1/forum/sections/")
+    @GET("v1/forum/section/list/")
     fun sections(): Observable<SectionsWraper>
 
-    @GET("v1/forum/groups/")
+    @GET("v1/forum/group/list/")
     fun groups(): Observable<GroupsWraper>
 }

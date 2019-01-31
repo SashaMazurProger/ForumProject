@@ -23,11 +23,19 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <ProgressBar
+            android:id="@+id/mainProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:indeterminateOnly="true"
+            android:layout_height="12dp" />
+
         <FrameLayout
-            android:id="@+id/fragment_c"
+            android:id="@+id/fragmentC"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/bottomNav"/>
+            android:layout_above="@id/bottomNav"
+            android:layout_below="@id/mainProgress"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNav"
@@ -35,8 +43,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             app:itemBackground="?attr/backgroundColor"
+            app:itemIconSize="30dp"
             app:itemIconTint="?attr/colorAccent"
             app:itemTextColor="?attr/colorAccent"
+            app:labelVisibilityMode="unlabeled"
             app:menu="@menu/menu_bottom_navigation" />
     </RelativeLayout>
 

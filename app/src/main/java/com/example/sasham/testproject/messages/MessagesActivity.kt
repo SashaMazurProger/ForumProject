@@ -115,7 +115,7 @@ class MessagesActivity : BaseDaggerActivity(), BaseActivity.OnConnectionListener
 
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.fragment_c, MessagesFragment.newInstance(theme!!))
+                .replace(R.id.fragmentC, MessagesFragment.newInstance(theme!!))
                 .commit()
     }
 
