@@ -1,8 +1,12 @@
 package com.example.sasham.testproject.dependencies
 
+import android.content.Context
+import androidx.room.Room
 import com.example.sasham.testproject.Constants
+import com.example.sasham.testproject.model.db.RoomDb
 import com.example.sasham.testproject.model.network.WebestApi
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -12,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class WebestApiModule {
+class DataModule {
 
     @Singleton
     @Provides
@@ -31,5 +35,12 @@ class WebestApiModule {
                 .build()
 
         return retrofit.create(WebestApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun roomDb(appContext: Context): RoomDb {
+        return Room.databaseBuilder<RoomDb>(appContext, RoomDb::class.java, "forum.db")
+                .build()
     }
 }

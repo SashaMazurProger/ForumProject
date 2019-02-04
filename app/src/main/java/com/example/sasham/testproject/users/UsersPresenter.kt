@@ -16,6 +16,32 @@ class UsersPresenter : BasePresenter<UsersView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
+        loadAllUsers()
+    }
+
+    fun searchUser(s: String) {
+        compositeDisposable.clear()
+
+        compositeDisposable.add(
+                data.users(s)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                {
+                                    viewState.hideLoading()
+                                    viewState.showUsers(it.map { UserItem(it) })
+                                }
+                                ,
+                                {
+                                    viewState.hideLoading()
+                                    viewState.message(it.message!!)
+                                }
+                        )
+        )
+    }
+
+    fun loadAllUsers() {
+
         viewState.showLoading()
 
         compositeDisposable.add(
@@ -34,7 +60,6 @@ class UsersPresenter : BasePresenter<UsersView>() {
                                 }
                         )
         )
-
     }
 }
 

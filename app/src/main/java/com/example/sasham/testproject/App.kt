@@ -4,22 +4,20 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
-
-import com.example.sasham.testproject.dependencies.AppComponent
-import com.example.sasham.testproject.notification.NewMessagesWorker
-
-import java.util.concurrent.TimeUnit
-
-import javax.inject.Inject
-
+import androidx.room.Room
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import com.example.sasham.testproject.dependencies.AppComponent
 import com.example.sasham.testproject.dependencies.DaggerAppComponent
+import com.example.sasham.testproject.model.db.RoomDb
+import com.example.sasham.testproject.notification.NewMessagesWorker
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 class App : Application(), HasActivityInjector {
 
@@ -60,7 +58,7 @@ class App : Application(), HasActivityInjector {
     }
 
     companion object {
-         var instance: App? = null
+        var instance: App? = null
             private set
     }
 

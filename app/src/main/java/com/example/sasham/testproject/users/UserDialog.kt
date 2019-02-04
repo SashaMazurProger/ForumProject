@@ -48,7 +48,7 @@ class UserDialog : BaseDialog(), UserDetailsView {
 
     companion object {
 
-        fun newInstance(user: User): UserDialog {
+        fun newInstance(user: User): UserDialog{
             val bundle = Bundle()
             bundle.putParcelable(Constants.USER_MODEL, user)
             val dialog = UserDialog()

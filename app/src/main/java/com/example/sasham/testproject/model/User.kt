@@ -3,6 +3,8 @@ package com.example.sasham.testproject.model
 import android.os.Parcel
 import android.os.Parcelable
 import android.os.Parcelable.Creator
+import com.example.sasham.testproject.model.db.UserTable
+import com.example.sasham.testproject.model.network.UserWrapper
 
 class User : Parcelable {
 
@@ -135,6 +137,59 @@ class User : Parcelable {
     }
 
     companion object {
+
+        fun copy(it: UserTable): User {
+            return User(
+                    it.id,
+                    it.login,
+                    it.userName,
+                    it.birthday,
+                    it.country,
+                    it.country2,
+                    it.city,
+                    it.sex,
+                    it.state,
+                    it.email,
+                    it.homepage,
+                    it.icq,
+                    it.about,
+                    it.reputation,
+                    it.regDate,
+                    it.msgDate,
+                    it.msgCount,
+                    it.lastMsgTime,
+                    it.lastIp,
+                    it.avatar,
+                    it.created
+            )
+        }
+
+        fun copy(it: UserWrapper): User {
+            return User(
+                    it.id,
+                    it.login,
+                    it.userName,
+                    it.birthday,
+                    it.country,
+                    it.country2,
+                    it.city,
+                    it.sex,
+                    it.state,
+                    it.email,
+                    it.homepage,
+                    it.icq,
+                    it.about,
+                    it.reputation,
+                    it.regDate,
+                    it.msgDate,
+                    it.msgCount,
+                    it.lastMsgTime,
+                    it.lastIp,
+                    it.avatar,
+                    it.created
+            )
+        }
+
         @JvmField
         val CREATOR: Parcelable.Creator<User> = object : Creator<User> {
 

@@ -28,6 +28,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:indeterminateOnly="true"
+            android:background="?attr/backgroundColorMain"
             android:layout_height="12dp" />
 
         <FrameLayout
