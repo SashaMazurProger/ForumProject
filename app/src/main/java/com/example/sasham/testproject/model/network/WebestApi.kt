@@ -10,8 +10,8 @@ interface WebestApi {
     @GET("v1/forum/topic/page/{page}/")
     fun themes(@Path("page") page: String): Observable<ThemesWraper>
 
-    @GET("v1/forum/section/{section}/topic/page/{page}/")
-    fun themesBySection(@Path("page") page: String, @Path("section") section: Int?): Observable<ThemesWraper>
+    @GET("v1/forum/theme/{theme}/topic/page/{page}/")
+    fun themesBySection(@Path("page") page: String, @Path("theme") section: Int?): Observable<ThemesWraper>
 
     @GET("v1/forum/topic/{id}/")
     fun themeMessages(@Path("id") themeId: String): Observable<MessagesWraper>

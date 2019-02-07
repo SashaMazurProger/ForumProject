@@ -1,4 +1,4 @@
-package com.example.sasham.testproject.users
+package com.example.sasham.testproject.account
 
 import com.arellomobile.mvp.viewstate.strategy.AddToEndStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType

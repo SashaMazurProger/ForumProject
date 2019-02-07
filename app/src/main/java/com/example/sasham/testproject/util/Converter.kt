@@ -17,7 +17,8 @@ object Converter {
                 themeAnswer.topicText,
                 themeAnswer.msgText,
                 themeAnswer.msgTime.toString(),
-                themeAnswer.topicUpdated.toString()
+                themeAnswer.topicUpdated.toString(),
+                false
         )
 
     }

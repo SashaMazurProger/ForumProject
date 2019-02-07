@@ -4,6 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.example.sasham.testproject.App
 import com.example.sasham.testproject.model.DataRepository
+import com.example.sasham.testproject.model.FavoriteTheme
 import com.example.sasham.testproject.model.Section
 import com.example.sasham.testproject.model.Theme
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -31,6 +32,7 @@ class ThemesPresenter : MvpPresenter<ThemesView>() {
         super.onFirstViewAttach()
         firstPage()
         loadSections()
+        loadFavoriteThemes()
     }
 
     fun firstPage() {
@@ -75,7 +77,7 @@ class ThemesPresenter : MvpPresenter<ThemesView>() {
     }
 
 
-    fun loadSections() {
+    private fun loadSections() {
 
         val disposable = data.sections()
                 .subscribeOn(Schedulers.io())
@@ -88,8 +90,66 @@ class ThemesPresenter : MvpPresenter<ThemesView>() {
         compositeDisposable.add(disposable);
     }
 
+    private fun loadFavoriteThemes() {
+
+        val disposable = data.favoriteThemes()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ themes ->
+                    viewState.showFavoriteThemes(themes)
+                },
+                        { throwable ->
+                            viewState.message(throwable.message!!)
+                        })
+
+        compositeDisposable.add(disposable)
+    }
+
     fun selectSection(section: Section) {
         this.section = section
         firstPage()
+    }
+
+    fun selectFavoriteTheme(theme: FavoriteTheme) {
+        viewState.openTheme(Theme.copy(theme))
+    }
+
+    fun selectTheme(theme: Theme) {
+        viewState.openTheme(theme)
+    }
+
+    fun onToggleFavoriteState(theme: Theme) {
+
+        if (!theme.isFavorite!!) {
+            data.addFavoriteTheme(FavoriteTheme.copy(theme))
+                    .andThen({ loadFavoriteThemes() })
+                    .andThen({
+                        //                        theme.isFavorite = theme.isFavorite!!.not()
+                        loadedThemes.find { it.id == theme.id }
+                                .let { it?.isFavorite = it?.isFavorite?.not() }
+
+                        viewState.showThemes(loadedThemes)
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
+
+        } else {
+            data.removeFavoriteTheme(FavoriteTheme.copy(theme))
+                    .andThen({ loadFavoriteThemes() })
+                    .andThen({
+                        //                        theme.isFavorite = theme.isFavorite!!.not()
+//                        viewState.updateTheme(theme)
+
+                        loadedThemes.find { it.id == theme.id }
+                                .let { it?.isFavorite = it?.isFavorite?.not() }
+
+                        viewState.showThemes(loadedThemes)
+                    })
+
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
+        }
     }
 }

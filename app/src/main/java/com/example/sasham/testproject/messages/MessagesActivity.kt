@@ -17,7 +17,7 @@ import com.example.sasham.testproject.util.PreferencesHelper
 import com.example.sasham.testproject.util.StringUtil
 import com.example.sasham.testproject.website.WebActivity
 import kotlinx.android.synthetic.main.activity_messages.*
-import kotlinx.android.synthetic.main.theme_listing_item.*
+import kotlinx.android.synthetic.main.theme_item.*
 
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 

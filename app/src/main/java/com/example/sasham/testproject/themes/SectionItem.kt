@@ -17,3 +17,4 @@ class SectionItem(val section: Section) : Item() {
         return R.layout.section_item
     }
 }
+

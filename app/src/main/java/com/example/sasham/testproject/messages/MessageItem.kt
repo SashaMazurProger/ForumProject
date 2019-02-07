@@ -9,12 +9,12 @@ import com.example.sasham.testproject.website.WebActivity
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import kotlinx.android.synthetic.main.message_listing_item.view.*
+import kotlinx.android.synthetic.main.message_item.view.*
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class MessageItem(val message: Message) : Item() {
     override fun getLayout(): Int {
-        return R.layout.message_listing_item
+        return R.layout.message_item
     }
 
     override fun bind(holder: ViewHolder, position: Int) {

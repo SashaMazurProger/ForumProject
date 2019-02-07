@@ -6,7 +6,6 @@ import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.model.db.RoomDb
 import com.example.sasham.testproject.model.network.WebestApi
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -41,6 +40,7 @@ class DataModule {
     @Provides
     fun roomDb(appContext: Context): RoomDb {
         return Room.databaseBuilder<RoomDb>(appContext, RoomDb::class.java, "forum.db")
+                .fallbackToDestructiveMigration()
                 .build()
     }
 }

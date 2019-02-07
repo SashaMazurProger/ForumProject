@@ -8,10 +8,10 @@ import com.example.sasham.testproject.util.StringUtil
 import com.example.sasham.testproject.website.WebActivity
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import kotlinx.android.synthetic.main.theme_listing_item.view.*
+import kotlinx.android.synthetic.main.theme_item.view.*
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
-class ThemeItem(val theme: Theme) : Item() {
+class ThemeItem(val theme: Theme, val presenter: ThemesPresenter) : Item() {
 
     override fun bind(holder: ViewHolder, position: Int) {
 
@@ -30,9 +30,11 @@ class ThemeItem(val theme: Theme) : Item() {
         if (StringUtil.isNotNullOrEmpty(theme.msgTime)) {
             holder.itemView.createdTime!!.text = StringUtil.getDateFromMillis(theme.msgTime!!, Constants.TIME_PATTERN)
         }
+
+        holder.itemView.favoriteBtn.setOnClickListener { presenter.onToggleFavoriteState(theme) }
     }
 
     override fun getLayout(): Int {
-        return R.layout.theme_listing_item
+        return R.layout.theme_item
     }
 }

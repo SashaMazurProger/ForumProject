@@ -13,24 +13,21 @@ class Theme : Parcelable {
     var msgText: String? = null
     var msgTime: String? = null
     var topicUpdated: String? = null
+    var isFavorite: Boolean? = null
 
-    protected constructor(`in`: Parcel) {
-        this.id = `in`.readValue(String::class.java.classLoader) as String?
-        this.userId = `in`.readValue(String::class.java.classLoader) as String?
-        this.userName = `in`.readValue(String::class.java.classLoader) as String?
-        this.topicText = `in`.readValue(String::class.java.classLoader) as String?
-        this.msgText = `in`.readValue(String::class.java.classLoader) as String?
-        this.msgTime = `in`.readValue(String::class.java.classLoader) as String?
-        this.topicUpdated = `in`.readValue(String::class.java.classLoader) as String?
-
+    constructor(parcel: Parcel) {
+        id = parcel.readString()
+        userId = parcel.readString()
+        userName = parcel.readString()
+        topicText = parcel.readString()
+        msgText = parcel.readString()
+        msgTime = parcel.readString()
+        topicUpdated = parcel.readString()
+        isFavorite = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
     }
 
-    /**
-     * No args constructor for use in serialization
-     */
-    constructor() {}
 
-    constructor(id: String?, userId: String?, userName: String?, topicText: String?, msgText: String?, msgTime: String?, topicUpdated: String?) {
+    constructor(id: String?, userId: String?, userName: String?, topicText: String?, msgText: String?, msgTime: String?, topicUpdated: String?, isFavorite: Boolean?) {
         this.id = id
         this.userId = userId
         this.userName = userName
@@ -38,52 +35,38 @@ class Theme : Parcelable {
         this.msgText = msgText
         this.msgTime = msgTime
         this.topicUpdated = topicUpdated
-
+        this.isFavorite = isFavorite
     }
 
-
-    /**
-     * @param id
-     * @param isModerator
-     * @param topicUpdated
-     * @param forumName
-     * @param userId
-     * @param msgTime
-     * @param userName
-     * @param isAdmin
-     * @param topicText
-     * @param msgText
-     */
-
-
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeValue(id)
-        dest.writeValue(userId)
-        dest.writeValue(userName)
-        dest.writeValue(topicText)
-        dest.writeValue(msgText)
-        dest.writeValue(msgTime)
-        dest.writeValue(topicUpdated)
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(id)
+        parcel.writeString(userId)
+        parcel.writeString(userName)
+        parcel.writeString(topicText)
+        parcel.writeString(msgText)
+        parcel.writeString(msgTime)
+        parcel.writeString(topicUpdated)
+        parcel.writeValue(isFavorite)
     }
 
     override fun describeContents(): Int {
         return 0
     }
 
-    companion object {
-        @JvmField
-        val CREATOR: Parcelable.Creator<Theme> = object : Creator<Theme> {
+    companion object CREATOR : Creator<Theme> {
 
+        override fun createFromParcel(parcel: Parcel): Theme {
+            return Theme(parcel)
+        }
 
-            override fun createFromParcel(`in`: Parcel): Theme {
-                return Theme(`in`)
-            }
+        override fun newArray(size: Int): Array<Theme?> {
+            return arrayOfNulls(size)
+        }
 
-            override fun newArray(size: Int): Array<Theme?> {
-                return arrayOfNulls(size)
-            }
-
+        fun copy(theme: FavoriteTheme): Theme {
+            return Theme(theme.themeId.toString(), theme.userId, theme.userName, theme.topicText, theme.msgText, theme.msgTime, theme.topicUpdated, true)
         }
     }
+
 
 }

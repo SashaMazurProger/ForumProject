@@ -1,23 +1,48 @@
 package com.example.sasham.testproject.model
 
+import com.example.sasham.testproject.model.db.FavoriteThemeTable
 import com.example.sasham.testproject.model.db.RoomDb
 import com.example.sasham.testproject.model.db.UserTable
 import com.example.sasham.testproject.model.network.SectionsWraper
+import com.example.sasham.testproject.model.network.ThemesWraper
 import com.example.sasham.testproject.model.network.WebestApi
 import com.example.sasham.testproject.util.Converter
+import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import java.util.*
 import javax.inject.Inject
 
 class DataRepositoryImp @Inject
 constructor(private val webestApi: WebestApi, private val db: RoomDb) : DataRepository {
 
+
+    override fun removeFavoriteTheme(theme: FavoriteTheme): Completable {
+        return Completable.fromAction { db.favoriteThemeDao().delete(FavoriteThemeTable.copy(theme)) }
+
+    }
+
+
+    override fun addFavoriteTheme(theme: FavoriteTheme): Completable {
+        return Completable.fromAction { db.favoriteThemeDao().saveTheme(FavoriteThemeTable.copy(theme)) }
+    }
+
+
+    override fun favoriteThemes(): Observable<List<FavoriteTheme>> {
+
+        return Observable.fromCallable { (db.favoriteThemeDao().themes()) }
+                .map { it.map { FavoriteTheme.copy(it) } }
+    }
+
     override fun users(s: String): Observable<List<User>> {
+
+        val sqlSearch = "%$s%"
+
         return Observable.fromCallable { db.userDao().count() }
                 .flatMap<List<User>> {
                     if (it > 0) {
                         return@flatMap Observable.fromCallable {
-                            db.userDao().users(s)
+                            db.userDao().users(sqlSearch)
                                     .map {
                                         User.copy(it)
                                     }
@@ -33,7 +58,7 @@ constructor(private val webestApi: WebestApi, private val db: RoomDb) : DataRepo
                                     db.userDao().saveUsers(it.map {
                                         UserTable.copy(it)
                                     })
-                                    return@map db.userDao().users(s)
+                                    return@map db.userDao().users(sqlSearch)
                                             .map {
                                                 User.copy(it)
                                             }
@@ -51,25 +76,55 @@ constructor(private val webestApi: WebestApi, private val db: RoomDb) : DataRepo
     override fun themes(page: String, section: Section?): Observable<List<Theme>> {
 
         if (section == null) {
-            return webestApi.themes(page)
-                    .map { themesWraper -> themesWraper.themeAnswers }
-                    .flatMap { themeAnswers ->
-                        val themes = ArrayList<Theme>()
-                        for (themeAnswer in themeAnswers!!.iterator()) {
-                            themes.add(Converter.themeAnswerToTheme(themeAnswer!!)!!)
+            return Observable.zip(webestApi.themes(page), Observable.fromCallable { db.favoriteThemeDao().themes() },
+                    object : BiFunction<ThemesWraper, List<FavoriteThemeTable>, List<Theme>> {
+                        override fun apply(t1: ThemesWraper, favorites: List<FavoriteThemeTable>): List<Theme> {
+                            val themes = t1.themeAnswers
+                                    ?.map { Converter.themeAnswerToTheme(it)!! }
+
+                            themes?.filter { answer: Theme -> favorites.any { it.themeId == answer.id?.toInt() } }
+                                    ?.map {
+                                        it.isFavorite = true
+                                    }
+
+                            return themes!!
                         }
-                        Observable.just(themes)
-                    }
+
+                    })
+//                    .map { themesWraper -> themesWraper.themeAnswers }
+//                    .flatMap { themeAnswers ->
+//                        val themes = ArrayList<Theme>()
+//                        for (themeAnswer in themeAnswers!!.iterator()) {
+//                            themes.add(Converter.themeAnswerToTheme(themeAnswer!!)!!)
+//                        }
+//                        Observable.just(themes)
+//                    }
+//                    .
         } else {
-            return webestApi.themesBySection(page, section.id)
-                    .map { themesWraper -> themesWraper.themeAnswers }
-                    .flatMap { themeAnswers ->
-                        val themes = ArrayList<Theme>()
-                        for (themeAnswer in themeAnswers!!.iterator()) {
-                            themes.add(Converter.themeAnswerToTheme(themeAnswer!!)!!)
+//            return webestApi.themesBySection(page, section.id)
+//                    .map { themesWraper -> themesWraper.themeAnswers }
+//                    .flatMap { themeAnswers ->
+//                        val themes = ArrayList<Theme>()
+//                        for (themeAnswer in themeAnswers!!.iterator()) {
+//                            themes.add(Converter.themeAnswerToTheme(themeAnswer!!)!!)
+//                        }
+//                        Observable.just(themes)
+//                    }
+            return Observable.zip(webestApi.themesBySection(page, section.id), Observable.just(db.favoriteThemeDao().themes()),
+                    object : BiFunction<ThemesWraper, List<FavoriteThemeTable>, List<Theme>> {
+                        override fun apply(t1: ThemesWraper, favorites: List<FavoriteThemeTable>): List<Theme> {
+                            val themes = t1.themeAnswers
+                                    ?.map { Converter.themeAnswerToTheme(it!!)!! }
+
+                            themes?.filter { answer: Theme -> favorites.any { it.themeId == answer.id?.toInt() } }
+                                    ?.map {
+                                        it.isFavorite = true
+                                    }
+
+                            return themes!!
                         }
-                        Observable.just(themes)
-                    }
+
+                    })
         }
     }
 
