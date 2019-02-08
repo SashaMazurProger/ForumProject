@@ -3,10 +3,8 @@ package com.example.sasham.testproject.themes
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.example.sasham.testproject.App
-import com.example.sasham.testproject.model.DataRepository
-import com.example.sasham.testproject.model.FavoriteTheme
-import com.example.sasham.testproject.model.Section
-import com.example.sasham.testproject.model.Theme
+import com.example.sasham.testproject.model.*
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -33,6 +31,18 @@ class ThemesPresenter : MvpPresenter<ThemesView>() {
         firstPage()
         loadSections()
         loadFavoriteThemes()
+
+        data.favoriteStatusChangeEvent
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ changed: Theme ->
+
+                    loadFavoriteThemes()
+                    loadedThemes.find { it.id == changed.id }
+                            .let { it?.isFavorite = changed?.isFavorite }
+
+                    viewState.showThemes(loadedThemes)
+
+                }, {})
     }
 
     fun firstPage() {
@@ -120,36 +130,23 @@ class ThemesPresenter : MvpPresenter<ThemesView>() {
 
     fun onToggleFavoriteState(theme: Theme) {
 
-        if (!theme.isFavorite!!) {
-            data.addFavoriteTheme(FavoriteTheme.copy(theme))
-                    .andThen({ loadFavoriteThemes() })
-                    .andThen({
-                        //                        theme.isFavorite = theme.isFavorite!!.not()
-                        loadedThemes.find { it.id == theme.id }
-                                .let { it?.isFavorite = it?.isFavorite?.not() }
-
-                        viewState.showThemes(loadedThemes)
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
-
-        } else {
-            data.removeFavoriteTheme(FavoriteTheme.copy(theme))
-                    .andThen({ loadFavoriteThemes() })
-                    .andThen({
-                        //                        theme.isFavorite = theme.isFavorite!!.not()
-//                        viewState.updateTheme(theme)
-
-                        loadedThemes.find { it.id == theme.id }
-                                .let { it?.isFavorite = it?.isFavorite?.not() }
-
-                        viewState.showThemes(loadedThemes)
-                    })
-
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
+        Completable.fromAction {
+            if (theme.isFavorite!!) {
+                data.removeFavoriteTheme(FavoriteTheme.copy(theme))
+                        .blockingAwait()
+            } else data.addFavoriteTheme(FavoriteTheme.copy(theme))
+                    .blockingAwait()
         }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .andThen({
+                    loadFavoriteThemes()
+                    loadedThemes.find { it.id == theme.id }
+                            .let { it?.isFavorite = it?.isFavorite?.not() }
+
+                    viewState.showThemes(loadedThemes)
+                })
+                .subscribe()
+
     }
 }

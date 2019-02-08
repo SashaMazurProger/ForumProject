@@ -1,6 +1,8 @@
 package com.example.sasham.testproject.themes
 
+import android.graphics.PorterDuff
 import android.text.util.Linkify
+import androidx.core.content.ContextCompat
 import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.R
 import com.example.sasham.testproject.model.Theme
@@ -32,6 +34,9 @@ class ThemeItem(val theme: Theme, val presenter: ThemesPresenter) : Item() {
         }
 
         holder.itemView.favoriteBtn.setOnClickListener { presenter.onToggleFavoriteState(theme) }
+
+        val color = if (theme.isFavorite!!) R.color.favorite_theme else R.color.non_favorite_theme
+        holder.itemView.favoriteBtn.drawable.setColorFilter(ContextCompat.getColor(holder.itemView.context, color), PorterDuff.Mode.SRC_ATOP)
     }
 
     override fun getLayout(): Int {

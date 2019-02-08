@@ -1,5 +1,6 @@
 package com.example.sasham.testproject.model
 
+import hu.akarnokd.rxjava2.subjects.DispatchWorkSubject
 import io.reactivex.Completable
 import io.reactivex.Observable
 
@@ -13,4 +14,5 @@ interface DataRepository {
     fun favoriteThemes(): Observable<List<FavoriteTheme>>
     fun addFavoriteTheme(theme: FavoriteTheme): Completable
     fun removeFavoriteTheme(theme: FavoriteTheme): Completable
+    val favoriteStatusChangeEvent: DispatchWorkSubject<Theme>
 }

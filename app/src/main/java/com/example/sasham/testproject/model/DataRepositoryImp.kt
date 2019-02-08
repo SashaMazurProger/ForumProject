@@ -7,19 +7,21 @@ import com.example.sasham.testproject.model.network.SectionsWraper
 import com.example.sasham.testproject.model.network.ThemesWraper
 import com.example.sasham.testproject.model.network.WebestApi
 import com.example.sasham.testproject.util.Converter
+import hu.akarnokd.rxjava2.subjects.DispatchWorkSubject
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
 
 class DataRepositoryImp @Inject
 constructor(private val webestApi: WebestApi, private val db: RoomDb) : DataRepository {
 
+    override val favoriteStatusChangeEvent = DispatchWorkSubject.create<Theme>(Schedulers.io())
 
     override fun removeFavoriteTheme(theme: FavoriteTheme): Completable {
         return Completable.fromAction { db.favoriteThemeDao().delete(FavoriteThemeTable.copy(theme)) }
-
     }
 
 
@@ -30,7 +32,7 @@ constructor(private val webestApi: WebestApi, private val db: RoomDb) : DataRepo
 
     override fun favoriteThemes(): Observable<List<FavoriteTheme>> {
 
-        return Observable.fromCallable { (db.favoriteThemeDao().themes()) }
+        return Observable.fromCallable { db.favoriteThemeDao().themes() }
                 .map { it.map { FavoriteTheme.copy(it) } }
     }
 

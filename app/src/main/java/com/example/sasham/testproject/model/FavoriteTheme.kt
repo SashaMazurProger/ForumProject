@@ -25,7 +25,14 @@ data class FavoriteTheme constructor(
         }
 
         fun copy(theme: Theme): FavoriteTheme {
-            return FavoriteTheme(theme.id!!.toInt(), theme.userId, theme.userName, theme.topicText, theme.msgText, theme.msgTime, theme.topicUpdated)
+            return FavoriteTheme(
+                    theme.id!!.toInt(),
+                    theme.userId,
+                    theme.userName,
+                    theme.topicText,
+                    theme.msgText,
+                    theme.msgTime,
+                    theme.topicUpdated)
         }
     }
 }

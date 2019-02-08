@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.sasham.testproject.Constants
+import com.example.sasham.testproject.R
 import com.example.sasham.testproject.base.BaseFragment
 import com.example.sasham.testproject.messages.MessagesActivity
 import com.example.sasham.testproject.model.FavoriteTheme
 import com.example.sasham.testproject.model.Theme
 import com.xwray.groupie.GroupAdapter
-import com.example.sasham.testproject.R
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_themes_listing.*
@@ -83,7 +83,7 @@ class ThemesFragment : BaseFragment(), ThemesView, androidx.swiperefreshlayout.w
 
     override fun showFavoriteThemes(themes: List<FavoriteTheme?>) {
         val section = Section()
-        section.addAll(themes.map { FavoriteThemeItem(it!!) })
+        section.addAll(themes.map { FavoriteThemeItem(it!!, presenter) })
         favoriteThemesAdapter!!.clear()
         favoriteThemesAdapter!!.add(section)
     }

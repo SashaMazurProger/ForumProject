@@ -32,4 +32,5 @@ class MessagesPresenter(private val theme: Theme) : BasePresenter<MessagesListin
 
         compositeDisposable.add(disposable)
     }
+
 }

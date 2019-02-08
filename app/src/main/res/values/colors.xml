@@ -9,8 +9,8 @@
     <color name="colorPrimaryDark_white">#25607e</color>
     <color name="colorAccent_white">@color/md_light_blue_A400</color>
     <color name="colorTitle_white">@color/md_indigo_A400</color>
-    <color name="colorBackgroundMain_white">#ececec</color>
-    <color name="colorBackground_white">#ffffff</color>
+    <color name="colorBackgroundMain_white">@color/md_grey_100</color>
+    <color name="colorBackground_white">@color/md_white_1000</color>
     <color name="textColorMain_white">#737373</color>
 
     <!--Black-->
@@ -21,5 +21,9 @@
     <color name="colorBackgroundMain_black">#2e2e2e</color>
     <color name="colorBackground_black">#161616</color>
     <color name="textColorMain_black">#ffffff</color>
+
+
+    <color name="non_favorite_theme">@color/md_grey_400</color>
+    <color name="favorite_theme">@color/md_orange_A400</color>
 
 </resources>
