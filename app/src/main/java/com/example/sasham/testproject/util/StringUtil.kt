@@ -2,11 +2,11 @@ package com.example.sasham.testproject.util
 
 import android.net.Uri
 import android.text.Html
-
 import com.example.sasham.testproject.Constants
-
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
+import java.util.concurrent.TimeUnit
+
 
 object StringUtil {
 
@@ -15,16 +15,17 @@ object StringUtil {
     }
 
     fun isNotNullOrEmpty(s: String?): Boolean {
-        return s != null && !s.trim { it <= ' ' }.isEmpty()
+        return s != null && !s.isEmpty()
     }
 
     fun getDateFromMillis(millis: String, pattern: String): String? {
-        val millisNumb = java.lang.Long.parseLong(millis)
-        if (millisNumb != 0L) {
-            val date = Date(millisNumb)
+        try {
+            val millisNumb = java.lang.Long.parseLong(millis)
+            val date = Date(TimeUnit.SECONDS.toMillis(millisNumb))
             return SimpleDateFormat(pattern).format(date)
+        } catch (e: NumberFormatException) {
+            return null
         }
-        return null
     }
 
     fun stripHtml(html: String?): String? {

@@ -7,6 +7,5 @@ import com.example.sasham.testproject.model.User
 
 @StateStrategyType(AddToEndStrategy::class)
 interface AccountView : IView {
-    fun onLogin()
-    fun onRegistration()
+    fun showUser(user: User)
 }

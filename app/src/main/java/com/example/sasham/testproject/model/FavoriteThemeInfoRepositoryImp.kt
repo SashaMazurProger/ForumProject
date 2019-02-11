@@ -14,18 +14,18 @@ constructor(private val context: Context) : FavoriteThemeInfoRepository {
     private val prefs: SharedPreferences
     private val favoritesThemes = ArrayList<FavoriteThemeInfo>()
 
-    override val lastViewedTheme: FavoriteThemeInfo?
-        get() {
-
-            val id = prefs.getString(LAST_VIEWED_THEME_ID, null) ?: return null
-
-            return FavoriteThemeInfo(
-                    id,
-                    0,
-                    prefs.getLong(LAST_VIEWED_THEME_TIME, 0),
-                    prefs.getString(LAST_VIEWED_THEME_TITLE, null)
-            )
-        }
+//    override val lastViewedTheme: FavoriteThemeInfo?
+//        get() {
+//
+//            val id = prefs.getString(LAST_VIEWED_THEME_ID, null) ?: return null
+//
+//            return FavoriteThemeInfo(
+//                    id,
+//                    0,
+//                    prefs.getLong(LAST_VIEWED_THEME_TIME, 0),
+//                    prefs.getString(LAST_VIEWED_THEME_TITLE, null)
+//            )
+//        }
 
     init {
         prefs = PreferenceManager.getDefaultSharedPreferences(context)

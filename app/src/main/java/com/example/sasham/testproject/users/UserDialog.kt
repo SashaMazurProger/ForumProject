@@ -8,10 +8,9 @@ import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.R
 import com.example.sasham.testproject.base.BaseDialog
 import com.example.sasham.testproject.model.User
+import com.example.sasham.testproject.util.StringUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.user_dialog.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 class UserDialog : BaseDialog(), UserDetailsView {
 
@@ -33,7 +32,7 @@ class UserDialog : BaseDialog(), UserDetailsView {
         userLocation.text = "${user.city} ${user.country}"
         userBirthday.text = user.birthday
         userEmail.text = user.email
-        userRegistration.text = SimpleDateFormat(Constants.TIME_PATTERN).format(Date(user.regDate!!.toLong()))
+        userRegistration.text = StringUtil.getDateFromMillis(user.regDate.toString(), Constants.TIME_PATTERN)
     }
 
     override val layoutId: Int
@@ -48,7 +47,7 @@ class UserDialog : BaseDialog(), UserDetailsView {
 
     companion object {
 
-        fun newInstance(user: User): UserDialog{
+        fun newInstance(user: User): UserDialog {
             val bundle = Bundle()
             bundle.putParcelable(Constants.USER_MODEL, user)
             val dialog = UserDialog()

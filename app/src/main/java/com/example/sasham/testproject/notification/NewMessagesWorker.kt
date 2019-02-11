@@ -5,16 +5,14 @@ import android.app.PendingIntent
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.BitmapFactory
-import androidx.core.app.NotificationCompat
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import androidx.work.Worker
 import com.example.sasham.testproject.App
 import com.example.sasham.testproject.R
-import com.example.sasham.testproject.model.FavoriteThemeInfoRepository
+import com.example.sasham.testproject.model.DataRepository
 import com.example.sasham.testproject.model.Message
-import com.example.sasham.testproject.model.network.WebestApi
 import com.example.sasham.testproject.themes.ThemesActivity
-import com.example.sasham.testproject.util.Converter
 import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
@@ -22,10 +20,7 @@ import javax.inject.Inject
 class NewMessagesWorker : Worker() {
 
     @Inject
-    lateinit var infoRepository: FavoriteThemeInfoRepository
-
-    @Inject
-    lateinit var webestApi: WebestApi
+    lateinit var data: DataRepository
 
     private var isNotifShowed = false
 
@@ -38,47 +33,50 @@ class NewMessagesWorker : Worker() {
         return Worker.Result.SUCCESS
     }
 
-    //Проверяем часто посещаемые форумы на наличие новых сообщений и показываем их в уведомлении
+    //Проверяем часто избранные форумы на наличие новых сообщений и показываем их кв уведомлении
     private fun checkFavoriteThemes() {
 
+//
+//        if (isNotifShowed) {
+//            return
+//        }
 
-        if (isNotifShowed) {
-            return
-        }
+        data.favoriteThemes()
+                .flatMap { Observable.fromIterable(it) }
+                .flatMap {
+                    data.themeMessages(it.themeId.toString())
+                            .flatMap { messages ->
+                                val newMessages = ArrayList<Message>()
+                                for (message in messages) {
+                                    if (it.lastTimeViewedInMillis != null && isNewMessage(message, it.lastTimeViewedInMillis!!)) {
+                                        newMessages.add(message)
+                                    }
+                                }
+                                Observable.just(newMessages)
+                            }
+                            .map { messages: List<Message> ->
+                                Log.d(TAG, "accept: " + messages.size)
 
-        val themeInfo = infoRepository!!.lastViewedTheme ?: return
-
-        webestApi!!.themeMessages(themeInfo.themeId!!)
-                .map { messageWraper -> messageWraper.messageAnswers }
-                .flatMap { messageAnswers ->
-                    val messages = ArrayList<Message>()
-                    for (themeAnswer in messageAnswers!!) {
-                        val message = Converter.messageAnswerToMessage(themeAnswer)
-
-                        if (isNewMessage(message!!, themeInfo.lastMessageTime)) {
-                            messages.add(message)
-                        }
-                    }
-                    Observable.just(messages)
+                                //Если есть новые сообщения - выводим уведомление
+//                                if (messages.isNotEmpty()) {
+                                showNotification(messages.size, it.topicText)
+                                isNotifShowed = true
+//                                }
+                            }
                 }
-                .blockingSubscribe({ messages ->
-                    Log.d(TAG, "accept: " + messages.size)
-
-                    //Если есть новые сообщения - выводим уведомление
-                    if (messages.size > 0) {
-                        showNotification(messages.size, themeInfo.title)
-                        isNotifShowed = true
-                    }
+                .blockingSubscribe({
                 },
-                        { })
+                        {
+
+                        })
 
 
     }
 
-    private fun isNewMessage(message: Message, lastMessageTime: Long): Boolean {
-        val messageTime = java.lang.Long.parseLong(message.msgTime)
+    private fun isNewMessage(message: Message, lastViewedTime: Long): Boolean {
+        val messageTime = java.lang.Long.parseLong(message.msgTime) * 1000
 
-        return messageTime > lastMessageTime
+        return messageTime > lastViewedTime
     }
 
 

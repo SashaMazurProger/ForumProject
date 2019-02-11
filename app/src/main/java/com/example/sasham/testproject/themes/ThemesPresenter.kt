@@ -3,7 +3,10 @@ package com.example.sasham.testproject.themes
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.example.sasham.testproject.App
-import com.example.sasham.testproject.model.*
+import com.example.sasham.testproject.model.DataRepository
+import com.example.sasham.testproject.model.FavoriteTheme
+import com.example.sasham.testproject.model.Section
+import com.example.sasham.testproject.model.Theme
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -130,12 +133,17 @@ class ThemesPresenter : MvpPresenter<ThemesView>() {
 
     fun onToggleFavoriteState(theme: Theme) {
 
+        val favorite = FavoriteTheme.copy(theme)
+
         Completable.fromAction {
             if (theme.isFavorite!!) {
                 data.removeFavoriteTheme(FavoriteTheme.copy(theme))
                         .blockingAwait()
-            } else data.addFavoriteTheme(FavoriteTheme.copy(theme))
-                    .blockingAwait()
+            } else {
+                favorite.lastTimeViewedInMillis = Calendar.getInstance().timeInMillis
+                data.addFavoriteTheme(favorite)
+                        .blockingAwait()
+            }
         }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

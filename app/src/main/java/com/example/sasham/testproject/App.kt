@@ -4,14 +4,12 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
-import androidx.room.Room
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.example.sasham.testproject.dependencies.AppComponent
 import com.example.sasham.testproject.dependencies.DaggerAppComponent
-import com.example.sasham.testproject.model.db.RoomDb
 import com.example.sasham.testproject.notification.NewMessagesWorker
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -33,16 +31,16 @@ class App : Application(), HasActivityInjector {
         instance = this
         injectDependencies()
 
-        val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-
-        val newMessagesWork = PeriodicWorkRequest.Builder(NewMessagesWorker::class.java, 1, TimeUnit.HOURS)
-                .setConstraints(constraints)
-                .build()
-
-        WorkManager.getInstance()
-                .enqueue(newMessagesWork)
+//        val constraints = Constraints.Builder()
+//                .setRequiredNetworkType(NetworkType.CONNECTED)
+//                .build()
+//
+//        val newMessagesWork = PeriodicWorkRequest.Builder(NewMessagesWorker::class.java, 30, TimeUnit.SECONDS)
+//                .setConstraints(constraints)
+//                .build()
+//
+//        WorkManager.getInstance()
+//                .enqueue(newMessagesWork)
     }
 
     private fun injectDependencies() {

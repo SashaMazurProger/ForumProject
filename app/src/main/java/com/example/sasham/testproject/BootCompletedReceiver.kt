@@ -23,7 +23,7 @@ class BootCompletedReceiver : BroadcastReceiver() {
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
-        val newMessagesWork = PeriodicWorkRequest.Builder(NewMessagesWorker::class.java, 1, TimeUnit.HOURS)
+        val newMessagesWork = PeriodicWorkRequest.Builder(NewMessagesWorker::class.java, 30, TimeUnit.SECONDS)
                 .setConstraints(constraints)
                 .build()
 

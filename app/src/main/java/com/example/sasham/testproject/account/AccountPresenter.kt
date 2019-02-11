@@ -8,13 +8,13 @@ import com.example.sasham.testproject.model.User
 @InjectViewState
 class AccountPresenter(val user: User) : BasePresenter<AccountView>() {
 
-//    init {
-//        App.instance!!.appComp!!.inject(this)
-//    }
+    init {
+        App.instance!!.appComp!!.inject(this)
+    }
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
-//        viewState.showUser(user)
+        viewState.showUser(user)
     }
 }

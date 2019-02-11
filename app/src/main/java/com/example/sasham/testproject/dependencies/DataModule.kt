@@ -1,6 +1,7 @@
 package com.example.sasham.testproject.dependencies
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.model.db.RoomDb
@@ -42,5 +43,11 @@ class DataModule {
         return Room.databaseBuilder<RoomDb>(appContext, RoomDb::class.java, "forum.db")
                 .fallbackToDestructiveMigration()
                 .build()
+    }
+
+    @Singleton
+    @Provides
+    fun prefs(appContext: Context): SharedPreferences {
+        return appContext.getSharedPreferences("forum", Context.MODE_PRIVATE)
     }
 }

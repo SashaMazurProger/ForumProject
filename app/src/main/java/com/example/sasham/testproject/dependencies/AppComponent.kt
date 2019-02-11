@@ -1,12 +1,12 @@
 package com.example.sasham.testproject.dependencies
 
 import android.content.Context
-import androidx.room.Room
 import com.example.sasham.testproject.App
+import com.example.sasham.testproject.account.AuthPresenter
 import com.example.sasham.testproject.messages.MessagesPresenter
-import com.example.sasham.testproject.model.db.RoomDb
 import com.example.sasham.testproject.notification.NewMessagesWorker
 import com.example.sasham.testproject.themes.ThemesPresenter
+import com.example.sasham.testproject.users.AccountPresenter
 import com.example.sasham.testproject.users.UserDetPresenter
 import com.example.sasham.testproject.users.UsersPresenter
 import dagger.BindsInstance
@@ -21,6 +21,7 @@ interface AppComponent {
     interface Builder {
         @BindsInstance
         fun context(context: Context): Builder
+
         fun build(): AppComponent
     }
 
@@ -31,4 +32,6 @@ interface AppComponent {
     fun inject(presenter: ThemesPresenter)
     fun inject(presenter: MessagesPresenter)
     fun inject(presenter: UserDetPresenter)
+    fun inject(presenter: AuthPresenter)
+    fun inject(presenter: AccountPresenter)
 }

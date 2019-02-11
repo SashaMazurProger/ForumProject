@@ -1,9 +1,14 @@
 package com.example.sasham.testproject.model.network
 
+import com.example.sasham.testproject.model.User
 import io.reactivex.Observable
+import okhttp3.RequestBody
+import okhttp3.Response
+import okhttp3.ResponseBody
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface WebestApi {
 
@@ -24,4 +29,10 @@ interface WebestApi {
 
     @GET("v1/forum/group/list/")
     fun groups(): Observable<GroupsWraper>
+
+    //    @GET("v1/user/login/")
+//    fun login( email: String, pass: String): Observable<User>
+//
+    @POST("v1/user/login/")
+    fun login(@Body body: RequestBody): Observable<ResponseBody>
 }

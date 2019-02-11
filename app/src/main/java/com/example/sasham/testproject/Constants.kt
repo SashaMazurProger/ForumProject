@@ -14,5 +14,6 @@ object Constants {
     const val USER_MODEL = "user"
     const val USER_TABLE = "USER_TABLE"
     const val FAVORITE_THEME_TABLE = "FAVORITE_THEME_TABLE"
+    const val PASS_HASH = "PASS_HASH"
 
 }

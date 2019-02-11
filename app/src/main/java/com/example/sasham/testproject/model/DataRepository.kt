@@ -14,5 +14,8 @@ interface DataRepository {
     fun favoriteThemes(): Observable<List<FavoriteTheme>>
     fun addFavoriteTheme(theme: FavoriteTheme): Completable
     fun removeFavoriteTheme(theme: FavoriteTheme): Completable
+    fun updateFavoriteThemeViewTime(theme: Theme)
+    fun login(email: String, pass: String): Observable<User>
+
     val favoriteStatusChangeEvent: DispatchWorkSubject<Theme>
 }

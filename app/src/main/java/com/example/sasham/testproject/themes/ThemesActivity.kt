@@ -6,7 +6,10 @@ import android.view.MenuItem
 import android.view.View
 import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.R
+import com.example.sasham.testproject.account.AuthFragment
 import com.example.sasham.testproject.base.BaseDaggerActivity
+import com.example.sasham.testproject.model.User
+import com.example.sasham.testproject.users.AccountFragment
 import com.example.sasham.testproject.users.UsersFragment
 import com.example.sasham.testproject.util.PreferencesHelper
 import com.google.android.material.snackbar.Snackbar
@@ -47,7 +50,18 @@ class ThemesActivity : BaseDaggerActivity() {
     }
 
     private fun showAccountFragment() {
-
+        val f = supportFragmentManager.findFragmentByTag(AuthFragment::class.java.simpleName)
+        if (f == null) {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragmentC, AuthFragment(), AuthFragment::class.java.simpleName)
+                    .commit()
+        } else {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragmentC, f, AuthFragment::class.java.simpleName)
+                    .commit()
+        }
     }
 
 
@@ -125,5 +139,13 @@ class ThemesActivity : BaseDaggerActivity() {
 
     override fun hideLoading() {
         mainProgress.visibility = View.GONE
+    }
+
+    fun showAccountScreen(it: User) {
+        val f = AccountFragment.newInstance(it)
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragmentC, f, UsersFragment::class.java.simpleName)
+                .commit()
     }
 }

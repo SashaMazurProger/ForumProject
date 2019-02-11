@@ -1,24 +1,58 @@
 package com.example.sasham.testproject.model
 
+import android.content.SharedPreferences
+import com.example.sasham.testproject.Constants
 import com.example.sasham.testproject.model.db.FavoriteThemeTable
 import com.example.sasham.testproject.model.db.RoomDb
 import com.example.sasham.testproject.model.db.UserTable
 import com.example.sasham.testproject.model.network.SectionsWraper
 import com.example.sasham.testproject.model.network.ThemesWraper
+import com.example.sasham.testproject.model.network.UserWrapper
 import com.example.sasham.testproject.model.network.WebestApi
 import com.example.sasham.testproject.util.Converter
+import com.google.gson.Gson
 import hu.akarnokd.rxjava2.subjects.DispatchWorkSubject
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import java.util.*
 import javax.inject.Inject
 
 class DataRepositoryImp @Inject
-constructor(private val webestApi: WebestApi, private val db: RoomDb) : DataRepository {
+constructor(private val webestApi: WebestApi, private val db: RoomDb, private val prefs: SharedPreferences) : DataRepository {
+
 
     override val favoriteStatusChangeEvent = DispatchWorkSubject.create<Theme>(Schedulers.io())
+
+
+    override fun login(email: String, pass: String): Observable<User> {
+
+        val body = RequestBody.create(MediaType.get("application/json"), "{\"login\":\"${email}\",\"password\":\"${pass}\"}")
+        return webestApi.login(body)
+                .map {
+                    val body = it.string()
+                    val userWraper = Gson().fromJson<UserWrapper>(body, UserWrapper::class.java)
+//                    val passHash = Gson().toJsonTree(body).asJsonObject.get("password").asString
+//                    prefs.edit().putString(Constants.PASS_HASH,passHash).commit()
+                    return@map User.copy(userWraper)
+                }
+    }
+
+    override fun updateFavoriteThemeViewTime(theme: Theme) {
+        db.favoriteThemeDao()
+                .themes()
+                .find { it.themeId.toString() == theme.id }
+                .let {
+                    it?.lastTimeViewedInMillis = Calendar.getInstance().timeInMillis
+                    if (it != null) {
+                        db.favoriteThemeDao()
+                                .update(it)
+                    }
+                }
+    }
 
     override fun removeFavoriteTheme(theme: FavoriteTheme): Completable {
         return Completable.fromAction { db.favoriteThemeDao().delete(FavoriteThemeTable.copy(theme)) }

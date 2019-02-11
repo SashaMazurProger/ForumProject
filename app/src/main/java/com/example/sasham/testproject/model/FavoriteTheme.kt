@@ -10,7 +10,9 @@ data class FavoriteTheme constructor(
         var topicText: String? = null,
         var msgText: String? = null,
         var msgTime: String? = null,
-        var topicUpdated: String? = null
+        var topicUpdated: String? = null,
+        var lastTimeViewedInMillis: Long? = null
+
 ) {
 
     companion object {
@@ -21,7 +23,8 @@ data class FavoriteTheme constructor(
                     it.topicText,
                     it.msgText,
                     it.msgTime,
-                    it.topicUpdated)
+                    it.topicUpdated,
+                    it.lastTimeViewedInMillis)
         }
 
         fun copy(theme: Theme): FavoriteTheme {

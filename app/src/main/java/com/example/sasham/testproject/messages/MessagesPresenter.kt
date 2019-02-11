@@ -24,6 +24,14 @@ class MessagesPresenter(private val theme: Theme) : BasePresenter<MessagesListin
 
         val disposable = data.themeMessages(theme.id!!)
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .map {
+                    if (theme.isFavorite!!) {
+                        data.updateFavoriteThemeViewTime(theme)
+                    }
+
+                    return@map it
+                }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ messages ->
                     viewState.showThemeMessages(messages)
