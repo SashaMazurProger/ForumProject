@@ -41,14 +41,10 @@ class UsersFragment : BaseFragment(), UsersView {
 
         adapter.setOnItemClickListener { item, view ->
             if (item is UserItem) {
-                val userItem = item as UserItem
-                Toast.makeText(context, "${userItem.user.userName} view: ${view.javaClass.name} ", Toast.LENGTH_SHORT).show()
-                val userDialog = UserDialog.newInstance(userItem.user)
+                val userDialog = UserDialog.newInstance(item.user)
                 userDialog.show(childFragmentManager, UserDialog::javaClass.name)
             }
         }
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -82,6 +78,13 @@ class UsersFragment : BaseFragment(), UsersView {
         section.addAll(users)
         adapter.clear()
         adapter.add(section)
+    }
+
+    companion object {
+
+        fun newInstance(): UsersFragment {
+            return UsersFragment()
+        }
     }
 }
 

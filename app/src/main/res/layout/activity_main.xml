@@ -5,7 +5,7 @@
     android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".themes.ThemesActivity">
+    tools:context=".themes.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

@@ -12,18 +12,18 @@ import com.example.sasham.testproject.R
 import com.example.sasham.testproject.base.BaseFragment
 import com.example.sasham.testproject.model.Message
 import com.example.sasham.testproject.model.Theme
-import com.example.sasham.testproject.themes.ThemesPresenter
+import com.example.sasham.testproject.users.UserDialog
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_messages.*
-import kotlinx.android.synthetic.main.theme_item.*
 
 /**
  * A simple [Fragment] subclass.
  */
 class MessagesFragment : BaseFragment(), MessagesListingView, SwipeRefreshLayout.OnRefreshListener {
+
 
     override val layoutId: Int
         get() = R.layout.fragment_messages
@@ -57,13 +57,20 @@ class MessagesFragment : BaseFragment(), MessagesListingView, SwipeRefreshLayout
 
     }
 
+    override fun showUserDialog(message: Message) {
+        if (!message.userId.isNullOrEmpty()) {
+            UserDialog.newInstance(message.userId!!.toInt())
+                    .show(childFragmentManager, null)
+        }
+    }
+
     override fun showThemeMessages(messages: List<Message>) {
         if (swipeRefreshLayout!!.isRefreshing) {
             swipeRefreshLayout!!.isRefreshing = false
         }
 
         val section = Section()
-        section.addAll(messages.map { MessageItem(it) })
+        section.addAll(messages.map { MessageItem(it, presenter) })
         groupAdapter!!.add(section)
     }
 

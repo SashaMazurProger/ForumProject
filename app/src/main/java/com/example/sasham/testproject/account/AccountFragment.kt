@@ -19,7 +19,7 @@ class AccountFragment : BaseFragment(), AccountView {
 
     @ProvidePresenter
     fun provide(): AccountPresenter {
-        return AccountPresenter(arguments!!.getParcelable(Constants.USER_MODEL))
+        return AccountPresenter()
     }
 
     override val layoutId: Int
@@ -40,11 +40,8 @@ class AccountFragment : BaseFragment(), AccountView {
 
     companion object {
 
-        fun newInstance(it: User): AccountFragment {
-            val b = Bundle()
-            b.putParcelable(Constants.USER_MODEL, it)
+        fun newInstance(): AccountFragment {
             val f = AccountFragment()
-            f.arguments = b
             return f
         }
     }

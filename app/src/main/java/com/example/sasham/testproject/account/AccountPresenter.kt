@@ -3,10 +3,11 @@ package com.example.sasham.testproject.users
 import com.arellomobile.mvp.InjectViewState
 import com.example.sasham.testproject.App
 import com.example.sasham.testproject.base.BasePresenter
-import com.example.sasham.testproject.model.User
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 @InjectViewState
-class AccountPresenter(val user: User) : BasePresenter<AccountView>() {
+class AccountPresenter() : BasePresenter<AccountView>() {
 
     init {
         App.instance!!.appComp!!.inject(this)
@@ -15,6 +16,13 @@ class AccountPresenter(val user: User) : BasePresenter<AccountView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
-        viewState.showUser(user)
+        data.mainUser()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    viewState.showUser(it)
+                }, {
+                    if (!it.message.isNullOrEmpty()) viewState.message(it.message!!)
+                })
     }
 }

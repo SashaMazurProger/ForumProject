@@ -3,13 +3,10 @@ package com.example.sasham.testproject.website
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.view.View
-import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.example.sasham.testproject.base.BaseActivity
 import com.example.sasham.testproject.R
+import com.example.sasham.testproject.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_web.*
 
 class WebActivity : BaseActivity() {
@@ -35,13 +32,14 @@ class WebActivity : BaseActivity() {
     private fun openWebSite() {
         val url = intent.getStringExtra(WEB_URL_ARGS)
         webView.settings.javaScriptEnabled = true
+        webView.webViewClient = WebViewClient()
         webView.loadUrl(url)
         title = url
     }
 
     companion object {
 
-        val WEB_URL_ARGS = "url"
+        const val WEB_URL_ARGS = "url"
 
 
         fun startActivity(url: String, context: Context) {

@@ -6,4 +6,5 @@ import com.example.sasham.testproject.model.Message
 interface MessagesListingView :IView{
 
     fun showThemeMessages(messageList: List<Message>)
+    fun showUserDialog(message: Message)
 }

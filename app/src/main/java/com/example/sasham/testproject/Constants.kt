@@ -15,5 +15,7 @@ object Constants {
     const val USER_TABLE = "USER_TABLE"
     const val FAVORITE_THEME_TABLE = "FAVORITE_THEME_TABLE"
     const val PASS_HASH = "PASS_HASH"
-
+    const val MAIN_USER_ID = "MAIN_USER_ID"
+    const val EMPTY_USER_ID = -100
+    const val USER_MODEL_ID = "USER_MODEL_ID"
 }

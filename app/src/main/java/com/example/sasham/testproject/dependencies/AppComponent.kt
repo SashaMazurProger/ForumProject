@@ -4,7 +4,9 @@ import android.content.Context
 import com.example.sasham.testproject.App
 import com.example.sasham.testproject.account.AuthPresenter
 import com.example.sasham.testproject.messages.MessagesPresenter
+import com.example.sasham.testproject.navigation.TabContainerFragment
 import com.example.sasham.testproject.notification.NewMessagesWorker
+import com.example.sasham.testproject.themes.MainPresenter
 import com.example.sasham.testproject.themes.ThemesPresenter
 import com.example.sasham.testproject.users.AccountPresenter
 import com.example.sasham.testproject.users.UserDetPresenter
@@ -34,4 +36,6 @@ interface AppComponent {
     fun inject(presenter: UserDetPresenter)
     fun inject(presenter: AuthPresenter)
     fun inject(presenter: AccountPresenter)
+    fun inject(mainPresenter: MainPresenter)
+    fun inject(tabContainerFragment: TabContainerFragment)
 }

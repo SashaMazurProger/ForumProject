@@ -18,6 +18,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import org.json.JSONObject
 import java.util.*
 import javax.inject.Inject
 
@@ -32,13 +33,49 @@ constructor(private val webestApi: WebestApi, private val db: RoomDb, private va
 
         val body = RequestBody.create(MediaType.get("application/json"), "{\"login\":\"${email}\",\"password\":\"${pass}\"}")
         return webestApi.login(body)
+                .observeOn(Schedulers.io())
                 .map {
                     val body = it.string()
                     val userWraper = Gson().fromJson<UserWrapper>(body, UserWrapper::class.java)
-//                    val passHash = Gson().toJsonTree(body).asJsonObject.get("password").asString
-//                    prefs.edit().putString(Constants.PASS_HASH,passHash).commit()
-                    return@map User.copy(userWraper)
+                    val passHash = JSONObject(body).getString("password")
+                    prefs.edit().putString(Constants.PASS_HASH, passHash).commit()
+                    if (userWraper.id != null) prefs.edit().putInt(Constants.MAIN_USER_ID, userWraper.id!!).commit()
+                    val user = User.copy(userWraper)
+                    db.userDao().saveUsers(listOf(UserTable.copy(user)))
+                    return@map user
                 }
+    }
+
+    override fun mainUserPassHash(): String? {
+        return prefs.getString(Constants.PASS_HASH, null)
+    }
+
+    override fun mainUserId(): Int? {
+        val id = prefs.getInt(Constants.MAIN_USER_ID, Constants.EMPTY_USER_ID)
+        if (id == Constants.EMPTY_USER_ID) {
+            return null
+        } else {
+            return id
+        }
+    }
+
+    override fun mainUser(): Observable<User> {
+        if (isLogined()) {
+            return Observable.fromCallable { db.userDao().users().find { it.id == mainUserId() } }
+                    .map { User.copy(it) }
+        }
+        return Observable.error(Throwable("no main user"))
+    }
+
+    override fun isLogined(): Boolean {
+        return mainUserPassHash() != null
+    }
+
+    override fun logout() {
+        prefs.edit()
+                .putInt(Constants.MAIN_USER_ID, Constants.EMPTY_USER_ID)
+                .putString(Constants.PASS_HASH, null)
+                .commit()
     }
 
     override fun updateFavoriteThemeViewTime(theme: Theme) {
@@ -76,7 +113,8 @@ constructor(private val webestApi: WebestApi, private val db: RoomDb, private va
 
         return Observable.fromCallable { db.userDao().count() }
                 .flatMap<List<User>> {
-                    if (it > 0) {
+                    //if downloaded main user
+                    if (it > 1) {
                         return@flatMap Observable.fromCallable {
                             db.userDao().users(sqlSearch)
                                     .map {
@@ -127,25 +165,8 @@ constructor(private val webestApi: WebestApi, private val db: RoomDb, private va
                         }
 
                     })
-//                    .map { themesWraper -> themesWraper.themeAnswers }
-//                    .flatMap { themeAnswers ->
-//                        val themes = ArrayList<Theme>()
-//                        for (themeAnswer in themeAnswers!!.iterator()) {
-//                            themes.add(Converter.themeAnswerToTheme(themeAnswer!!)!!)
-//                        }
-//                        Observable.just(themes)
-//                    }
-//                    .
         } else {
-//            return webestApi.themesBySection(page, section.id)
-//                    .map { themesWraper -> themesWraper.themeAnswers }
-//                    .flatMap { themeAnswers ->
-//                        val themes = ArrayList<Theme>()
-//                        for (themeAnswer in themeAnswers!!.iterator()) {
-//                            themes.add(Converter.themeAnswerToTheme(themeAnswer!!)!!)
-//                        }
-//                        Observable.just(themes)
-//                    }
+
             return Observable.zip(webestApi.themesBySection(page, section.id), Observable.just(db.favoriteThemeDao().themes()),
                     object : BiFunction<ThemesWraper, List<FavoriteThemeTable>, List<Theme>> {
                         override fun apply(t1: ThemesWraper, favorites: List<FavoriteThemeTable>): List<Theme> {
@@ -180,7 +201,8 @@ constructor(private val webestApi: WebestApi, private val db: RoomDb, private va
     override fun users(): Observable<List<User>> {
         return Observable.fromCallable { db.userDao().count() }
                 .flatMap<List<User>> {
-                    if (it > 0) {
+                    //if downloaded main user
+                    if (it > 1) {
                         return@flatMap Observable.fromCallable {
                             db.userDao().users()
                                     .map {

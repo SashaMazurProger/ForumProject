@@ -19,7 +19,10 @@ class UserDialog : BaseDialog(), UserDetailsView {
 
     @ProvidePresenter
     fun presenter(): UserDetPresenter {
-        return UserDetPresenter(arguments!!.getParcelable(Constants.USER_MODEL))
+        if (arguments!!.containsKey(Constants.USER_MODEL)) {
+            return UserDetPresenter(arguments!!.getParcelable(Constants.USER_MODEL))
+        }
+        return UserDetPresenter(null, arguments!!.getInt(Constants.USER_MODEL_ID))
     }
 
     override fun showUser(user: User) {
@@ -43,6 +46,7 @@ class UserDialog : BaseDialog(), UserDetailsView {
         super.onViewCreated(view, savedInstanceState)
 
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent);
+
     }
 
     companion object {
@@ -50,6 +54,14 @@ class UserDialog : BaseDialog(), UserDetailsView {
         fun newInstance(user: User): UserDialog {
             val bundle = Bundle()
             bundle.putParcelable(Constants.USER_MODEL, user)
+            val dialog = UserDialog()
+            dialog.arguments = bundle
+            return dialog
+        }
+
+        fun newInstance(userId: Int): UserDialog {
+            val bundle = Bundle()
+            bundle.putInt(Constants.USER_MODEL_ID, userId)
             val dialog = UserDialog()
             dialog.arguments = bundle
             return dialog

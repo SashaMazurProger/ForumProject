@@ -12,7 +12,7 @@ import com.example.sasham.testproject.App
 import com.example.sasham.testproject.R
 import com.example.sasham.testproject.model.DataRepository
 import com.example.sasham.testproject.model.Message
-import com.example.sasham.testproject.themes.ThemesActivity
+import com.example.sasham.testproject.themes.MainActivity
 import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
@@ -21,8 +21,6 @@ class NewMessagesWorker : Worker() {
 
     @Inject
     lateinit var data: DataRepository
-
-    private var isNotifShowed = false
 
     init {
         App.instance!!.appComp!!.inject(this)
@@ -35,11 +33,6 @@ class NewMessagesWorker : Worker() {
 
     //Проверяем часто избранные форумы на наличие новых сообщений и показываем их кв уведомлении
     private fun checkFavoriteThemes() {
-
-//
-//        if (isNotifShowed) {
-//            return
-//        }
 
         data.favoriteThemes()
                 .flatMap { Observable.fromIterable(it) }
@@ -60,15 +53,10 @@ class NewMessagesWorker : Worker() {
                                 //Если есть новые сообщения - выводим уведомление
 //                                if (messages.isNotEmpty()) {
                                 showNotification(messages.size, it.topicText)
-                                isNotifShowed = true
 //                                }
                             }
                 }
-                .blockingSubscribe({
-                },
-                        {
-
-                        })
+                .blockingSubscribe()
 
 
     }
@@ -86,10 +74,10 @@ class NewMessagesWorker : Worker() {
         val context = applicationContext
         val notificationBuilder: NotificationCompat.Builder?
 
-        val intent = Intent(context, ThemesActivity::class.java)
+        val intent = Intent(context, MainActivity::class.java)
 
         val pendingIntent = PendingIntent.getActivity(context,
-                PENDING_INTENT_REQUEST_CODE,
+                OPEN_THEME_REQUEST_CODE,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -104,6 +92,7 @@ class NewMessagesWorker : Worker() {
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentText(stringBuilder.toString())
                 .setSmallIcon(R.drawable.ic_message)
+                .setGroup(NEW_MESSAGES_GROUP)
                 .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_people))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
@@ -118,9 +107,10 @@ class NewMessagesWorker : Worker() {
     companion object {
 
         private val NOTIF_CHANNEL_ID = "channel_id"
+        private val NEW_MESSAGES_GROUP = "NEW_MESSAGES_GROUP"
         private val NOTIFY_ID = 1
         private val TAG = NewMessagesWorker::class.java.simpleName
-        private val PENDING_INTENT_REQUEST_CODE = 2
+        private val OPEN_THEME_REQUEST_CODE = 2
     }
 
 

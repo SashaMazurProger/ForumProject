@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme.White">
 
-        <activity android:name=".themes.ThemesActivity" android:launchMode="singleTop">
+        <activity android:name=".themes.MainActivity" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +34,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".messages.MessagesActivity" android:parentActivityName=".themes.ThemesActivity"></activity>
+        <activity android:name=".messages.MessagesActivity" android:parentActivityName=".themes.MainActivity"></activity>
     </application>
 
 </manifest>

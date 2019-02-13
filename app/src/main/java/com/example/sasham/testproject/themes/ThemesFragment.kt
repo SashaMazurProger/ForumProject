@@ -119,4 +119,11 @@ class ThemesFragment : BaseFragment(), ThemesView, androidx.swiperefreshlayout.w
         presenter!!.loadNewData()
     }
 
+
+    companion object {
+
+        fun newInstance(): ThemesFragment {
+            return ThemesFragment()
+        }
+    }
 }// Required empty public constructor

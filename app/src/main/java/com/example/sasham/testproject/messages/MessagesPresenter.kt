@@ -3,7 +3,9 @@ package com.example.sasham.testproject.messages
 import com.arellomobile.mvp.InjectViewState
 import com.example.sasham.testproject.App
 import com.example.sasham.testproject.base.BasePresenter
+import com.example.sasham.testproject.model.Message
 import com.example.sasham.testproject.model.Theme
+import com.example.sasham.testproject.users.UserDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -39,6 +41,10 @@ class MessagesPresenter(private val theme: Theme) : BasePresenter<MessagesListin
                         { throwable -> viewState.message(throwable.message!!) })
 
         compositeDisposable.add(disposable)
+    }
+
+    fun onShowUserClicked(message: Message) {
+        viewState.showUserDialog(message)
     }
 
 }

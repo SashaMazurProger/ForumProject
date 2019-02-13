@@ -3,11 +3,13 @@ package com.example.sasham.testproject.account
 import com.arellomobile.mvp.InjectViewState
 import com.example.sasham.testproject.App
 import com.example.sasham.testproject.base.BasePresenter
+import com.example.sasham.testproject.navigation.Screens
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import ru.terrakok.cicerone.Router
 
 @InjectViewState
-class AuthPresenter : BasePresenter<AuthView>() {
+class AuthPresenter(val localRouter: Router) : BasePresenter<AuthView>() {
 
     init {
         App.instance!!.appComp!!.inject(this)
@@ -20,7 +22,7 @@ class AuthPresenter : BasePresenter<AuthView>() {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            viewState.openAccountScreen(it)
+                            localRouter.replaceScreen(Screens.AccountScreen)
                         }, {
                             if (!it.message.isNullOrEmpty()) viewState.message(it.message!!)
                         })

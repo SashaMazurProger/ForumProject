@@ -8,5 +8,4 @@ import com.example.sasham.testproject.model.User
 @StateStrategyType(AddToEndStrategy::class)
 interface AuthView : IView {
     fun onRegistration()
-    fun openAccountScreen(it: User)
 }

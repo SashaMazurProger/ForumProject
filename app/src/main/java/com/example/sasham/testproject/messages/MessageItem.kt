@@ -12,7 +12,7 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.message_item.view.*
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
-class MessageItem(val message: Message) : Item() {
+class MessageItem(val message: Message, val presenter: MessagesPresenter) : Item() {
     override fun getLayout(): Int {
         return R.layout.message_item
     }
@@ -21,7 +21,7 @@ class MessageItem(val message: Message) : Item() {
 
         val view = holder.itemView
 
-        view.topicName!!.text = message.topicName
+        view.userName!!.text = message.topicName
 
         view.messagesCount!!.text = if (StringUtil.isNotNullOrEmpty(message.msgCount))
             message.msgCount
@@ -49,5 +49,8 @@ class MessageItem(val message: Message) : Item() {
         } else {
             view.avatar!!.setImageResource(R.mipmap.ic_avatar)
         }
+
+        view.userName.setOnClickListener { presenter.onShowUserClicked(message) }
+        view.avatar.setOnClickListener { presenter.onShowUserClicked(message) }
     }
 }

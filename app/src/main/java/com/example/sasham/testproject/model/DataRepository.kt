@@ -5,6 +5,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 
 interface DataRepository {
+    val favoriteStatusChangeEvent: DispatchWorkSubject<Theme>
 
     fun themes(page: String, section: Section?): Observable<List<Theme>>
     fun themeMessages(themeId: String): Observable<List<Message>>
@@ -17,5 +18,10 @@ interface DataRepository {
     fun updateFavoriteThemeViewTime(theme: Theme)
     fun login(email: String, pass: String): Observable<User>
 
-    val favoriteStatusChangeEvent: DispatchWorkSubject<Theme>
+
+    fun mainUserPassHash(): String?
+    fun isLogined(): Boolean
+    fun mainUserId(): Int?
+    fun mainUser(): Observable<User>
+    fun logout()
 }

@@ -10,4 +10,5 @@
     <string name="messages_title">Messages</string>
     <string name="new_messages_notification">new messages in forum</string>
     <string name="login_btn">Войти</string>
+    <string name="logout_action">Logout</string>
 </resources>
