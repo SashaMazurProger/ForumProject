@@ -1,28 +1,21 @@
 package com.example.sasham.testproject.themes
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import com.example.sasham.testproject.App
-import com.example.sasham.testproject.model.DataRepository
+import com.example.sasham.testproject.base.BaseLoadPagesPresenter
 import com.example.sasham.testproject.model.FavoriteTheme
 import com.example.sasham.testproject.model.Section
 import com.example.sasham.testproject.model.Theme
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
-import javax.inject.Inject
 
 @InjectViewState
-class ThemesPresenter : MvpPresenter<ThemesView>() {
+class ThemesPresenter : BaseLoadPagesPresenter<Theme, ThemesView>() {
 
-    @Inject
-    lateinit var data: DataRepository
 
-    private val loadedThemes = ArrayList<Theme>()
-    private val compositeDisposable = CompositeDisposable()
-    private var currentPage: Int = 0
     private var section: Section? = null
 
     init {
@@ -40,36 +33,19 @@ class ThemesPresenter : MvpPresenter<ThemesView>() {
                 .subscribe({ changed: Theme ->
 
                     loadFavoriteThemes()
-                    loadedThemes.find { it.id == changed.id }
+                    cachedItems.find { it.id == changed.id }
                             .let { it?.isFavorite = changed?.isFavorite }
 
-                    viewState.showThemes(loadedThemes)
+                    viewState.showThemes(cachedItems)
 
                 }, {})
     }
 
-    fun firstPage() {
-        currentPage = 1
-        loadedThemes.clear()
-        loadThemes()
+    override fun loadPage(page: Int): Disposable {
+        return loadThemes(page)
     }
 
-    fun nextPage() {
-        currentPage++
-        loadThemes()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.clear()
-    }
-
-    fun loadNewData() {
-        firstPage()
-    }
-
-
-    private fun loadThemes() {
+    private fun loadThemes(currentPage: Int): Disposable {
 
         viewState.showLoading()
 
@@ -77,15 +53,18 @@ class ThemesPresenter : MvpPresenter<ThemesView>() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ themes ->
+                    onSuccessLoadPage()
                     viewState.hideLoading()
-                    loadedThemes.addAll(themes)
-                    viewState.showThemes(loadedThemes)
+                    cachedItems.addAll(themes)
+                    viewState.showThemes(cachedItems)
                 },
                         { throwable ->
+                            onErrorLoadPage()
                             viewState.hideLoading()
                             viewState.message(throwable.message!!)
                         })
-        compositeDisposable.add(disposable)
+
+        return disposable
 
     }
 
@@ -149,10 +128,10 @@ class ThemesPresenter : MvpPresenter<ThemesView>() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .andThen({
                     loadFavoriteThemes()
-                    loadedThemes.find { it.id == theme.id }
+                    cachedItems.find { it.id == theme.id }
                             .let { it?.isFavorite = it?.isFavorite?.not() }
 
-                    viewState.showThemes(loadedThemes)
+                    viewState.showThemes(cachedItems)
                 })
                 .subscribe()
 

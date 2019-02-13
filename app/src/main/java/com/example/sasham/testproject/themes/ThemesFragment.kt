@@ -49,6 +49,14 @@ class ThemesFragment : BaseFragment(), ThemesView, androidx.swiperefreshlayout.w
             presenter.selectTheme((item as ThemeItem).theme)
         }
 
+        themesList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (!recyclerView.canScrollVertically(3)) {
+                    presenter.nextPage()
+                }
+            }
+        })
+
 
         sectionsAdapter = GroupAdapter()
         val layoutManager2 = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -116,7 +124,7 @@ class ThemesFragment : BaseFragment(), ThemesView, androidx.swiperefreshlayout.w
 
     override fun onRefresh() {
         swipeRefreshLayout!!.isRefreshing = true
-        presenter!!.loadNewData()
+        presenter!!.onRefresh()
     }
 
 
